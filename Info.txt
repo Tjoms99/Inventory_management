@@ -1,0 +1,12 @@
+Raspberry pinout
+irq = 24
+rst = 25
+MOSI = 19
+MISO = 21
+SCLK = 23
+
+web service python (VS?), acces through flutter
+	https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5562997
+sql server microsoft
+flutter VS
+
