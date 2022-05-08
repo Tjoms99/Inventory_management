@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: firstFontSize),
                 ),
-                const SizedBox(height: thirdBoxHeight),
+                const SizedBox(height: firstBoxHeight),
 
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: standardPadding),

@@ -43,19 +43,24 @@ class _RegisterPage extends State<RegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(height: firstBoxHeight),
                 //Icon
                 const ImageIcon(
                   AssetImage("assets/images/rfid_transparent.png"),
                   color: Color.fromARGB(255, 37, 174, 53),
                   size: 100,
                 ),
-                //Hello
-                const Text(
-                  'Become a member by scanning your card!',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: secondFontSize),
+                //Info text
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: standardPadding),
+                  child: const Text(
+                    'Scan your RFID tag',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: secondFontSize),
+                  ),
                 ),
-                const SizedBox(height: thirdBoxHeight),
+                const SizedBox(height: firstBoxHeight),
 
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: standardPadding),
