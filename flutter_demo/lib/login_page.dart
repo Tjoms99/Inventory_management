@@ -24,8 +24,6 @@ class _LoginPageState extends State<LoginPage> {
 
     //Shown in debug console
     print("Signed in user");
-    print("Register user");
-
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const UserPage()),
