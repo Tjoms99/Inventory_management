@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/* WINDOW STATE */
+int window = 0;
 /* Colors */
 const Color primaryBackgroundColor = Color.fromARGB(225, 224, 224, 224);
 const Color secondaryBackgroundColor = Colors.orangeAccent;

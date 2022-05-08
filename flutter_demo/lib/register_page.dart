@@ -1,42 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/login_page.dart';
 import 'constants.dart';
 
-import 'register_page.dart';
-
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPage();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPage extends State<RegisterPage> {
   //Controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  Future signIn() async {
-    //Check email and password using the controllers
-    //_emailController.text.trim()
-    //_passwordController.text.trim()
-
-    //Shown in debug console
-    print("Signed in user");
-  }
+  final TextEditingController _passwordConfirmController =
+      TextEditingController();
 
   Future registerUser() async {
-    //Shown in debug console
-    print("Register user");
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const RegisterPage()),
-    );
+    if (_passwordController.text.trim() ==
+        _passwordConfirmController.text.trim()) {
+      //Register user in database and goto login pag
+
+      Navigator.pop(context);
+    }
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _passwordConfirmController.dispose();
     super.dispose();
   }
 
@@ -58,16 +51,16 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 //Hello
                 const Text(
-                  'Tap to sign in',
+                  'Become a member by scanning your card!',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: firstFontSize),
+                      fontWeight: FontWeight.bold, fontSize: secondFontSize),
                 ),
                 const SizedBox(height: thirdBoxHeight),
 
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: standardPadding),
                   child: Text(
-                    '---OR---',
+                    '---AND---',
                     style: TextStyle(
                       fontSize: forthFontSize,
                     ),
@@ -130,12 +123,40 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: thirdBoxHeight),
 
+                //Password confirm
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: texfieldPadding),
+                  child: TextField(
+                    controller: _passwordConfirmController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: textfieldEnabledBorderColor),
+                        borderRadius:
+                            BorderRadius.circular(texfieldBorderRadius),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: textfieldFocusedBorderColor),
+                        borderRadius:
+                            BorderRadius.circular(texfieldBorderRadius),
+                      ),
+                      hintText: 'Confirm Password',
+                      fillColor: textfieldBackgroundColor,
+                      filled: true,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: thirdBoxHeight),
+
                 //Sign-in
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: standardPadding),
                   child: GestureDetector(
-                    onTap: signIn,
+                    onTap: registerUser,
                     child: Container(
                       padding: const EdgeInsets.all(buttonPadding),
                       decoration: const BoxDecoration(
@@ -143,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: const Center(
                         child: Text(
-                          'Sign In',
+                          'Register',
                           style: TextStyle(
                             color: buttonTextColor,
                             fontWeight: FontWeight.bold,
@@ -154,32 +175,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: secondBoxHeight),
-
-                //Not a member
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Not a member?',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: forthFontSize,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: registerUser,
-                      child: Text(
-                        ' Register now',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: forthFontSize,
-                        ),
-                      ),
-                    )
-                  ],
-                )
               ],
             ),
           ),
