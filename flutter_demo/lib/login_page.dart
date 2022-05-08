@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/user_page.dart';
 import 'constants.dart';
 
 import 'register_page.dart';
+import 'user_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -22,6 +24,12 @@ class _LoginPageState extends State<LoginPage> {
 
     //Shown in debug console
     print("Signed in user");
+    print("Register user");
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const UserPage()),
+    );
   }
 
   Future registerUser() async {
@@ -58,9 +66,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 //Hello
                 const Text(
-                  'Tap to sign in',
+                  'Scan to sign in',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: firstFontSize),
+                      fontWeight: FontWeight.bold, fontSize: secondFontSize),
                 ),
                 const SizedBox(height: firstBoxHeight),
 
