@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/login_page.dart';
 import 'constants.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -23,6 +22,10 @@ class _RegisterPage extends State<RegisterPage> {
 
       Navigator.pop(context);
     }
+  }
+
+  Future login() async {
+    Navigator.pop(context);
   }
 
   @override
@@ -51,10 +54,9 @@ class _RegisterPage extends State<RegisterPage> {
                   size: 100,
                 ),
                 //Info text
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: standardPadding),
-                  child: const Text(
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: standardPadding),
+                  child: Text(
                     'Scan your RFID tag',
                     style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: secondFontSize),
@@ -81,14 +83,14 @@ class _RegisterPage extends State<RegisterPage> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: textfieldEnabledBorderColor),
+                        borderSide: const BorderSide(
+                            color: textfieldEnabledBorderColor),
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: textfieldFocusedBorderColor),
+                        borderSide: const BorderSide(
+                            color: textfieldFocusedBorderColor),
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
@@ -109,14 +111,14 @@ class _RegisterPage extends State<RegisterPage> {
                     obscureText: true,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: textfieldEnabledBorderColor),
+                        borderSide: const BorderSide(
+                            color: textfieldEnabledBorderColor),
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: textfieldFocusedBorderColor),
+                        borderSide: const BorderSide(
+                            color: textfieldFocusedBorderColor),
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
@@ -137,14 +139,14 @@ class _RegisterPage extends State<RegisterPage> {
                     obscureText: true,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: textfieldEnabledBorderColor),
+                        borderSide: const BorderSide(
+                            color: textfieldEnabledBorderColor),
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: textfieldFocusedBorderColor),
+                        borderSide: const BorderSide(
+                            color: textfieldFocusedBorderColor),
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
@@ -180,6 +182,32 @@ class _RegisterPage extends State<RegisterPage> {
                     ),
                   ),
                 ),
+                const SizedBox(height: thirdBoxHeight),
+
+                //Login
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Already a member?',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: forthFontSize,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: registerUser,
+                      child: const Text(
+                        ' Login here',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: forthFontSize,
+                        ),
+                      ),
+                    )
+                  ],
+                )
               ],
             ),
           ),

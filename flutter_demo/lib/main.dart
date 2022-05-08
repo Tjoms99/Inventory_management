@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/login_page.dart';
 
 import 'login_page.dart';
-import 'register_page.dart';
-import 'user_page.dart';
-import 'constants.dart';
 
 void main() {
   runApp(const MyApp());

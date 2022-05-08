@@ -17,6 +17,18 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  /*final bool didAuthenticate = await auth.authenticate(
+        localizedReason: 'Please authenticate to show account balance',
+        authMessages: const <AuthMessages>[
+          AndroidAuthMessages(
+            signInTitle: 'Oops! Biometric authentication required!',
+            cancelButton: 'No thanks',
+          ),
+          IOSAuthMessages(
+            cancelButton: 'No thanks',
+          ),
+        ]);
+*/
   Future signIn() async {
     //Check email and password using the controllers
     //_emailController.text.trim()
@@ -89,14 +101,14 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: textfieldEnabledBorderColor),
+                        borderSide: const BorderSide(
+                            color: textfieldEnabledBorderColor),
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: textfieldFocusedBorderColor),
+                        borderSide: const BorderSide(
+                            color: textfieldFocusedBorderColor),
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
@@ -117,14 +129,14 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: textfieldEnabledBorderColor),
+                        borderSide: const BorderSide(
+                            color: textfieldEnabledBorderColor),
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: textfieldFocusedBorderColor),
+                        borderSide: const BorderSide(
+                            color: textfieldFocusedBorderColor),
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
@@ -160,13 +172,13 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: secondBoxHeight),
+                const SizedBox(height: thirdBoxHeight),
 
                 //Not a member
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Not a member?',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -175,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     GestureDetector(
                       onTap: registerUser,
-                      child: Text(
+                      child: const Text(
                         ' Register now',
                         style: TextStyle(
                           color: Colors.blue,

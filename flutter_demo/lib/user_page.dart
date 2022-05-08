@@ -25,11 +25,11 @@ class _UserPage extends State<UserPage> {
         child: Column(
           children: [
             const SizedBox(height: firstBoxHeight),
-            Text('This is the main user page'),
+            const Text('This is the main user page'),
             const SizedBox(height: firstBoxHeight),
             GestureDetector(
               onTap: signOut,
-              child: Text('Sign out'),
+              child: const Text('Sign out'),
             ),
           ],
         ),
