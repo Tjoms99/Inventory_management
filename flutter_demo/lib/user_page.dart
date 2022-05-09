@@ -10,6 +10,10 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPage extends State<UserPage> {
+  var userInput = 0;
+  var userFeedback = '';
+  var userTask = '';
+
   Future signOut() async {
     //Shown in debug console
     print("Signed out user");
@@ -21,6 +25,18 @@ class _UserPage extends State<UserPage> {
       context: context,
       delegate: MySearchDelegate(),
     );
+  }
+
+  Future changeUserTask() async {
+    print('RFID detected');
+
+    setState(() {
+      userTask = userTask.contains('BORROWED') ? 'RETURNED' : 'BORROWED';
+
+      userFeedback = 'You have ' + userTask + ' this item';
+    });
+
+    print(userFeedback);
   }
 
   @override
@@ -41,9 +57,33 @@ class _UserPage extends State<UserPage> {
           ]),
       body: Center(
         child: Column(
-          children: const [
-            SizedBox(height: firstBoxHeight),
-            Text('This is the main user page'),
+          children: [
+            const SizedBox(height: firstBoxHeight),
+            //Icon
+            GestureDetector(
+              onTap: changeUserTask,
+              child: const ImageIcon(
+                AssetImage("assets/images/rfid_transparent.png"),
+                color: Color.fromARGB(255, 37, 174, 53),
+                size: 100,
+              ),
+            ),
+            //Hello
+            const Text(
+              'Scan the item RFID tag',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: secondFontSize),
+            ),
+            const SizedBox(height: thirdBoxHeight),
+            const Text('The system knows what you want to do!'),
+
+            const SizedBox(height: firstBoxHeight * 2),
+
+            Text(
+              userFeedback,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: secondFontSize),
+            ),
           ],
         ),
       ),
@@ -64,15 +104,26 @@ class MySearchDelegate extends SearchDelegate {
     return searchResults;
   }
 
+  //Returns a list in alphabetic order
+  //Depends on the query
   List<String> getSearchResults() {
+    //List all matches
     List<String> searchResults = getItems().where((searchResults) {
       final result = searchResults.toLowerCase().trim();
       final input = query.toLowerCase().trim();
+
       return result.contains(input);
     }).toList();
+
+    //Sort in alphabetic order
+    searchResults.sort((a, b) {
+      return a.toLowerCase().compareTo(b.toLowerCase());
+    });
+
     return searchResults;
   }
 
+  //Clear the query or exit search
   void clear(BuildContext context) {
     if (query.isEmpty) {
       close(context, null);
@@ -106,6 +157,7 @@ class MySearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     List<String> searchResults = getSearchResults();
+
     final thisItem =
         searchResults.contains(query.trim()) ? query : 'Item does not exist';
     final itemDescription = searchResults.contains(query.trim())
