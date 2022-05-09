@@ -59,7 +59,9 @@ class _RegisterPage extends State<RegisterPage> {
                   child: Text(
                     'Scan your RFID tag',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: secondFontSize),
+                      fontWeight: FontWeight.bold,
+                      fontSize: secondFontSize,
+                    ),
                   ),
                 ),
                 const SizedBox(height: firstBoxHeight),
