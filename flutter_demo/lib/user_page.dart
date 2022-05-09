@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
-import 'login_page.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
@@ -13,35 +12,38 @@ class UserPage extends StatefulWidget {
 class _UserPage extends State<UserPage> {
   Future signOut() async {
     //Shown in debug console
-    print("Register user");
+    print("Signed out user");
     Navigator.pop(context);
+  }
+
+  Future search() async {
+    showSearch(
+      context: context,
+      delegate: MySearchDelegate(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
-      appBar: AppBar(actions: [
-        IconButton(
-          onPressed: () {
-            showSearch(
-              context: context,
-              delegate: MySearchDelegate(),
-            );
-          },
-          icon: const Icon(Icons.search),
-        ),
-      ]),
+      appBar: AppBar(
+          backgroundColor: secondaryBackgroundColor,
+          leading: IconButton(
+            onPressed: signOut,
+            icon: const Icon(Icons.logout),
+          ),
+          actions: [
+            IconButton(
+              onPressed: search,
+              icon: const Icon(Icons.search),
+            ),
+          ]),
       body: Center(
         child: Column(
-          children: [
-            const SizedBox(height: firstBoxHeight),
-            const Text('This is the main user page'),
-            const SizedBox(height: firstBoxHeight),
-            GestureDetector(
-              onTap: signOut,
-              child: const Text('Sign out'),
-            ),
+          children: const [
+            SizedBox(height: firstBoxHeight),
+            Text('This is the main user page'),
           ],
         ),
       ),
@@ -50,13 +52,42 @@ class _UserPage extends State<UserPage> {
 }
 
 class MySearchDelegate extends SearchDelegate {
+  List<String> getItems() {
+    List<String> searchResults = [
+      'Book',
+      'Pen',
+      'Paper',
+      'Calculator',
+      'Chair',
+      'Table'
+    ];
+    return searchResults;
+  }
+
+  List<String> getSearchResults() {
+    List<String> searchResults = getItems().where((searchResults) {
+      final result = searchResults.toLowerCase().trim();
+      final input = query.toLowerCase().trim();
+      return result.contains(input);
+    }).toList();
+    return searchResults;
+  }
+
+  void clear(BuildContext context) {
+    if (query.isEmpty) {
+      close(context, null);
+    } else {
+      query = '';
+    }
+  }
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
         icon: const Icon(Icons.clear),
         onPressed: () {
-          query = '';
+          clear(context);
         },
       ),
     ];
@@ -74,27 +105,35 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    if (query.length < 3) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const <Widget>[
-          Center(
-            child: Text(
-              "Search term must be longer than two letters.",
-            ),
-          )
+    List<String> searchResults = getSearchResults();
+    final thisItem =
+        searchResults.contains(query.trim()) ? query : 'Item does not exist';
+    final itemDescription = searchResults.contains(query.trim())
+        ? 'This is the item description'
+        : '';
+    final itemLocation =
+        searchResults.contains(query.trim()) ? 'This is the item location' : '';
+
+    return Center(
+      child: Column(
+        children: [
+          const SizedBox(height: firstBoxHeight),
+          Text(
+            thisItem,
+            style: const TextStyle(fontSize: firstFontSize),
+          ),
+          const SizedBox(height: secondBoxHeight),
+          Text(
+            itemDescription,
+            style: const TextStyle(fontSize: secondFontSize),
+          ),
+          const SizedBox(height: thirdBoxHeight),
+          Text(
+            itemLocation,
+            style: const TextStyle(fontSize: secondFontSize),
+          ),
         ],
-      );
-    }
-
-    //Add the search term to the searchBloc.
-    //The Bloc will then handle the searching and add the results to the searchResults stream.
-    //This is the equivalent of submitting the search term to whatever search service you are using
-
-    return Column(
-      children: const <Widget>[
-        //Build the results based on the searchResults stream in the searchBloc
-      ],
+      ),
     );
   }
 
@@ -102,6 +141,20 @@ class MySearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     // This method is called everytime the search term changes.
     // If you want to add search suggestions as the user enters their search term, this is the place to do that.
-    return Column();
+    List<String> searchResults = getSearchResults();
+
+    return ListView.builder(
+        itemCount: searchResults.length,
+        itemBuilder: ((context, index) {
+          final suggestion = searchResults[index];
+
+          return ListTile(
+            title: Text(suggestion),
+            onTap: () {
+              query = suggestion;
+              showResults(context);
+            },
+          );
+        }));
   }
 }
