@@ -3,6 +3,7 @@ import 'package:flutter_demo/user_page.dart';
 import 'constants.dart';
 
 import 'register_page.dart';
+import 'customer_page.dart';
 import 'user_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -36,10 +37,18 @@ class _LoginPageState extends State<LoginPage> {
 
     //Shown in debug console
     print("Signed in user");
+
+    if(_emailController.text.trim() == "customer"){
     Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CustomerPage()),
+    );
+    } else {
+      Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const UserPage()),
     );
+    }
   }
 
   Future registerUser() async {
