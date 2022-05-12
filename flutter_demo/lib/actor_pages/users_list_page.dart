@@ -11,21 +11,6 @@ class UsersListPage extends StatefulWidget {
 
 class _UsersListPageState extends State<UsersListPage> {
 
-    List<String> getAllUsers = [
-      'User1',
-      'User2',
-      'User3',
-      'User4',
-      'User5',
-      'User6',
-      'User7',
-      'User8',
-      'User9',
-      'User10',
-      'User11',
-      'User12'
-    ];
-
    bool isSelectionMode = false;
   final int listLength = 12;
   late List<bool> _selected;
@@ -79,6 +64,22 @@ class ListBuilder extends StatefulWidget {
 }
 
 class _ListBuilderState extends State<ListBuilder> {
+      //Should get from database
+      List<String> users = [
+      'Mark',
+      'Ron',
+      'Sara',
+      'Marcus',
+      'Andreas',
+      'Pietari',
+      'Colari',
+      'Dimitri',
+      'Nico',
+      'Beate',
+      'Fillip',
+      'Tobias'
+    ];
+
   void _toggle(int index) {
     if (widget.isSelectionMode) {
       setState(() {
@@ -108,7 +109,7 @@ class _ListBuilderState extends State<ListBuilder> {
                       onChanged: (bool? x) => _toggle(index),
                     )
                   : const SizedBox.shrink(),
-              title: Text('User $index'),
+              title: Text('$index : ' + users[index] + '@gmail.com'),
 
               
               );
