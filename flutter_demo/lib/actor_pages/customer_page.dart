@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
+import 'package:flutter_demo/actor_pages/user_body_page.dart';
 
   const TextStyle _textStyle = TextStyle(
   fontSize: 40,
@@ -28,38 +29,7 @@ class _CustomerPageState extends State<CustomerPage> {
     Text("MODIFY USERS", style: _textStyle),
     Text("ADD/REMOVE ITEMS", style: _textStyle),
     Text("SCAN ITEMS FOR USER", style: _textStyle),
-    //Text("PERFORM USER OPERATION", style: _textStyle),
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              //Icon
-              GestureDetector(
-                //onTap: changeUserTask,
-                child: const ImageIcon(
-                  AssetImage("assets/images/rfid_transparent.png"),
-                  color: Color.fromARGB(255, 37, 174, 53),
-                  size: 100,
-                ),
-              ),
-              //Hello
-              const Text(
-                'Scan the item RFID tag',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: secondFontSize),
-              ),
-              const SizedBox(height: thirdBoxHeight),
-              const Text('The system knows what you want to do!'),
-
-              const SizedBox(height: firstBoxHeight * 3),
-
-              Text(
-                'This is not working',//userFeedback,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: secondFontSize),
-              ),
-            ],
-          ),
-        ),
+    UserBodyPage(),
   ];
 
   
