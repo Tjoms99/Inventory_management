@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
 import 'package:flutter_demo/actor_pages/user_body_page.dart';
+import 'package:flutter_demo/actor_pages/users_list_page.dart';
+
 
   const TextStyle _textStyle = TextStyle(
   fontSize: 40,
@@ -26,7 +28,7 @@ class _CustomerPageState extends State<CustomerPage> {
 
 
   List<Widget> pages =  [
-    Text("MODIFY USERS", style: _textStyle),
+    UsersListPage(),
     Text("ADD/REMOVE ITEMS", style: _textStyle),
     Text("SCAN ITEMS FOR USER", style: _textStyle),
     UserBodyPage(),
