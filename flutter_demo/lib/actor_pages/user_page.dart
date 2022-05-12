@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'constants.dart';
-import 'search_page.dart';
+import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/search_page.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
