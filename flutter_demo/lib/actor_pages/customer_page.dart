@@ -65,8 +65,9 @@ class _CustomerPageState extends State<CustomerPage> {
               icon: const Icon(Icons.search),
             ),
           ]),
-        body: Center(
-          child: pages[_currentIndex],
+        body: IndexedStack(
+            index: _currentIndex,
+            children: pages,
         ),
         bottomNavigationBar: NavigationBar(
           selectedIndex: _currentIndex,
