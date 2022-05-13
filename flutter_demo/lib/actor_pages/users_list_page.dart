@@ -109,7 +109,7 @@ class _ListBuilderState extends State<ListBuilder> {
                       onChanged: (bool? x) => _toggle(index),
                     )
                   : const SizedBox.shrink(),
-              title: Text('$index : ' + users[index] + '@gmail.com'),
+              title: Text('$index : ${users[index]} @gmail.com'),
 
               
               );
