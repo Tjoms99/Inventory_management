@@ -5,6 +5,7 @@ const Color primaryBackgroundColor = Color.fromARGB(225, 224, 224, 224);
 const Color secondaryBackgroundColor = Colors.orangeAccent;
 
 const Color buttonBackgroundColor = Colors.orangeAccent;
+const Color buttonSecondaryColor = Colors.grey;
 const Color buttonTextColor = Colors.white;
 
 const Color textfieldBackgroundColor = Color.fromARGB(255, 238, 238, 238);

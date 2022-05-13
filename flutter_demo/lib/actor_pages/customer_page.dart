@@ -24,7 +24,7 @@ class _CustomerPageState extends State<CustomerPage> {
   var userInput = 0;
   var userFeedback = '';
   var userTask = '';
-  int _currentIndex = 0;
+  int _currentIndex = 3;
 
 
   List<Widget> pages =  [
@@ -77,7 +77,7 @@ class _CustomerPageState extends State<CustomerPage> {
           }, 
           destinations: const [
             NavigationDestination(
-              selectedIcon: Icon(Icons.ballot ),
+              selectedIcon: Icon(Icons.ballot),
               icon: Icon(Icons.ballot_outlined),
               label: 'Users',
             ),
