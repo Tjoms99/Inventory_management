@@ -11,10 +11,9 @@ class UsersListPage extends StatefulWidget {
 
 class _UsersListPageState extends State<UsersListPage> {
 
-   bool isSelectionMode = false;
   final int listLength = 12;
-  late List<bool> _selected;
-  bool _selectAll = false;
+  late List<String> _users;
+
 
   @override
   void initState() {
@@ -23,26 +22,21 @@ class _UsersListPageState extends State<UsersListPage> {
   }
 
   void initializeSelection() {
-    _selected = List<bool>.generate(listLength, (_) => false);
+    _users = List<String>.generate(listLength, (_) => 'empty');
   }
 
   @override
   void dispose() {
-    _selected.clear();
+    _users.clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body:ListBuilder(
-                isSelectionMode: isSelectionMode,
-                selectedList: _selected,
-                onSelectionChange: (bool x) {
-                  setState(() {
-                    isSelectionMode = x;
-                  });
-                },
+        body: 
+              ListBuilder(
+                listToBuild: _users,
               ));
   }
 }
@@ -50,22 +44,22 @@ class _UsersListPageState extends State<UsersListPage> {
 class ListBuilder extends StatefulWidget {
   const ListBuilder({
     Key? key,
-    required this.selectedList,
-    required this.isSelectionMode,
-    required this.onSelectionChange,
+    required this.listToBuild,
   }) : super(key: key);
 
-  final bool isSelectionMode;
-  final List<bool> selectedList;
-  final Function(bool)? onSelectionChange;
+  final List<String> listToBuild;
 
   @override
   State<ListBuilder> createState() => _ListBuilderState();
 }
 
 class _ListBuilderState extends State<ListBuilder> {
-      //Should get from database
-      List<String> users = [
+      bool _hasPressedDelete = false;
+      bool _hasPressedModify = false;
+      int _selectedIndex = 0;
+      
+    //Should get from database
+      List<String> _users = [
       'Mark',
       'Ron',
       'Sara',
@@ -80,36 +74,71 @@ class _ListBuilderState extends State<ListBuilder> {
       'Tobias'
     ];
 
-  void _toggle(int index) {
-    if (widget.isSelectionMode) {
+
+  void  _setSelectedIndex(int index) {
       setState(() {
-        widget.selectedList[index] = !widget.selectedList[index];
+        _selectedIndex = index;
+        _hasPressedDelete = false;
+        _hasPressedModify = false;
       });
-    }
+  }
+
+  void _updateActionModify() {
+    print("modify");
+    setState(() {
+      if(_hasPressedModify) {
+        //Delete User 
+        _hasPressedModify = false;
+      } else {
+        _hasPressedModify = true;
+        _hasPressedDelete = false;
+      }
+
+    });
+  }
+
+   void _updateActionDelete() {
+    print("Delete");
+    setState(() {
+      _hasPressedModify = false; 
+      if(_hasPressedDelete) {
+        //Modify user
+        _hasPressedDelete = false;
+      } else {
+        _hasPressedDelete = true;
+        _hasPressedModify = false;
+      }
+
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: widget.selectedList.length,
+        itemCount: widget.listToBuild.length,
         itemBuilder: (_, int index) {
           return ListTile(
-              onTap: () => _toggle(index),
-              onLongPress: () {
-                if (!widget.isSelectionMode) {
-                  setState(() {
-                    widget.selectedList[index] = true;
-                  });
-                  widget.onSelectionChange!(true);
-                }
-              },
-              trailing: widget.isSelectionMode
-                  ? Checkbox(
-                      value: widget.selectedList[index],
-                      onChanged: (bool? x) => _toggle(index),
-                    )
-                  : const SizedBox.shrink(),
-              title: Text('$index : ${users[index]} @gmail.com'),
+              onTap: () => _setSelectedIndex(index),
+              title: Text('$index : ${_users[index]} @gmail.com'),
+              selected: index == _selectedIndex,
+
+              trailing: Visibility(
+                visible: _selectedIndex == index,
+                child: Wrap(
+                  spacing: 12, // space between two icons
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: _updateActionModify,
+                      child: _hasPressedModify ?  Icon(Icons.done) : Icon(Icons.create), // icon-1
+                    ),
+                    GestureDetector(
+                      onTap: _updateActionDelete,
+                      child: _hasPressedDelete ?  Icon(Icons.done) : Icon(Icons.delete) ,
+                    ),
+                  ],
+                ),
+              ),
+               
 
               
               );

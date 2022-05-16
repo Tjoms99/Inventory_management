@@ -31,7 +31,7 @@ class _CustomerPageState extends State<CustomerPage> {
     UsersListPage(),
     Text("ADD/REMOVE ITEMS", style: _textStyle),
     Text("SCAN ITEMS FOR USER", style: _textStyle),
-    UserBodyPage(),
+    UserBodyPage(),  
   ];
 
   
@@ -65,7 +65,7 @@ class _CustomerPageState extends State<CustomerPage> {
               icon: const Icon(Icons.search),
             ),
           ]),
-        body: IndexedStack(
+        body:IndexedStack(
             index: _currentIndex,
             children: pages,
         ),
