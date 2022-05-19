@@ -11,18 +11,31 @@ class UsersListPage extends StatefulWidget {
 
 class _UsersListPageState extends State<UsersListPage> {
 
-  final int listLength = 12;
   late List<String> _users;
 
 
   @override
   void initState() {
     super.initState();
-    initializeSelection();
+    initializeUsers();
   }
 
-  void initializeSelection() {
-    _users = List<String>.generate(listLength, (_) => 'empty');
+  void initializeUsers() {
+    //Should get users from database
+    _users = [
+      'Mark',
+      'Ron',
+      'Sara',
+      'Marcus',
+      'Andreas',
+      'Pietari',
+      'Colari',
+      'Dimitri',
+      'Nico',
+      'Beate',
+      'Fillip',
+      'Tobias'
+    ];
   }
 
   @override
@@ -57,22 +70,6 @@ class _ListBuilderState extends State<ListBuilder> {
       bool _hasPressedDelete = false;
       bool _hasPressedModify = false;
       int _selectedIndex = 0;
-      
-    //Should get from database
-      List<String> _users = [
-      'Mark',
-      'Ron',
-      'Sara',
-      'Marcus',
-      'Andreas',
-      'Pietari',
-      'Colari',
-      'Dimitri',
-      'Nico',
-      'Beate',
-      'Fillip',
-      'Tobias'
-    ];
 
 
   void  _setSelectedIndex(int index) {
@@ -83,11 +80,15 @@ class _ListBuilderState extends State<ListBuilder> {
       });
   }
 
+/** 
+ * _updateActionModify
+ * 
+ * TODO: Update user in database
+ */
   void _updateActionModify() {
     print("modify");
     setState(() {
       if(_hasPressedModify) {
-        //Delete User 
         _hasPressedModify = false;
       } else {
         _hasPressedModify = true;
@@ -97,12 +98,17 @@ class _ListBuilderState extends State<ListBuilder> {
     });
   }
 
+/** 
+ * _updateActionDelete
+ * 
+ * TODO: Delete user from database
+ */
    void _updateActionDelete() {
     print("Delete");
     setState(() {
       _hasPressedModify = false; 
       if(_hasPressedDelete) {
-        //Modify user
+        widget.listToBuild.removeAt(_selectedIndex);
         _hasPressedDelete = false;
       } else {
         _hasPressedDelete = true;
@@ -112,6 +118,7 @@ class _ListBuilderState extends State<ListBuilder> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -119,7 +126,7 @@ class _ListBuilderState extends State<ListBuilder> {
         itemBuilder: (_, int index) {
           return ListTile(
               onTap: () => _setSelectedIndex(index),
-              title: Text('$index : ${_users[index]} @gmail.com'),
+              title: Text('$index : ${widget.listToBuild[index]} @gmail.com'),
               selected: index == _selectedIndex,
 
               trailing: Visibility(
@@ -129,7 +136,7 @@ class _ListBuilderState extends State<ListBuilder> {
                   children: <Widget>[
                     GestureDetector(
                       onTap: _updateActionModify,
-                      child: _hasPressedModify ?  Icon(Icons.done) : Icon(Icons.create), // icon-1
+                      child: _hasPressedModify ?  Icon(Icons.done) : Icon(Icons.create),
                     ),
                     GestureDetector(
                       onTap: _updateActionDelete,
@@ -138,10 +145,8 @@ class _ListBuilderState extends State<ListBuilder> {
                   ],
                 ),
               ),
-               
-
-              
-              );
-        });
+            );
+        },
+      );
   }
 }

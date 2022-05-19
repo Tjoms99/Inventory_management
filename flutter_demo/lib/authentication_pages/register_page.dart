@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 
+
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage();
+
 
   @override
   State<RegisterPage> createState() => _RegisterPage();
@@ -12,29 +14,46 @@ class _RegisterPage extends State<RegisterPage> {
   //Controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmController =
-      TextEditingController();
+  final TextEditingController _passwordConfirmController =  TextEditingController();
 
-  Future registerUser() async {
-    if (_passwordController.text.trim() ==
-        _passwordConfirmController.text.trim()) {
-      //Register user in database and goto login pag
 
-      Navigator.pop(context);
-    }
+  String getEmail() {
+    return _emailController.text.trim();
+  }
+  
+  String getPassword() {
+    return _passwordController.text.trim();
   }
 
-  Future login() async {
-    Navigator.pop(context);
+  String getConfirmPassword() {
+    return _passwordConfirmController.text.trim();
   }
 
-  @override
+    @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _passwordConfirmController.dispose();
     super.dispose();
   }
+
+
+  Future login() async {
+    Navigator.pop(context);
+  }
+
+  Future registerUser() async {
+    String email = getEmail();
+    String password = getPassword();
+    String confirmPassword = getConfirmPassword();
+    
+    if (true) {
+
+
+      Navigator.pop(context);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +66,7 @@ class _RegisterPage extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: firstBoxHeight),
-                //Icon
+                 //Icon
                 const ImageIcon(
                   AssetImage("assets/images/rfid_transparent.png"),
                   color: Color.fromARGB(255, 37, 174, 53),
@@ -198,7 +217,7 @@ class _RegisterPage extends State<RegisterPage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: registerUser,
+                      onTap: login,
                       child: const Text(
                         ' Login here',
                         style: TextStyle(
