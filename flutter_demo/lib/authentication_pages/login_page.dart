@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
     print("Register user");
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const RegisterPage()),
+      MaterialPageRoute(builder: (context) => RegisterPage('Register', '${_emailController.text.trim()}@gmail.com', 'Login')),
     );
   }
 

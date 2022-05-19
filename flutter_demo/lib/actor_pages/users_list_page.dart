@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/authentication_pages/register_page.dart';
+
 
 
 class UsersListPage extends StatefulWidget {
@@ -18,6 +20,7 @@ class _UsersListPageState extends State<UsersListPage> {
   void initState() {
     super.initState();
     initializeUsers();
+
   }
 
   void initializeUsers() {
@@ -86,10 +89,22 @@ class _ListBuilderState extends State<ListBuilder> {
  * TODO: Update user in database
  */
   void _updateActionModify() {
+    String _email = '${widget.listToBuild[_selectedIndex]}@gmail.com';
+
     print("modify");
+    //Go to update user page
+    if(_hasPressedModify) {
+      Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => RegisterPage('Update', _email, 'Cancel')),
+      );
+    }
+
+    //Update state
     setState(() {
       if(_hasPressedModify) {
         _hasPressedModify = false;
+
       } else {
         _hasPressedModify = true;
         _hasPressedDelete = false;
@@ -126,7 +141,7 @@ class _ListBuilderState extends State<ListBuilder> {
         itemBuilder: (_, int index) {
           return ListTile(
               onTap: () => _setSelectedIndex(index),
-              title: Text('$index : ${widget.listToBuild[index]} @gmail.com'),
+              title: Text('$index : ${widget.listToBuild[index]}@gmail.com'),
               selected: index == _selectedIndex,
 
               trailing: Visibility(

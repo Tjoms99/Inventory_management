@@ -3,11 +3,14 @@ import 'package:flutter_demo/constants.dart';
 
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage();
+  final String buttonText;
+  final String email;
+  final String infoText;
 
+  RegisterPage(this.buttonText, this.email, this.infoText);
 
   @override
-  State<RegisterPage> createState() => _RegisterPage();
+  _RegisterPage createState() => _RegisterPage();
 }
 
 class _RegisterPage extends State<RegisterPage> {
@@ -29,6 +32,18 @@ class _RegisterPage extends State<RegisterPage> {
     return _passwordConfirmController.text.trim();
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+    initializeControllers();
+    
+  }
+
+  void initializeControllers(){
+    _emailController.text = widget.email;
+  }
+
     @override
   void dispose() {
     _emailController.dispose();
@@ -42,6 +57,8 @@ class _RegisterPage extends State<RegisterPage> {
     Navigator.pop(context);
   }
 
+  //Should register/update the user
+  // TODO: Store info in database
   Future registerUser() async {
     String email = getEmail();
     String password = getPassword();
@@ -190,9 +207,9 @@ class _RegisterPage extends State<RegisterPage> {
                       decoration: const BoxDecoration(
                         color: secondaryBackgroundColor,
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'Register',
+                          widget.buttonText,
                           style: TextStyle(
                             color: buttonTextColor,
                             fontWeight: FontWeight.bold,
@@ -218,8 +235,8 @@ class _RegisterPage extends State<RegisterPage> {
                     ),
                     GestureDetector(
                       onTap: login,
-                      child: const Text(
-                        ' Login here',
+                      child: Text(
+                        ' ${widget.infoText} here',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
