@@ -3,11 +3,10 @@ import 'package:flutter_demo/constants.dart';
 
 
 class RegisterPage extends StatefulWidget {
-  final String buttonText;
+  final bool doRegister;
   final String email;
-  final String infoText;
 
-  RegisterPage(this.buttonText, this.email, this.infoText);
+  RegisterPage(this.doRegister, this.email);
 
   @override
   _RegisterPage createState() => _RegisterPage();
@@ -19,7 +18,6 @@ class _RegisterPage extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController =  TextEditingController();
 
-
   String getEmail() {
     return _emailController.text.trim();
   }
@@ -30,6 +28,11 @@ class _RegisterPage extends State<RegisterPage> {
 
   String getConfirmPassword() {
     return _passwordConfirmController.text.trim();
+  }
+
+  //TODO: get rfid tag from database
+  String getTag(){
+    return '1234567890';
   }
 
 
@@ -90,10 +93,11 @@ class _RegisterPage extends State<RegisterPage> {
                   size: 100,
                 ),
                 //Info text
-                const Padding(
+                //TODO add compatibility with RFID 
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: standardPadding),
                   child: Text(
-                    'Scan your RFID tag',
+                    widget.doRegister? 'Scan your RFID tag' : 'Scan to update RFID\nCurrent: ${getTag()}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: secondFontSize,
@@ -136,6 +140,8 @@ class _RegisterPage extends State<RegisterPage> {
                       fillColor: textfieldBackgroundColor,
                       filled: true,
                     ),
+                    enabled: widget.doRegister, 
+
                   ),
                 ),
                 const SizedBox(height: thirdBoxHeight),
@@ -160,7 +166,7 @@ class _RegisterPage extends State<RegisterPage> {
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
-                      hintText: 'Password',
+                      hintText: widget.doRegister? 'Password' : 'New Password',
                       fillColor: textfieldBackgroundColor,
                       filled: true,
                     ),
@@ -209,7 +215,7 @@ class _RegisterPage extends State<RegisterPage> {
                       ),
                       child: Center(
                         child: Text(
-                          widget.buttonText,
+                          widget.doRegister? 'Register' : 'Update',
                           style: TextStyle(
                             color: buttonTextColor,
                             fontWeight: FontWeight.bold,
@@ -226,8 +232,8 @@ class _RegisterPage extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Already a member?',
+                    Text(
+                      widget.doRegister? 'Already a member?' : '',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: forthFontSize,
@@ -236,7 +242,7 @@ class _RegisterPage extends State<RegisterPage> {
                     GestureDetector(
                       onTap: login,
                       child: Text(
-                        ' ${widget.infoText} here',
+                        widget.doRegister? ' Login here' : ' Cancel here',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,

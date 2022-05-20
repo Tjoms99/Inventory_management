@@ -96,7 +96,7 @@ class _ListBuilderState extends State<ListBuilder> {
     if(_hasPressedModify) {
       Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RegisterPage('Update', _email, 'Cancel')),
+      MaterialPageRoute(builder: (context) => RegisterPage(false, _email)),
       );
     }
 

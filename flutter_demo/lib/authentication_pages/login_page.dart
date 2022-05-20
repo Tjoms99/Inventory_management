@@ -17,18 +17,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  /*final bool didAuthenticate = await auth.authenticate(
-        localizedReason: 'Please authenticate to show account balance',
-        authMessages: const <AuthMessages>[
-          AndroidAuthMessages(
-            signInTitle: 'Oops! Biometric authentication required!',
-            cancelButton: 'No thanks',
-          ),
-          IOSAuthMessages(
-            cancelButton: 'No thanks',
-          ),
-        ]);
-*/
   Future signIn() async {
     //Check email and password using the controllers
     //_emailController.text.trim()
@@ -52,10 +40,11 @@ class _LoginPageState extends State<LoginPage> {
 
   Future registerUser() async {
     //Shown in debug console
+    String _email = '${_emailController.text.trim()}';
     print("Register user");
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RegisterPage('Register', '${_emailController.text.trim()}@gmail.com', 'Login')),
+      MaterialPageRoute(builder: (context) => RegisterPage(true, _email)),
     );
   }
 
