@@ -4,6 +4,8 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
 import 'package:flutter_demo/actor_pages/user_body_page.dart';
 import 'package:flutter_demo/actor_pages/users_list_page.dart';
+import 'package:flutter_demo/actor_pages/items_list_page.dart';
+
 
 
   const TextStyle _textStyle = TextStyle(
@@ -29,7 +31,7 @@ class _CustomerPageState extends State<CustomerPage> {
 
   List<Widget> pages =  [
     UsersListPage(),
-    Text("ADD/REMOVE ITEMS", style: _textStyle),
+    ItemsListPage(),
     Text("SCAN ITEMS FOR USER", style: _textStyle),
     UserBodyPage(),  
   ];
@@ -80,22 +82,22 @@ class _CustomerPageState extends State<CustomerPage> {
             NavigationDestination(
               selectedIcon: Icon(Icons.ballot),
               icon: Icon(Icons.ballot_outlined),
-              label: 'Users',
+              label: 'Accounts',
             ),
             NavigationDestination(
               selectedIcon: Icon(Icons.assignment),
               icon: Icon(Icons.assignment_outlined),
-              label: 'Add/Remove',
+              label: 'Items',
             ),
             NavigationDestination(
               selectedIcon: Icon(Icons.connect_without_contact),
               icon: Icon(Icons.connect_without_contact_outlined),
-              label: 'Assign Item',
+              label: 'Help User',
             ),
             NavigationDestination(
               selectedIcon: Icon(Icons.contactless),
               icon: Icon(Icons.contactless_outlined),
-              label: 'Borrow/Return',
+              label: 'Play User',
             ),
             
           ],

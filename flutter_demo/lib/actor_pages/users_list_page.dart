@@ -72,7 +72,7 @@ class ListBuilder extends StatefulWidget {
 class _ListBuilderState extends State<ListBuilder> {
       bool _hasPressedDelete = false;
       bool _hasPressedModify = false;
-      int _selectedIndex = 0;
+      int _selectedIndex = -1;
 
 
   void  _setSelectedIndex(int index) {
@@ -141,7 +141,7 @@ class _ListBuilderState extends State<ListBuilder> {
         itemBuilder: (_, int index) {
           return ListTile(
               onTap: () => _setSelectedIndex(index),
-              title: Text('$index : ${widget.listToBuild[index]}@gmail.com'),
+              title: Text('${widget.listToBuild[index]}@gmail.com', style: TextStyle(fontSize: 20),),
               selected: index == _selectedIndex,
 
               trailing: Visibility(
