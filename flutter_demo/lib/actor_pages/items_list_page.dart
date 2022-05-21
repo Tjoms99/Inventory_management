@@ -15,19 +15,19 @@ class ItemsListPage extends StatefulWidget {
 
 class _ItemsListPageState extends State<ItemsListPage> {
 
-  late List<String> _items;
+  late List<String> _itemTypes;
 
 
   @override
   void initState() {
     super.initState();
-    initializeItems();
+    initializeItemTypes();
 
   }
 
   //TODO: Init items from database
-  void initializeItems() {
-    _items = [
+  void initializeItemTypes() {
+    _itemTypes = [
       'Book',
       'Pen',
       'Paper',
@@ -39,7 +39,7 @@ class _ItemsListPageState extends State<ItemsListPage> {
 
   @override
   void dispose() {
-    _items.clear();
+    _itemTypes.clear();
     super.dispose();
   }
 
@@ -48,7 +48,7 @@ class _ItemsListPageState extends State<ItemsListPage> {
     return Scaffold(
         body: 
               ListBuilder(
-                listToBuild: _items,
+                listToBuild: _itemTypes,
               ));
   }
 }
@@ -66,65 +66,29 @@ class ListBuilder extends StatefulWidget {
 }
 
 class _ListBuilderState extends State<ListBuilder> {
-      bool _hasPressedDelete = false;
-      bool _hasPressedModify = false;
-      int _selectedIndex = -1;
+  late List<String> _items;
 
-
-  void  _setSelectedIndex(int index) {
-      setState(() {
-        _selectedIndex = index;
-        _hasPressedDelete = false;
-        _hasPressedModify = false;
-      });
+  @override
+  void initState() {
+    super.initState();
+    initializeItems();
+  }
+  @override
+  void dispose() {
+    _items.clear();
+    super.dispose();
   }
 
-/** 
- * _updateActionModify
- * 
- * TODO: Update user in database
- */
-  void _updateActionModify() {
-    print("modify");
-    //Go to update user page
-    if(_hasPressedModify) {
-      Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => RegisterPage(false, 'Should go to edit items page')),
-      );
-    }
-
-    //Update state
-    setState(() {
-      if(_hasPressedModify) {
-        _hasPressedModify = false;
-
-      } else {
-        _hasPressedModify = true;
-        _hasPressedDelete = false;
-      }
-
-    });
-  }
-
-/** 
- * _updateActionDelete
- * 
- * TODO: Delete user from database
- */
-   void _updateActionDelete() {
-    print("Delete");
-    setState(() {
-      _hasPressedModify = false; 
-      if(_hasPressedDelete) {
-        widget.listToBuild.removeAt(_selectedIndex);
-        _hasPressedDelete = false;
-      } else {
-        _hasPressedDelete = true;
-        _hasPressedModify = false;
-      }
-
-    });
+  //TODO: Get items from database
+  void initializeItems() {
+    _items = [
+      'RFID:     1234567890001\nSTATUS:      borrowed\nLOCATION:     marcus@gmail.com',
+      'RFID:      1234567890002\nSTATUS:      borrowed\nLOCATION:     andreas@gmail.com',
+      'RFID:      1234567890003\nSTATUS:      unassigned\nLOCATION:     inventory',
+      'RFID:      1234567890004\nSTATUS:      unassigned\nLOCATION:     inventory',
+      'RFID:      1234567890005\nSTATUS:      unassigned\nLOCATION:     inventory',
+      'RFID:      1234567890006\nSTATUS:      unassigned\nLOCATION:     inventory',
+    ];
   }
 
 
@@ -133,7 +97,7 @@ class _ListBuilderState extends State<ListBuilder> {
     return ListView.builder(
         itemCount: widget.listToBuild.length,
         itemBuilder: (_, int index) {
-          return new ExpandableListView(title: "${widget.listToBuild[index]}");
+          return new ExpandableListView(title: "${widget.listToBuild[index]}", listToBuild: _items);
         },
       );
   }
@@ -143,8 +107,9 @@ class _ListBuilderState extends State<ListBuilder> {
 
 class ExpandableListView extends StatefulWidget {
   final String title;
+  final List<String> listToBuild;
 
-  const ExpandableListView({Key? key, required this.title}) : super(key: key);
+  const ExpandableListView({Key? key, required this.title, required this.listToBuild}) : super(key: key);
 
   @override
   _ExpandableListViewState createState() => new _ExpandableListViewState();
@@ -152,6 +117,23 @@ class ExpandableListView extends StatefulWidget {
 
 class _ExpandableListViewState extends State<ExpandableListView> {
   bool expandFlag = false;
+   int _selectedIndex = 0;
+
+  void  _setSelectedIndex(int index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+  }
+  void modify() {
+    print("Modify");
+  }
+
+  void delete() {
+    print("Delete");
+    setState(() {
+      widget.listToBuild.removeAt(_selectedIndex);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,26 +174,33 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                     child: new ListTile(
                       //TODO: Import info from database 
                       title: new Text(
-                        "$index\nRFID\nSTATUS\nPOSITION",
+                        widget.listToBuild[index],
                         style: new TextStyle(color: Colors.black),
                       ),
+                      onTap: () => _setSelectedIndex(index),
+                      selected: index == _selectedIndex,
+
                       trailing: Visibility(
-                        //visible: 
+                        visible: _selectedIndex == index,
                         child: Wrap(
                           spacing: 12, 
                           children: <Widget> [
-                            Icon(Icons.create),
-                            Icon(Icons.delete), 
+                            GestureDetector (
+                            onTap: modify, 
+                            child: Icon(Icons.create),
+                            ),
+                            GestureDetector (
+                            onTap: delete, 
+                            child: Icon(Icons.delete),
+                            ), 
                           ],
                         ),
                       ),
-
-        
                     ),
                   );
                 },
                 //TODO: Fit to the items from the database
-                itemCount: 15,
+                itemCount: widget.listToBuild.length,
               ))
         ],
       ),
