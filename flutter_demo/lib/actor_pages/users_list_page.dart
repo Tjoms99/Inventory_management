@@ -141,8 +141,9 @@ class _ListBuilderState extends State<ListBuilder> {
         itemBuilder: (_, int index) {
           return ListTile(
               onTap: () => _setSelectedIndex(index),
-              title: Text('${widget.listToBuild[index]}@gmail.com', style: TextStyle(fontSize: 20),),
+              title: Text('${widget.listToBuild[index]}@gmail.com', style: TextStyle(color: Colors.black, fontSize: 20),),
               selected: index == _selectedIndex,
+              selectedTileColor: Colors.orange[200],
 
               trailing: Visibility(
                 visible: _selectedIndex == index,
@@ -151,11 +152,11 @@ class _ListBuilderState extends State<ListBuilder> {
                   children: <Widget>[
                     GestureDetector(
                       onTap: _updateActionModify,
-                      child: _hasPressedModify ?  Icon(Icons.done) : Icon(Icons.create),
+                      child: _hasPressedModify ?  Icon(Icons.done, color: Colors.black) : Icon(Icons.create, color: Colors.black),
                     ),
                     GestureDetector(
                       onTap: _updateActionDelete,
-                      child: _hasPressedDelete ?  Icon(Icons.done) : Icon(Icons.delete) ,
+                      child: _hasPressedDelete ?  Icon(Icons.done, color: Colors.black) : Icon(Icons.delete, color: Colors.black) ,
                     ),
                   ],
                 ),

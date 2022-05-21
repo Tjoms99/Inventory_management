@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
     //Shown in debug console
     print("Signed in user");
 
-    if(_emailController.text.trim() == "customer"){
+    if(_emailController.text.trim() == "customer" || _emailController.text.trim() == "marcus.alex@live.no"){
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const CustomerPage()),

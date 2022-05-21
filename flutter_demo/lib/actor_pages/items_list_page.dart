@@ -192,8 +192,18 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                     child: new ListTile(
                       //TODO: Import info from database 
                       title: new Text(
-                        "$index   RFID    STATUS    POSITION",
+                        "$index\nRFID\nSTATUS\nPOSITION",
                         style: new TextStyle(color: Colors.black),
+                      ),
+                      trailing: Visibility(
+                        //visible: 
+                        child: Wrap(
+                          spacing: 12, 
+                          children: <Widget> [
+                            Icon(Icons.create),
+                            Icon(Icons.delete), 
+                          ],
+                        ),
                       ),
 
         
