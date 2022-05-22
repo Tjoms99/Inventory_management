@@ -97,7 +97,7 @@ class _CustomerPageState extends State<CustomerPage> {
             NavigationDestination(
               selectedIcon: Icon(Icons.contactless),
               icon: Icon(Icons.contactless_outlined),
-              label: 'Play User',
+              label: 'User',
             ),
             
           ],

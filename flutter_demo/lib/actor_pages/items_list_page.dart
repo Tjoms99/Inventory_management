@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 
 //TODO: Replace with edit items page
-import 'package:flutter_demo/authentication_pages/register_page.dart';
+import 'package:flutter_demo/add_item_page.dart';
 
 
 
@@ -109,7 +109,7 @@ class ExpandableListView extends StatefulWidget {
   final String title;
   final List<String> listToBuild;
 
-  const ExpandableListView({Key? key, required this.title, required this.listToBuild}) : super(key: key);
+  ExpandableListView({Key? key, required this.title, required this.listToBuild}) : super(key: key);
 
   @override
   _ExpandableListViewState createState() => new _ExpandableListViewState();
@@ -124,8 +124,13 @@ class _ExpandableListViewState extends State<ExpandableListView> {
         _selectedIndex = index;
       });
   }
+
   void modify() {
     print("Modify");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddItemPage(false)),
+    );
   }
 
   void delete() {
