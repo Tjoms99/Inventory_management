@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
-import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
+import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 
 
 class UserPage extends StatefulWidget {
@@ -44,7 +44,7 @@ class _UserPage extends State<UserPage> {
               icon: const Icon(Icons.search),
             ),
           ]),
-          body: UserBodyPage(),
+          body: CustomerPage(),
     );
   }
 }
