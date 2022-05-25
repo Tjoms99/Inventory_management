@@ -39,6 +39,10 @@ class _UsersListPageState extends State<UsersListPage> {
       'Fillip',
       'Tobias'
     ];
+
+   _users.sort((a, b) {
+      return a.toLowerCase().compareTo(b.toLowerCase());
+    });
   }
 
   @override
@@ -104,7 +108,6 @@ class _ListBuilderState extends State<ListBuilder> {
     setState(() {
       if(_hasPressedModify) {
         _hasPressedModify = false;
-
       } else {
         _hasPressedModify = true;
         _hasPressedDelete = false;

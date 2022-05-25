@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
+import 'package:flutter_demo/add_item_page.dart';
+
 import 'package:flutter_demo/actor_pages/user_body_page.dart';
 import 'package:flutter_demo/actor_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/items_list_page.dart';
@@ -50,6 +52,12 @@ class _CustomerPageState extends State<CustomerPage> {
     );
   }
 
+  Future _addItem () async {
+      Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddItemPage(true)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +75,8 @@ class _CustomerPageState extends State<CustomerPage> {
               icon: const Icon(Icons.search),
             ),
           ]),
-        body:IndexedStack(
+        body:
+          IndexedStack(
             index: _currentIndex,
             children: pages,
         ),
@@ -102,7 +111,17 @@ class _CustomerPageState extends State<CustomerPage> {
             
           ],
         ),
-
+      
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat ,
+            floatingActionButton: new Visibility( 
+            visible: _currentIndex == 1,
+            child: new FloatingActionButton(
+            backgroundColor: Colors.orange[400],
+            onPressed: _addItem,
+            tooltip: 'Increment',
+            child: new Icon(Icons.add),
+            ),     
+          ),
     );
   }
 }
