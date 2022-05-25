@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 
-import 'package:flutter_demo/actor_pages/customer_page.dart';
-import 'package:flutter_demo/actor_pages/user_page.dart';
+import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
+import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 
 class AddItemPage extends StatefulWidget {
   final bool doAddItem;

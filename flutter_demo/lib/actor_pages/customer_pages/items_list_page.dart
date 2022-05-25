@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 
-//TODO: Replace with edit items page
-import 'package:flutter_demo/add_item_page.dart';
+import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 
 
 
