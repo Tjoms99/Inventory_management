@@ -6,6 +6,7 @@ import 'package:flutter_demo/add_item_page.dart';
 
 import 'package:flutter_demo/authentication_pages/register_page.dart';
 
+import 'package:flutter_demo/actor_pages/assist_user_page.dart';
 import 'package:flutter_demo/actor_pages/user_body_page.dart';
 import 'package:flutter_demo/actor_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/items_list_page.dart';
@@ -36,7 +37,7 @@ class _CustomerPageState extends State<CustomerPage> {
   List<Widget> pages =  [
     UsersListPage(),
     ItemsListPage(),
-    Text("SCAN ITEMS FOR USER", style: _textStyle),
+    AssistUserPage(),
     UserBodyPage(),  
   ];
 
