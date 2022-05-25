@@ -5,7 +5,9 @@ import 'package:flutter_demo/authentication_pages/register_page.dart';
 
 
 class UsersListPage extends StatefulWidget {
-  UsersListPage({Key? key}) : super(key: key);
+  final bool _isAdmin;
+
+  UsersListPage(this._isAdmin);
 
   @override
   State<UsersListPage> createState() => _UsersListPageState();
@@ -14,40 +16,64 @@ class UsersListPage extends StatefulWidget {
 class _UsersListPageState extends State<UsersListPage> {
 
   late List<String> _users;
-
+  late List<String> _customers;
+  late List<String> _accounts;
 
   @override
   void initState() {
     super.initState();
-    initializeUsers();
+    initializeAccounts();
 
   }
 
-  void initializeUsers() {
+  void initializeAccounts() {
     //Should get users from database
+
+    _customers = [
+      'customer1', 
+      'customer2', 
+      'customer3',
+      'customer4'
+    ];
+
+    _customers.sort((a, b) {
+      return a.toLowerCase().compareTo(b.toLowerCase());
+    });
+
     _users = [
-      'Mark',
-      'Ron',
-      'Sara',
-      'Marcus',
-      'Andreas',
-      'Pietari',
-      'Colari',
-      'Dimitri',
-      'Nico',
-      'Beate',
-      'Fillip',
-      'Tobias'
+      'Mark@gmail.com',
+      'Ron@gmail.com',
+      'Sara@gmail.com',
+      'Marcus@gmail.com',
+      'Andreas@gmail.com',
+      'Pietari@gmail.com',
+      'Colari@gmail.com',
+      'Dimitri@gmail.com',
+      'Nico@gmail.com',
+      'Beate@gmail.com',
+      'Fillip@gmail.com',
+      'Tobias@gmail.com'
     ];
 
    _users.sort((a, b) {
       return a.toLowerCase().compareTo(b.toLowerCase());
     });
+
+   
+    if(widget._isAdmin) {
+      _accounts = _customers + _users; 
+    } else {
+       _accounts = _users;
+    }
+
   }
 
   @override
   void dispose() {
     _users.clear();
+    _customers.clear();
+    _accounts.clear();
+
     super.dispose();
   }
 
@@ -56,7 +82,7 @@ class _UsersListPageState extends State<UsersListPage> {
     return Scaffold(
         body: 
               ListBuilder(
-                listToBuild: _users,
+                listToBuild: _accounts,
               ));
   }
 }
@@ -93,7 +119,7 @@ class _ListBuilderState extends State<ListBuilder> {
  * TODO: Update user in database
  */
   void _updateActionModify() {
-    String _email = '${widget.listToBuild[_selectedIndex]}@gmail.com';
+    String _email = '${widget.listToBuild[_selectedIndex]}';
 
     print("modify");
     //Go to update user page
@@ -144,7 +170,7 @@ class _ListBuilderState extends State<ListBuilder> {
         itemBuilder: (_, int index) {
           return ListTile(
               onTap: () => _setSelectedIndex(index),
-              title: Text('${widget.listToBuild[index]}@gmail.com', style: TextStyle(color: Colors.black, fontSize: 20),),
+              title: Text('${widget.listToBuild[index]}', style: TextStyle(color: Colors.black, fontSize: 20),),
               selected: index == _selectedIndex,
               selectedTileColor: Colors.orange[200],
 

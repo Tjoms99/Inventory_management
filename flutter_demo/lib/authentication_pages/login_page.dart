@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 
 import 'package:flutter_demo/authentication_pages/register_page.dart';
+import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 
@@ -18,17 +19,20 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future signIn() async {
-    //Check email and password using the controllers
-    //_emailController.text.trim()
-    //_passwordController.text.trim()
+    //TODO: Check email and password using the controllers
 
     //Shown in debug console
-    print("Signed in user");
+    print("Signed in ${_emailController.text.trim()}");
 
     if(_emailController.text.trim() == "customer" || _emailController.text.trim() == "marcus.alex@live.no"){
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const CustomerPage()),
+    );
+    } else if(_emailController.text.trim() == "admin" ){
+      Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AdminPage()),
     );
     } else {
       Navigator.push(

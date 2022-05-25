@@ -12,14 +12,6 @@ import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
 
 
-
-  const TextStyle _textStyle = TextStyle(
-  fontSize: 40,
-  fontWeight: FontWeight.bold,
-  letterSpacing: 2, 
-  fontStyle: FontStyle.italic,
-);
-
 class CustomerPage extends StatefulWidget {
   const CustomerPage({Key? key}) : super(key: key);
 
@@ -35,7 +27,7 @@ class _CustomerPageState extends State<CustomerPage> {
 
 
   List<Widget> pages =  [
-    UsersListPage(),
+    UsersListPage(false),
     ItemsListPage(),
     AssistUserPage(),
     UserBodyPage(),  
