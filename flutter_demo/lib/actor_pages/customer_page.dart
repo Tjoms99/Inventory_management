@@ -4,6 +4,8 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
 import 'package:flutter_demo/add_item_page.dart';
 
+import 'package:flutter_demo/authentication_pages/register_page.dart';
+
 import 'package:flutter_demo/actor_pages/user_body_page.dart';
 import 'package:flutter_demo/actor_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/items_list_page.dart';
@@ -58,6 +60,14 @@ class _CustomerPageState extends State<CustomerPage> {
       MaterialPageRoute(builder: (context) => AddItemPage(true)),
     );
   }
+
+  Future _addUser () async {
+      Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => RegisterPage(true, "")),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -114,10 +124,10 @@ class _CustomerPageState extends State<CustomerPage> {
       
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat ,
             floatingActionButton: new Visibility( 
-            visible: _currentIndex == 1,
+            visible: _currentIndex == 1 || _currentIndex == 0,
             child: new FloatingActionButton(
             backgroundColor: Colors.orange[400],
-            onPressed: _addItem,
+            onPressed: _currentIndex == 1? _addItem : _addUser,
             tooltip: 'Increment',
             child: new Icon(Icons.add),
             ),     
