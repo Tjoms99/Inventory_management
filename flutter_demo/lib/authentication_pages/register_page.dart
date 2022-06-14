@@ -228,18 +228,11 @@ class _RegisterPage extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      widget.doRegister ? 'Already a member?' : '',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: forthFontSize,
-                      ),
-                    ),
                     GestureDetector(
                       onTap: login,
-                      child: Text(
-                        widget.doRegister ? ' Login here' : ' Cancel here',
-                        style: const TextStyle(
+                      child: const Text(
+                        ' Cancel',
+                        style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
                           fontSize: forthFontSize,
