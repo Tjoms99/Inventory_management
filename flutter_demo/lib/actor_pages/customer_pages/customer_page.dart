@@ -11,7 +11,6 @@ import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
 
-
 class CustomerPage extends StatefulWidget {
   const CustomerPage({Key? key}) : super(key: key);
 
@@ -25,21 +24,19 @@ class _CustomerPageState extends State<CustomerPage> {
   var userTask = '';
   int _currentIndex = 3;
 
-
-  List<Widget> pages =  [
+  List<Widget> pages = [
     UsersListPage(false),
     ItemsListPage(),
-    AssistUserPage(),
-    UserBodyPage(),  
+    const AssistUserPage(),
+    UserBodyPage(),
   ];
-
-  
 
   Future signOut() async {
     //Shown in debug console
     print("Signed out user");
     Navigator.pop(context);
   }
+
   Future search() async {
     showSearch(
       context: context,
@@ -47,20 +44,19 @@ class _CustomerPageState extends State<CustomerPage> {
     );
   }
 
-  Future _addItem () async {
-      Navigator.push(
+  Future _addItem() async {
+    Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddItemPage(true)),
+      MaterialPageRoute(builder: (context) => const AddItemPage(true)),
     );
   }
 
-  Future _addUser () async {
-      Navigator.push(
+  Future _addUser() async {
+    Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RegisterPage(true, "")),
+      MaterialPageRoute(builder: (context) => const RegisterPage(true, "")),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,53 +74,50 @@ class _CustomerPageState extends State<CustomerPage> {
               icon: const Icon(Icons.search),
             ),
           ]),
-        body:
-          IndexedStack(
-            index: _currentIndex,
-            children: pages,
-        ),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: _currentIndex,
-          onDestinationSelected: (int newIndex) {
-            setState((){
-              _currentIndex = newIndex;
-            });
-          }, 
-          destinations: const [
-            NavigationDestination(
-              selectedIcon: Icon(Icons.ballot),
-              icon: Icon(Icons.ballot_outlined),
-              label: 'Accounts',
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(Icons.assignment),
-              icon: Icon(Icons.assignment_outlined),
-              label: 'Items',
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(Icons.connect_without_contact),
-              icon: Icon(Icons.connect_without_contact_outlined),
-              label: 'Help User',
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(Icons.contactless),
-              icon: Icon(Icons.contactless_outlined),
-              label: 'User',
-            ),
-            
-          ],
-        ),
-      
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat ,
-            floatingActionButton: new Visibility( 
-            visible: _currentIndex == 1 || _currentIndex == 0,
-            child: new FloatingActionButton(
-            backgroundColor: Colors.orange[400],
-            onPressed: _currentIndex == 1? _addItem : _addUser,
-            tooltip: 'Increment',
-            child: new Icon(Icons.add),
-            ),     
+      body: IndexedStack(
+        index: _currentIndex,
+        children: pages,
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (int newIndex) {
+          setState(() {
+            _currentIndex = newIndex;
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            selectedIcon: Icon(Icons.ballot),
+            icon: Icon(Icons.ballot_outlined),
+            label: 'Accounts',
           ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.assignment),
+            icon: Icon(Icons.assignment_outlined),
+            label: 'Items',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.connect_without_contact),
+            icon: Icon(Icons.connect_without_contact_outlined),
+            label: 'Help User',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.contactless),
+            icon: Icon(Icons.contactless_outlined),
+            label: 'User',
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Visibility(
+        visible: _currentIndex == 1 || _currentIndex == 0,
+        child: FloatingActionButton(
+          backgroundColor: Colors.orange[400],
+          onPressed: _currentIndex == 1 ? _addItem : _addUser,
+          tooltip: 'Increment',
+          child: Icon(Icons.add),
+        ),
+      ),
     );
   }
 }

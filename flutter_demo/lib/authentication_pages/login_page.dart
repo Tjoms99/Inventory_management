@@ -24,27 +24,28 @@ class _LoginPageState extends State<LoginPage> {
     //Shown in debug console
     print("Signed in ${_emailController.text.trim()}");
 
-    if(_emailController.text.trim() == "customer" || _emailController.text.trim() == "marcus.alex@live.no"){
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const CustomerPage()),
-    );
-    } else if(_emailController.text.trim() == "admin" ){
+    if (_emailController.text.trim() == "customer" ||
+        _emailController.text.trim() == "marcus.alex@live.no") {
       Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const AdminPage()),
-    );
+        context,
+        MaterialPageRoute(builder: (context) => const CustomerPage()),
+      );
+    } else if (_emailController.text.trim() == "admin") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const AdminPage()),
+      );
     } else {
       Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const UserPage()),
-    );
+        context,
+        MaterialPageRoute(builder: (context) => const UserPage()),
+      );
     }
   }
 
   Future registerUser() async {
     //Shown in debug console
-    String _email = '${_emailController.text.trim()}';
+    String _email = _emailController.text.trim();
     print("Register user");
     Navigator.push(
       context,

@@ -7,30 +7,30 @@ import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 class AddItemPage extends StatefulWidget {
   final bool doAddItem;
 
-  AddItemPage(this.doAddItem);
+  const AddItemPage(this.doAddItem);
 
   @override
   State<AddItemPage> createState() => _AddItemPageState();
 }
 
 class _AddItemPageState extends State<AddItemPage> {
-    //Controllers
+  //Controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
 
   @override
   void dispose() {
     super.dispose();
   }
 
-  Future update() async{
+  Future update() async {
     Navigator.pop(context);
   }
 
-  Future cancelUpdate() async{
+  Future cancelUpdate() async {
     Navigator.pop(context);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,8 +50,8 @@ class _AddItemPageState extends State<AddItemPage> {
 
                 //Hello
                 Text(
-                  widget.doAddItem? 'Add Item' : 'Update Item',
-                  style: TextStyle(
+                  widget.doAddItem ? 'Add Item' : 'Update Item',
+                  style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: secondFontSize),
                 ),
 
@@ -180,8 +180,8 @@ class _AddItemPageState extends State<AddItemPage> {
                       ),
                       child: Center(
                         child: Text(
-                          widget.doAddItem? 'Add to inventory' : 'Update',
-                          style: TextStyle(
+                          widget.doAddItem ? 'Add to inventory' : 'Update',
+                          style: const TextStyle(
                             color: buttonTextColor,
                             fontWeight: FontWeight.bold,
                             fontSize: buttonFontSize,
@@ -199,7 +199,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   children: [
                     GestureDetector(
                       onTap: cancelUpdate,
-                      child: Text(
+                      child: const Text(
                         'Cancel here',
                         style: TextStyle(
                           color: Colors.blue,

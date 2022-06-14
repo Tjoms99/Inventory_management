@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 
-
-
 class AssistUserPage extends StatefulWidget {
   const AssistUserPage({Key? key}) : super(key: key);
 
@@ -10,9 +8,8 @@ class AssistUserPage extends StatefulWidget {
   State<AssistUserPage> createState() => _AssistUserPageState();
 }
 
-
 class _AssistUserPageState extends State<AssistUserPage> {
-  bool _isUserScanned = false; 
+  bool _isUserScanned = false;
 
   @override
   void dispose() {
@@ -21,13 +18,13 @@ class _AssistUserPageState extends State<AssistUserPage> {
 
   //TODO: get RFID from user card
   Future _updateState() async {
-      if(_isUserScanned){
-        _assignItem("testUser");
-      }
+    if (_isUserScanned) {
+      _assignItem("testUser");
+    }
 
-     setState(() {
-        _isUserScanned = !_isUserScanned;
-      });
+    setState(() {
+      _isUserScanned = !_isUserScanned;
+    });
   }
 
   //TODO: get RFID from item and update database
@@ -46,21 +43,20 @@ class _AssistUserPageState extends State<AssistUserPage> {
               children: [
                 //Icon
                 GestureDetector(
-                onTap: _updateState,
-                child: const ImageIcon(
-                  AssetImage("assets/images/rfid_transparent.png"),
-                  color: Color.fromARGB(255, 37, 174, 53),
-                  size: 100,
+                  onTap: _updateState,
+                  child: const ImageIcon(
+                    AssetImage("assets/images/rfid_transparent.png"),
+                    color: Color.fromARGB(255, 37, 174, 53),
+                    size: 100,
+                  ),
                 ),
-              ),
                 //Hello
                 Text(
-                  _isUserScanned? 'Scan Item' : 'Scan User',
-                  style: TextStyle(
+                  _isUserScanned ? 'Scan Item' : 'Scan User',
+                  style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: secondFontSize),
                 ),
                 const SizedBox(height: firstBoxHeight),
-
               ],
             ),
           ),

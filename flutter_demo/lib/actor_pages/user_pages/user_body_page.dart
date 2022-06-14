@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 
-
 class UserBodyPage extends StatefulWidget {
-  UserBodyPage({Key? key}) : super(key: key);
+  const UserBodyPage({Key? key}) : super(key: key);
 
   @override
   State<UserBodyPage> createState() => _UserBodyPageState();
@@ -13,7 +12,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
   var userInput = 0;
   var userFeedback = '';
   var userTask = '';
-  
+
   //Should update the database when a user scans an item
   Future changeUserTask() async {
     print('RFID detected');

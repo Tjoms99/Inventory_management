@@ -4,7 +4,6 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
 
-
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
 
@@ -13,7 +12,6 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPage extends State<UserPage> {
-
   Future signOut() async {
     //Shown in debug console
     print("Signed out user");
@@ -26,7 +24,6 @@ class _UserPage extends State<UserPage> {
       delegate: MySearchDelegate(),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +41,7 @@ class _UserPage extends State<UserPage> {
               icon: const Icon(Icons.search),
             ),
           ]),
-          body: UserBodyPage(),
+      body: const UserBodyPage(),
     );
   }
 }
