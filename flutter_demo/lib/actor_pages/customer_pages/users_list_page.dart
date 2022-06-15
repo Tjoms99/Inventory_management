@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
+import 'package:http/http.dart' as http;
 
 class UsersListPage extends StatefulWidget {
   final bool _isAdmin;
@@ -12,76 +14,52 @@ class UsersListPage extends StatefulWidget {
 }
 
 class _UsersListPageState extends State<UsersListPage> {
-  late List<String> _users;
-  late List<String> _customers;
-  late List<String> _accounts;
-
   @override
   void initState() {
     super.initState();
-    initializeAccounts();
   }
 
-  void initializeAccounts() {
-    //Should get users from database
+  Future<List> getAccounts() async {
+    print("getaccounts 1");
+    var uri = Uri.parse("http://192.168.1.201/dashboard/flutter_db/server.php");
+    print(uri);
+    final response = await http.get(uri);
 
-    _customers = ['customer1', 'customer2', 'customer3', 'customer4'];
-
-    _customers.sort((a, b) {
-      return a.toLowerCase().compareTo(b.toLowerCase());
-    });
-
-    _users = [
-      'Mark@gmail.com',
-      'Ron@gmail.com',
-      'Sara@gmail.com',
-      'Marcus@gmail.com',
-      'Andreas@gmail.com',
-      'Pietari@gmail.com',
-      'Colari@gmail.com',
-      'Dimitri@gmail.com',
-      'Nico@gmail.com',
-      'Beate@gmail.com',
-      'Fillip@gmail.com',
-      'Tobias@gmail.com'
-    ];
-
-    _users.sort((a, b) {
-      return a.toLowerCase().compareTo(b.toLowerCase());
-    });
-
-    if (widget._isAdmin) {
-      _accounts = _customers + _users;
-    } else {
-      _accounts = _users;
-    }
+    return jsonDecode(response.body);
   }
 
   @override
   void dispose() {
-    _users.clear();
-    _customers.clear();
-    _accounts.clear();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListBuilder(
-      listToBuild: _accounts,
-    ));
+      body: FutureBuilder<List>(
+          future: getAccounts(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              print(snapshot.data);
+              print(snapshot.connectionState);
+
+              print("Error");
+            }
+            if (snapshot.hasData) {
+              return ListBuilder(
+                listToBuild: snapshot.data,
+              );
+            } else {
+              return const CircularProgressIndicator();
+            }
+          }),
+    );
   }
 }
 
 class ListBuilder extends StatefulWidget {
-  const ListBuilder({
-    Key? key,
-    required this.listToBuild,
-  }) : super(key: key);
-
-  final List<String> listToBuild;
+  final List? listToBuild;
+  const ListBuilder({this.listToBuild});
 
   @override
   State<ListBuilder> createState() => _ListBuilderState();
@@ -104,7 +82,7 @@ class _ListBuilderState extends State<ListBuilder> {
   ///
   /// TODO: Update user in database
   void _updateActionModify() {
-    String _email = widget.listToBuild[_selectedIndex];
+    String _email = widget.listToBuild![_selectedIndex]['account_name'];
 
     print("modify");
     //Go to update user page
@@ -134,7 +112,7 @@ class _ListBuilderState extends State<ListBuilder> {
     setState(() {
       _hasPressedModify = false;
       if (_hasPressedDelete) {
-        widget.listToBuild.removeAt(_selectedIndex);
+        widget.listToBuild?.removeAt(_selectedIndex);
         _hasPressedDelete = false;
       } else {
         _hasPressedDelete = true;
@@ -146,12 +124,16 @@ class _ListBuilderState extends State<ListBuilder> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: widget.listToBuild.length,
+      itemCount: widget.listToBuild?.length,
       itemBuilder: (_, int index) {
         return ListTile(
           onTap: () => _setSelectedIndex(index),
           title: Text(
-            widget.listToBuild[index],
+            widget.listToBuild![index]['account_name'],
+            style: const TextStyle(color: Colors.black, fontSize: 20),
+          ),
+          subtitle: Text(
+            widget.listToBuild![index]['account_role'],
             style: const TextStyle(color: Colors.black, fontSize: 20),
           ),
           selected: index == _selectedIndex,
