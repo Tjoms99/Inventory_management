@@ -84,11 +84,11 @@ class _ListBuilderState extends State<ListBuilder> {
     //Go to update user page
     //TODO edit this page
     if (_hasPressedModify) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => RegisterPage(
-              false, _email, (widget.listToBuild![_selectedIndex]['id'])),
+              false, _email, (widget.listToBuild![_selectedIndex]['id']), true),
         ),
       );
     }

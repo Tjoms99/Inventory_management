@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
+import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -6,8 +8,10 @@ class RegisterPage extends StatefulWidget {
   final bool _doRegister;
   final String _email;
   final String _index;
+  final bool _isLoggedIn;
 
-  const RegisterPage(this._doRegister, this._email, this._index);
+  const RegisterPage(
+      this._doRegister, this._email, this._index, this._isLoggedIn);
 
   @override
   _RegisterPage createState() => _RegisterPage();
@@ -66,6 +70,8 @@ class _RegisterPage extends State<RegisterPage> {
     String password = getPassword();
     String confirmPassword = getConfirmPassword();
     String accountRole = "user";
+    String rfid = "012345678901234567890001";
+    String customerId = "000000000";
 
     var uri = widget._doRegister
         ? Uri.parse("http://192.168.1.201/dashboard/flutter_db/addAccounts.php")
@@ -74,21 +80,43 @@ class _RegisterPage extends State<RegisterPage> {
 
     print(uri);
     print(widget._index);
-    if (widget._doRegister) {
-      http.post(uri, body: {
-        "account_name": email,
-        "account_role": accountRole,
-      });
-    } else {
-      http.post(uri, body: {
-        'id': widget._index,
-        'account_name': email,
-        'account_role': accountRole,
-      });
+    if (confirmPassword == password) {
+      if (widget._doRegister) {
+        http.post(uri, body: {
+          "account_name": email,
+          "account_role": accountRole,
+          "password": password,
+          "rfid": rfid,
+          "customer_id": customerId,
+        });
+        if (widget._isLoggedIn) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CustomerPage()),
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          );
+        }
+      } else {
+        http.post(uri, body: {
+          'id': widget._index,
+          'account_name': email,
+          'account_role': accountRole,
+          "password": password,
+          "rfid": rfid,
+          "customer_id": customerId,
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CustomerPage()),
+        );
+      }
     }
 
     print("register completed");
-    Navigator.pop(context);
   }
 
   @override

@@ -11,6 +11,8 @@ import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
 
+import '../../authentication_pages/login_page.dart';
+
 class CustomerPage extends StatefulWidget {
   const CustomerPage({Key? key}) : super(key: key);
 
@@ -34,7 +36,10 @@ class _CustomerPageState extends State<CustomerPage> {
   Future signOut() async {
     //Shown in debug console
     print("Signed out user");
-    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
   }
 
   Future search() async {
@@ -55,7 +60,7 @@ class _CustomerPageState extends State<CustomerPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => const RegisterPage(true, "", '0')),
+          builder: (context) => const RegisterPage(true, "", '0', true)),
     );
   }
 
