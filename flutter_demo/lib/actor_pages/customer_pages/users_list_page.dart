@@ -20,9 +20,8 @@ class _UsersListPageState extends State<UsersListPage> {
   }
 
   Future<List> getAccounts() async {
-    print("getaccounts 1");
-    var uri = Uri.parse("http://192.168.1.201/dashboard/flutter_db/server.php");
-    print(uri);
+    var uri =
+        Uri.parse("http://192.168.1.201/dashboard/flutter_db/getAccounts.php");
     final response = await http.get(uri);
 
     return jsonDecode(response.body);
@@ -40,14 +39,11 @@ class _UsersListPageState extends State<UsersListPage> {
           future: getAccounts(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              print(snapshot.data);
-              print(snapshot.connectionState);
-
               print("Error");
             }
             if (snapshot.hasData) {
               return ListBuilder(
-                listToBuild: snapshot.data,
+                listToBuild: snapshot.data as List,
               );
             } else {
               return const CircularProgressIndicator();
@@ -86,13 +82,16 @@ class _ListBuilderState extends State<ListBuilder> {
 
     print("modify");
     //Go to update user page
+    //TODO edit this page
     if (_hasPressedModify) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => RegisterPage(false, _email)),
+        MaterialPageRoute(
+          builder: (context) => RegisterPage(
+              false, _email, (widget.listToBuild![_selectedIndex]['id'])),
+        ),
       );
     }
-
     //Update state
     setState(() {
       if (_hasPressedModify) {
@@ -108,10 +107,19 @@ class _ListBuilderState extends State<ListBuilder> {
   ///
   /// TODO: Delete user from database
   void _updateActionDelete() {
+    String id = widget.listToBuild![_selectedIndex]['id'];
     print("Delete");
+    print(id);
+
     setState(() {
       _hasPressedModify = false;
       if (_hasPressedDelete) {
+        var uri = Uri.parse(
+            "http://192.168.1.201/dashboard/flutter_db/deleteAccount.php");
+        http.post(uri, body: {
+          'id': id,
+        });
+
         widget.listToBuild?.removeAt(_selectedIndex);
         _hasPressedDelete = false;
       } else {

@@ -25,10 +25,10 @@ class _AdminPageState extends State<AdminPage> {
   int _currentIndex = 3;
 
   List<Widget> pages = [
-    UsersListPage(true),
-    ItemsListPage(),
+    const UsersListPage(true),
+    const ItemsListPage(),
     const AssistUserPage(),
-    UserBodyPage(),
+    const UserBodyPage(),
   ];
 
   Future signOut() async {
@@ -47,14 +47,15 @@ class _AdminPageState extends State<AdminPage> {
   Future _addItem() async {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddItemPage(true)),
+      MaterialPageRoute(builder: (context) => const AddItemPage(true)),
     );
   }
 
   Future _addUser() async {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const RegisterPage(true, "")),
+      MaterialPageRoute(
+          builder: (context) => const RegisterPage(true, "", '0')),
     );
   }
 

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
-  final bool doRegister;
-  final String email;
+  final bool _doRegister;
+  final String _email;
+  final String _index;
 
-  const RegisterPage(this.doRegister, this.email);
+  const RegisterPage(this._doRegister, this._email, this._index);
 
   @override
   _RegisterPage createState() => _RegisterPage();
@@ -42,7 +44,7 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   void initializeControllers() {
-    _emailController.text = widget.email;
+    _emailController.text = widget._email;
   }
 
   @override
@@ -63,10 +65,30 @@ class _RegisterPage extends State<RegisterPage> {
     String email = getEmail();
     String password = getPassword();
     String confirmPassword = getConfirmPassword();
+    String accountRole = "user";
 
-    if (true) {
-      Navigator.pop(context);
+    var uri = widget._doRegister
+        ? Uri.parse("http://192.168.1.201/dashboard/flutter_db/addAccounts.php")
+        : Uri.parse(
+            "http://192.168.1.201/dashboard/flutter_db/updateAccount.php");
+
+    print(uri);
+    print(widget._index);
+    if (widget._doRegister) {
+      http.post(uri, body: {
+        "account_name": email,
+        "account_role": accountRole,
+      });
+    } else {
+      http.post(uri, body: {
+        'id': widget._index,
+        'account_name': email,
+        'account_role': accountRole,
+      });
     }
+
+    print("register completed");
+    Navigator.pop(context);
   }
 
   @override
@@ -92,7 +114,7 @@ class _RegisterPage extends State<RegisterPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: standardPadding),
                   child: Text(
-                    widget.doRegister
+                    widget._doRegister
                         ? 'Scan your RFID tag'
                         : 'Scan to update RFID\nCurrent: ${getTag()}',
                     style: const TextStyle(
@@ -137,7 +159,7 @@ class _RegisterPage extends State<RegisterPage> {
                       fillColor: textfieldBackgroundColor,
                       filled: true,
                     ),
-                    enabled: widget.doRegister,
+                    //enabled: widget._doRegister,
                   ),
                 ),
                 const SizedBox(height: thirdBoxHeight),
@@ -162,7 +184,8 @@ class _RegisterPage extends State<RegisterPage> {
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
-                      hintText: widget.doRegister ? 'Password' : 'New Password',
+                      hintText:
+                          widget._doRegister ? 'Password' : 'New Password',
                       fillColor: textfieldBackgroundColor,
                       filled: true,
                     ),
@@ -198,7 +221,7 @@ class _RegisterPage extends State<RegisterPage> {
                 ),
                 const SizedBox(height: thirdBoxHeight),
 
-                //Sign-in
+                //Sign-up
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: standardPadding),
@@ -211,7 +234,7 @@ class _RegisterPage extends State<RegisterPage> {
                       ),
                       child: Center(
                         child: Text(
-                          widget.doRegister ? 'Register' : 'Update',
+                          widget._doRegister ? 'Register' : 'Update',
                           style: const TextStyle(
                             color: buttonTextColor,
                             fontWeight: FontWeight.bold,

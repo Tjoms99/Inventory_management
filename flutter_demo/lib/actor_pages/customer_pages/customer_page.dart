@@ -25,10 +25,10 @@ class _CustomerPageState extends State<CustomerPage> {
   int _currentIndex = 3;
 
   List<Widget> pages = [
-    UsersListPage(false),
-    ItemsListPage(),
+    const UsersListPage(false),
+    const ItemsListPage(),
     const AssistUserPage(),
-    UserBodyPage(),
+    const UserBodyPage(),
   ];
 
   Future signOut() async {
@@ -54,7 +54,8 @@ class _CustomerPageState extends State<CustomerPage> {
   Future _addUser() async {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const RegisterPage(true, "")),
+      MaterialPageRoute(
+          builder: (context) => const RegisterPage(true, "", '0')),
     );
   }
 
@@ -115,7 +116,7 @@ class _CustomerPageState extends State<CustomerPage> {
           backgroundColor: Colors.orange[400],
           onPressed: _currentIndex == 1 ? _addItem : _addUser,
           tooltip: 'Increment',
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ),
       ),
     );

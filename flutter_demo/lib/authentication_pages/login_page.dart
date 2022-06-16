@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
     print("Register user");
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RegisterPage(true, _email)),
+      MaterialPageRoute(builder: (context) => RegisterPage(true, _email, '0')),
     );
   }
 
