@@ -35,27 +35,39 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     //Show approriate window depending on account role
-    if (accounts[accountIndex]['password'] == _passwordController.text.trim()) {
-      print("Signed in ${_emailController.text.trim()}");
+    if (accountIndex == -1) {
+      print("no account");
+      return;
+    }
 
-      if (accounts[accountIndex]['account_role'] == "customer") {
+    if (accounts[accountIndex]['password'] != _passwordController.text.trim()) {
+      print("wrong password");
+      return;
+    }
+
+    print("Signed in ${_emailController.text.trim()}");
+
+    switch (accounts[accountIndex]['account_role']) {
+      case "customer":
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const CustomerPage()),
         );
-      } else if (accounts[accountIndex]['account_role'] == "admin") {
+
+        break;
+
+      case "admin":
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const AdminPage()),
         );
-      } else {
+        break;
+
+      default:
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const UserPage()),
         );
-      }
-    } else {
-      print("wrong password");
     }
   }
 

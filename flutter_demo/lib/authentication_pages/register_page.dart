@@ -4,6 +4,7 @@ import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:http/http.dart' as http;
 
+//TODO Add filed for account type for admin, add user does not work
 class RegisterPage extends StatefulWidget {
   final bool _doRegister;
   final String _email;
