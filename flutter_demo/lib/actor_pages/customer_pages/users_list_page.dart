@@ -14,9 +14,25 @@ class UsersListPage extends StatefulWidget {
 }
 
 class _UsersListPageState extends State<UsersListPage> {
+  List accounts = [];
   @override
   void initState() {
     super.initState();
+  }
+
+  //Remove admin and customer accounts for everyone except admin
+  void setAccounts() {
+    if (widget._isAdmin) {
+      return;
+    }
+
+    for (int index = 0; index < accounts.length; index++) {
+      if (accounts[index]['account_role'] == "admin" ||
+          accounts[index]['account_role'] == "customer") {
+        print(accounts[index]['account_name']);
+        accounts.removeAt(index);
+      }
+    }
   }
 
   Future<List> getAccounts() async {
@@ -42,8 +58,10 @@ class _UsersListPageState extends State<UsersListPage> {
               print("Error");
             }
             if (snapshot.hasData) {
+              accounts = snapshot.data as List;
+              setAccounts();
               return ListBuilder(
-                listToBuild: snapshot.data as List,
+                listToBuild: accounts,
               );
             } else {
               return const CircularProgressIndicator();
