@@ -27,8 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     //Check if user exists
     int accountIndex = -1;
     for (int index = 0; index < accounts.length; index++) {
-      if (accounts[index]['account_name']!
-          .contains(_emailController.text.trim())) {
+      if (accounts[index]['account_name'] == (_emailController.text.trim())) {
         accountIndex = index;
         break;
       }

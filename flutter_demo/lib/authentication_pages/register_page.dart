@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
@@ -24,6 +26,7 @@ class _RegisterPage extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController =
       TextEditingController();
+  List accounts = [];
 
   String getEmail() {
     return _emailController.text.trim();
@@ -60,8 +63,26 @@ class _RegisterPage extends State<RegisterPage> {
     super.dispose();
   }
 
+  bool isRegistered() {
+    bool isRegistered = false;
+    print("check for user");
+
+    for (int index = 0; index < accounts.length; index++) {
+      if (accounts[index]['account_name'] == (_emailController.text.trim())) {
+        isRegistered = true;
+        print("found match");
+        break;
+      }
+    }
+
+    return isRegistered;
+  }
+
   Future login() async {
-    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
   }
 
   //Should register/update the user
@@ -81,43 +102,62 @@ class _RegisterPage extends State<RegisterPage> {
 
     print(uri);
     print(widget._index);
-    if (confirmPassword == password) {
-      if (widget._doRegister) {
-        http.post(uri, body: {
-          "account_name": email,
-          "account_role": accountRole,
-          "password": password,
-          "rfid": rfid,
-          "customer_id": customerId,
-        });
-        if (widget._isLoggedIn) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CustomerPage()),
-          );
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-          );
-        }
-      } else {
-        http.post(uri, body: {
-          'id': widget._index,
-          'account_name': email,
-          'account_role': accountRole,
-          "password": password,
-          "rfid": rfid,
-          "customer_id": customerId,
-        });
+    print(widget._doRegister);
+
+    if (confirmPassword != password) {
+      print("incorrect password");
+      return;
+    }
+
+    if (widget._doRegister) {
+      if (isRegistered()) {
+        print("returns");
+        return;
+      }
+
+      http.post(uri, body: {
+        "account_name": email,
+        "account_role": accountRole,
+        "password": password,
+        "rfid": rfid,
+        "customer_id": customerId,
+      });
+
+      if (widget._isLoggedIn) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const CustomerPage()),
         );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+        );
       }
+      print("registered");
+    } else {
+      http.post(uri, body: {
+        'id': widget._index,
+        'account_name': email,
+        'account_role': accountRole,
+        "password": password,
+        "rfid": rfid,
+        "customer_id": customerId,
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const CustomerPage()),
+      );
+      print("updated");
     }
+  }
 
-    print("register completed");
+  Future<List> getAccounts() async {
+    var uri =
+        Uri.parse("http://192.168.1.201/dashboard/flutter_db/getAccounts.php");
+    final response = await http.get(uri);
+
+    return jsonDecode(response.body);
   }
 
   @override
@@ -127,174 +167,188 @@ class _RegisterPage extends State<RegisterPage> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: firstBoxHeight),
-                //Icon
-                const ImageIcon(
-                  AssetImage("assets/images/rfid_transparent.png"),
-                  color: Color.fromARGB(255, 37, 174, 53),
-                  size: 100,
-                ),
-                //Info text
-                //TODO add compatibility with RFID
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: standardPadding),
-                  child: Text(
-                    widget._doRegister
-                        ? 'Scan your RFID tag'
-                        : 'Scan to update RFID\nCurrent: ${getTag()}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: secondFontSize,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: firstBoxHeight),
-
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: standardPadding),
-                  child: Text(
-                    '---AND---',
-                    style: TextStyle(
-                      fontSize: forthFontSize,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: firstBoxHeight),
-
-                //Email
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: texfieldPadding),
-                  child: TextField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: textfieldEnabledBorderColor),
-                        borderRadius:
-                            BorderRadius.circular(texfieldBorderRadius),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: textfieldFocusedBorderColor),
-                        borderRadius:
-                            BorderRadius.circular(texfieldBorderRadius),
-                      ),
-                      hintText: 'Email',
-                      fillColor: textfieldBackgroundColor,
-                      filled: true,
-                    ),
-                    //enabled: widget._doRegister,
-                  ),
-                ),
-                const SizedBox(height: thirdBoxHeight),
-
-                //Password
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: texfieldPadding),
-                  child: TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: textfieldEnabledBorderColor),
-                        borderRadius:
-                            BorderRadius.circular(texfieldBorderRadius),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: textfieldFocusedBorderColor),
-                        borderRadius:
-                            BorderRadius.circular(texfieldBorderRadius),
-                      ),
-                      hintText:
-                          widget._doRegister ? 'Password' : 'New Password',
-                      fillColor: textfieldBackgroundColor,
-                      filled: true,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: thirdBoxHeight),
-
-                //Password confirm
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: texfieldPadding),
-                  child: TextField(
-                    controller: _passwordConfirmController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: textfieldEnabledBorderColor),
-                        borderRadius:
-                            BorderRadius.circular(texfieldBorderRadius),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: textfieldFocusedBorderColor),
-                        borderRadius:
-                            BorderRadius.circular(texfieldBorderRadius),
-                      ),
-                      hintText: 'Confirm Password',
-                      fillColor: textfieldBackgroundColor,
-                      filled: true,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: thirdBoxHeight),
-
-                //Sign-up
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: standardPadding),
-                  child: GestureDetector(
-                    onTap: registerUser,
-                    child: Container(
-                      padding: const EdgeInsets.all(buttonPadding),
-                      decoration: const BoxDecoration(
-                        color: secondaryBackgroundColor,
-                      ),
-                      child: Center(
-                        child: Text(
-                          widget._doRegister ? 'Register' : 'Update',
-                          style: const TextStyle(
-                            color: buttonTextColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: buttonFontSize,
+            child: FutureBuilder<List>(
+                future: getAccounts(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    print("Error");
+                  }
+                  if (snapshot.hasData) {
+                    accounts = snapshot.data as List;
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: firstBoxHeight),
+                        //Icon
+                        const ImageIcon(
+                          AssetImage("assets/images/rfid_transparent.png"),
+                          color: Color.fromARGB(255, 37, 174, 53),
+                          size: 100,
+                        ),
+                        //Info text
+                        //TODO add compatibility with RFID
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: standardPadding),
+                          child: Text(
+                            widget._doRegister
+                                ? 'Scan your RFID tag'
+                                : 'Scan to update RFID\nCurrent: ${getTag()}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: secondFontSize,
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: thirdBoxHeight),
+                        const SizedBox(height: firstBoxHeight),
 
-                //Login
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: login,
-                      child: const Text(
-                        ' Cancel',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: forthFontSize,
+                        const Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: standardPadding),
+                          child: Text(
+                            '---AND---',
+                            style: TextStyle(
+                              fontSize: forthFontSize,
+                            ),
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
+                        const SizedBox(height: firstBoxHeight),
+
+                        //Email
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: texfieldPadding),
+                          child: TextField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: textfieldEnabledBorderColor),
+                                borderRadius:
+                                    BorderRadius.circular(texfieldBorderRadius),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: textfieldFocusedBorderColor),
+                                borderRadius:
+                                    BorderRadius.circular(texfieldBorderRadius),
+                              ),
+                              hintText: 'Email',
+                              fillColor: textfieldBackgroundColor,
+                              filled: true,
+                            ),
+                            //enabled: widget._doRegister,
+                          ),
+                        ),
+                        const SizedBox(height: thirdBoxHeight),
+
+                        //Password
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: texfieldPadding),
+                          child: TextField(
+                            controller: _passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: textfieldEnabledBorderColor),
+                                borderRadius:
+                                    BorderRadius.circular(texfieldBorderRadius),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: textfieldFocusedBorderColor),
+                                borderRadius:
+                                    BorderRadius.circular(texfieldBorderRadius),
+                              ),
+                              hintText: widget._doRegister
+                                  ? 'Password'
+                                  : 'New Password',
+                              fillColor: textfieldBackgroundColor,
+                              filled: true,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: thirdBoxHeight),
+
+                        //Password confirm
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: texfieldPadding),
+                          child: TextField(
+                            controller: _passwordConfirmController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: textfieldEnabledBorderColor),
+                                borderRadius:
+                                    BorderRadius.circular(texfieldBorderRadius),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: textfieldFocusedBorderColor),
+                                borderRadius:
+                                    BorderRadius.circular(texfieldBorderRadius),
+                              ),
+                              hintText: 'Confirm Password',
+                              fillColor: textfieldBackgroundColor,
+                              filled: true,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: thirdBoxHeight),
+
+                        //Sign-up
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: standardPadding),
+                          child: GestureDetector(
+                            onTap: registerUser,
+                            child: Container(
+                              padding: const EdgeInsets.all(buttonPadding),
+                              decoration: const BoxDecoration(
+                                color: secondaryBackgroundColor,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  widget._doRegister ? 'Register' : 'Update',
+                                  style: const TextStyle(
+                                    color: buttonTextColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: buttonFontSize,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: thirdBoxHeight),
+
+                        //Login
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: login,
+                              child: const Text(
+                                ' Cancel',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: forthFontSize,
+                                ),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    );
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                }),
           ),
         ),
       ),
