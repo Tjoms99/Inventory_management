@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/constants.dart';
@@ -12,9 +13,10 @@ class RegisterPage extends StatefulWidget {
   final String _email;
   final String _index;
   final bool _isLoggedIn;
+  final bool? _isAdmin;
 
-  const RegisterPage(
-      this._doRegister, this._email, this._index, this._isLoggedIn);
+  const RegisterPage(this._doRegister, this._email, this._index,
+      this._isLoggedIn, this._isAdmin);
 
   @override
   _RegisterPage createState() => _RegisterPage();
@@ -26,7 +28,9 @@ class _RegisterPage extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController =
       TextEditingController();
+  final TextEditingController _accountRoleController = TextEditingController();
   List accounts = [];
+  bool _isRegistered = false;
 
   String getEmail() {
     return _emailController.text.trim();
@@ -38,6 +42,18 @@ class _RegisterPage extends State<RegisterPage> {
 
   String getConfirmPassword() {
     return _passwordConfirmController.text.trim();
+  }
+
+  String getRole() {
+    return _accountRoleController.text.trim();
+  }
+
+  String getRFID() {
+    return "012345678901234567890001";
+  }
+
+  String getCustomerID() {
+    return "0";
   }
 
   //TODO: get rfid tag from database
@@ -63,26 +79,39 @@ class _RegisterPage extends State<RegisterPage> {
     super.dispose();
   }
 
-  bool isRegistered() {
-    bool isRegistered = false;
+  void _checkAccount() {
     print("check for user");
 
     for (int index = 0; index < accounts.length; index++) {
-      if (accounts[index]['account_name'] == (_emailController.text.trim())) {
-        isRegistered = true;
-        print("found match");
+      if (accounts[index]['account_name'] == (getEmail())) {
+        _isRegistered = true;
+        _accountRoleController.text = accounts[index]['account_role'];
         break;
       }
     }
-
-    return isRegistered;
   }
 
-  Future login() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
+  Future gotoPage() async {
+    if (widget._isLoggedIn) {
+      if (widget._isAdmin!) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AdminPage()),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CustomerPage()),
+        );
+      }
+    } else {
+      print("goto login");
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    }
   }
 
   //Should register/update the user
@@ -91,9 +120,9 @@ class _RegisterPage extends State<RegisterPage> {
     String email = getEmail();
     String password = getPassword();
     String confirmPassword = getConfirmPassword();
-    String accountRole = "user";
-    String rfid = "012345678901234567890001";
-    String customerId = "000000000";
+    String accountRole = getRole();
+    String rfid = getRFID();
+    String customerId = getCustomerID();
 
     var uri = widget._doRegister
         ? Uri.parse("http://192.168.1.201/dashboard/flutter_db/addAccounts.php")
@@ -110,7 +139,7 @@ class _RegisterPage extends State<RegisterPage> {
     }
 
     if (widget._doRegister) {
-      if (isRegistered()) {
+      if (_isRegistered) {
         print("returns");
         return;
       }
@@ -123,17 +152,7 @@ class _RegisterPage extends State<RegisterPage> {
         "customer_id": customerId,
       });
 
-      if (widget._isLoggedIn) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const CustomerPage()),
-        );
-      } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
-      }
+      gotoPage();
       print("registered");
     } else {
       http.post(uri, body: {
@@ -144,10 +163,8 @@ class _RegisterPage extends State<RegisterPage> {
         "rfid": rfid,
         "customer_id": customerId,
       });
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const CustomerPage()),
-      );
+
+      gotoPage();
       print("updated");
     }
   }
@@ -175,6 +192,8 @@ class _RegisterPage extends State<RegisterPage> {
                   }
                   if (snapshot.hasData) {
                     accounts = snapshot.data as List;
+                    _checkAccount();
+
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -237,7 +256,7 @@ class _RegisterPage extends State<RegisterPage> {
                               fillColor: textfieldBackgroundColor,
                               filled: true,
                             ),
-                            //enabled: widget._doRegister,
+                            enabled: widget._doRegister,
                           ),
                         ),
                         const SizedBox(height: thirdBoxHeight),
@@ -300,6 +319,33 @@ class _RegisterPage extends State<RegisterPage> {
                         ),
                         const SizedBox(height: thirdBoxHeight),
 
+                        //Account role
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: texfieldPadding),
+                          child: TextField(
+                            controller: _accountRoleController,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: textfieldEnabledBorderColor),
+                                borderRadius:
+                                    BorderRadius.circular(texfieldBorderRadius),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: textfieldFocusedBorderColor),
+                                borderRadius:
+                                    BorderRadius.circular(texfieldBorderRadius),
+                              ),
+                              hintText: 'Account role',
+                              fillColor: textfieldBackgroundColor,
+                              filled: true,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: thirdBoxHeight),
+
                         //Sign-up
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -326,12 +372,12 @@ class _RegisterPage extends State<RegisterPage> {
                         ),
                         const SizedBox(height: thirdBoxHeight),
 
-                        //Login
+                        //Cancle
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             GestureDetector(
-                              onTap: login,
+                              onTap: gotoPage,
                               child: const Text(
                                 ' Cancel',
                                 style: TextStyle(

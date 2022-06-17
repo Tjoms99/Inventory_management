@@ -60,7 +60,7 @@ class _CustomerPageState extends State<CustomerPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => const RegisterPage(true, "", '0', true)),
+          builder: (context) => const RegisterPage(true, "", '0', true, false)),
     );
   }
 

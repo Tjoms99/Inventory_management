@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => RegisterPage(true, _email, '0', false)),
+          builder: (context) => RegisterPage(true, _email, '0', false, false)),
     );
   }
 

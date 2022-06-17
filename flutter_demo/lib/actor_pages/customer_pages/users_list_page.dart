@@ -62,6 +62,7 @@ class _UsersListPageState extends State<UsersListPage> {
               setAccounts();
               return ListBuilder(
                 listToBuild: accounts,
+                isAdmin: widget._isAdmin,
               );
             } else {
               return const CircularProgressIndicator();
@@ -73,7 +74,9 @@ class _UsersListPageState extends State<UsersListPage> {
 
 class ListBuilder extends StatefulWidget {
   final List? listToBuild;
-  const ListBuilder({this.listToBuild});
+  final bool? isAdmin;
+
+  const ListBuilder({this.listToBuild, this.isAdmin});
 
   @override
   State<ListBuilder> createState() => _ListBuilderState();
@@ -105,11 +108,12 @@ class _ListBuilderState extends State<ListBuilder> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RegisterPage(
-              false, _email, (widget.listToBuild![_selectedIndex]['id']), true),
+          builder: (context) => RegisterPage(false, _email,
+              widget.listToBuild![_selectedIndex]['id'], true, widget.isAdmin),
         ),
       );
     }
+
     //Update state
     setState(() {
       if (_hasPressedModify) {
@@ -121,9 +125,7 @@ class _ListBuilderState extends State<ListBuilder> {
     });
   }
 
-  /// _updateActionDelete
-  ///
-  /// TODO: Delete user from database
+  // TODO: Delete user from database
   void _updateActionDelete() {
     String id = widget.listToBuild![_selectedIndex]['id'];
     print("Delete");

@@ -55,7 +55,7 @@ class _AdminPageState extends State<AdminPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => const RegisterPage(true, "", '0', true)),
+          builder: (context) => const RegisterPage(true, "", '0', true, true)),
     );
   }
 
