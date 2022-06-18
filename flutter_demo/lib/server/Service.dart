@@ -20,3 +20,11 @@ Future<List<Account>> getAccounts() async {
 
   return accounts;
 }
+
+void deleteAccount(int id) {
+  var uri =
+      Uri.parse("http://192.168.1.201/dashboard/flutter_db/deleteAccount.php");
+  http.post(uri, body: {
+    'id': jsonEncode(id),
+  });
+}

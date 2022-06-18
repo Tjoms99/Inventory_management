@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
-import 'package:http/http.dart' as http;
 
 import '../../classes/account.dart';
 import '../../server/service.dart';
@@ -128,13 +125,9 @@ class _ListBuilderState extends State<ListBuilder> {
     setState(() {
       _hasPressedModify = false;
       if (_hasPressedDelete) {
-        var uri = Uri.parse(
-            "http://192.168.1.201/dashboard/flutter_db/deleteAccount.php");
-        http.post(uri, body: {
-          'id': id,
-        });
-
+        deleteAccount(id);
         widget.listOfAccounts.removeAt(_selectedIndex);
+
         _hasPressedDelete = false;
       } else {
         _hasPressedDelete = true;
