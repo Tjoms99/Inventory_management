@@ -15,7 +15,7 @@ import '../../authentication_pages/login_page.dart';
 import '../../classes/account.dart';
 
 class CustomerPage extends StatefulWidget {
-  Account currentAccount;
+  Account currentAccount = createDefaultAccount();
   CustomerPage({required this.currentAccount});
 
   @override
@@ -27,11 +27,12 @@ class _CustomerPageState extends State<CustomerPage> {
   var userFeedback = '';
   var userTask = '';
   int _currentIndex = 3;
+
   List<Widget> pages = [];
 
   Future signOut() async {
     //Shown in debug console
-    print("Signed out user");
+    print("Signed out customer");
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
 
 import '../../classes/account.dart';
-import '../../server/service.dart';
+import '../../server/account_service.dart';
 
 class UsersListPage extends StatefulWidget {
   Account currentAccount;
@@ -25,12 +25,10 @@ class _UsersListPageState extends State<UsersListPage> {
     if (isAdmin(widget.currentAccount)) {
       return;
     }
-
+    print("Setting accounts");
     for (int index = 0; index < accounts.length; index++) {
-      Account account = createAccountFromJson(accounts, index);
-
       //Remove all admins and customers
-      if ((isAdmin(account) || isCustomer(account))) {
+      if ((isAdmin(accounts[index]) || isCustomer(accounts[index]))) {
         accounts.removeAt(index);
 
         //Update index due to list length change
@@ -54,7 +52,7 @@ class _UsersListPageState extends State<UsersListPage> {
               //error
             }
             if (snapshot.hasData) {
-              accounts = snapshot.data!;
+              accounts = snapshot.data as List<Account>;
               setAccounts();
               return ListBuilder(
                 listOfAccounts: accounts,
@@ -69,8 +67,8 @@ class _UsersListPageState extends State<UsersListPage> {
 }
 
 class ListBuilder extends StatefulWidget {
-  List<Account> listOfAccounts;
-  Account currentAccount;
+  List<Account> listOfAccounts = [];
+  Account currentAccount = createDefaultAccount();
   ListBuilder({required this.listOfAccounts, required this.currentAccount});
 
   @override

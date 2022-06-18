@@ -31,7 +31,7 @@ void deleteAccount(int id) {
 
 void addAccount(Account account) {
   var uri =
-      Uri.parse("http://192.168.1.201/dashboard/flutter_db/addAccounts.php");
+      Uri.parse("http://192.168.1.201/dashboard/flutter_db/addAccount.php");
 
   http.post(uri, body: {
     "account_name": account.accountName,

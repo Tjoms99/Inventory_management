@@ -3,7 +3,7 @@ import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/constants.dart';
-import 'package:flutter_demo/server/service.dart';
+import 'package:flutter_demo/server/account_service.dart';
 
 import '../classes/account.dart';
 

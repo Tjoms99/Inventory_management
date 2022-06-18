@@ -18,6 +18,10 @@ class Account {
 }
 
 Account createAccountFromJson(List<dynamic> accounts, int index) {
+  if (accounts[index] == null) {
+    return createDefaultAccount();
+  }
+
   return Account(
       id: jsonDecode(accounts[index]['id']),
       accountName: accounts[index]['account_name'] as String,
