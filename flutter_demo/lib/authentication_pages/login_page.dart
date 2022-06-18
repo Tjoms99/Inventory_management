@@ -48,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
         print(accounts[index]['customer_id']);
 
         print(accounts);
+        /*
         currentAccount.id = jsonDecode(accounts[index]['id']);
         currentAccount.accountName = accounts[index]['account_name'] as String;
         currentAccount.accountRole = accounts[index]['account_role'] as String;
@@ -55,6 +56,9 @@ class _LoginPageState extends State<LoginPage> {
         currentAccount.rfid = accounts[index]['rfid'] as String;
         currentAccount.customerId = accounts[index]['customer_id'] as String;
 
+        */
+
+        currentAccount = currentAccount.fromJson(accounts, accountIndex);
         print(currentAccount);
         break;
       }

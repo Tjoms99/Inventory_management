@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Account {
   int id;
   String accountName;
@@ -13,4 +15,14 @@ class Account {
       required this.password,
       required this.rfid,
       required this.customerId});
+
+  Account fromJson(List<dynamic> accounts, int index) {
+    return Account(
+        id: jsonDecode(accounts[index]['id']),
+        accountName: accounts[index]['account_name'] as String,
+        accountRole: accounts[index]['account_role'] as String,
+        password: accounts[index]['password'] as String,
+        rfid: accounts[index]['rfid'] as String,
+        customerId: accounts[index]['customer_id'] as String);
+  }
 }
