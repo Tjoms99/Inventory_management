@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:http/http.dart' as http;
 
-class UsersListPage extends StatefulWidget {
-  final bool _isAdmin;
+import '../../classes/account.dart';
 
-  const UsersListPage(this._isAdmin);
+class UsersListPage extends StatefulWidget {
+  Account? currentAccount;
+
+  UsersListPage(this.currentAccount);
 
   @override
   State<UsersListPage> createState() => _UsersListPageState();
@@ -22,7 +24,8 @@ class _UsersListPageState extends State<UsersListPage> {
 
   //Remove admin and customer accounts for everyone except admin
   void setAccounts() {
-    if (widget._isAdmin) {
+    print("account role ${widget.currentAccount?.accountRole}");
+    if (widget.currentAccount?.accountRole == "admin") {
       return;
     }
 
@@ -62,7 +65,7 @@ class _UsersListPageState extends State<UsersListPage> {
               setAccounts();
               return ListBuilder(
                 listToBuild: accounts,
-                isAdmin: widget._isAdmin,
+                currentAccount: widget.currentAccount,
               );
             } else {
               return const CircularProgressIndicator();
@@ -74,9 +77,8 @@ class _UsersListPageState extends State<UsersListPage> {
 
 class ListBuilder extends StatefulWidget {
   final List? listToBuild;
-  final bool? isAdmin;
-
-  const ListBuilder({this.listToBuild, this.isAdmin});
+  Account? currentAccount;
+  ListBuilder({this.listToBuild, this.currentAccount});
 
   @override
   State<ListBuilder> createState() => _ListBuilderState();
@@ -108,8 +110,12 @@ class _ListBuilderState extends State<ListBuilder> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RegisterPage(false, _email,
-              widget.listToBuild![_selectedIndex]['id'], true, widget.isAdmin),
+          builder: (context) => RegisterPage(
+              false,
+              _email,
+              widget.listToBuild![_selectedIndex]['id'],
+              true,
+              widget.currentAccount),
         ),
       );
     }

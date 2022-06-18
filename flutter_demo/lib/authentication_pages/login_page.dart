@@ -10,6 +10,8 @@ import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../classes/account.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -22,16 +24,43 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   List accounts = [];
+  Account currentAccount = Account(
+      id: 0,
+      accountName: "accountName",
+      accountRole: "accountRole",
+      password: "password",
+      rfid: "01230123",
+      customerId: "customerId");
 
+//TODO rfid returns null for some reason. fix;
   Future signIn() async {
     //Check if user exists
     int accountIndex = -1;
     for (int index = 0; index < accounts.length; index++) {
       if (accounts[index]['account_name'] == (_emailController.text.trim())) {
         accountIndex = index;
+
+        print(accounts[index]['id']);
+        print(accounts[index]['account_name']);
+        print(accounts[index]['account_role']);
+        print(accounts[index]['password']);
+        print(accounts[index]['rfid']);
+        print(accounts[index]['customer_id']);
+
+        print(accounts);
+        currentAccount.id = jsonDecode(accounts[index]['id']);
+        currentAccount.accountName = accounts[index]['account_name'] as String;
+        currentAccount.accountRole = accounts[index]['account_role'] as String;
+        currentAccount.password = accounts[index]['password'] as String;
+        currentAccount.rfid = accounts[index]['rfid'] as String;
+        currentAccount.customerId = accounts[index]['customer_id'] as String;
+
+        print(currentAccount);
         break;
       }
     }
+
+    print("account role ${currentAccount.accountRole}");
 
     //Show approriate window depending on account role
     if (accountIndex == -1) {
@@ -50,7 +79,9 @@ class _LoginPageState extends State<LoginPage> {
       case "customer":
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const CustomerPage()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  CustomerPage(currentAccount: currentAccount)),
         );
 
         break;
@@ -58,14 +89,16 @@ class _LoginPageState extends State<LoginPage> {
       case "admin":
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const AdminPage()),
+          MaterialPageRoute(
+              builder: (context) => AdminPage(currentAccount: currentAccount)),
         );
         break;
 
       default:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const UserPage()),
+          MaterialPageRoute(
+              builder: (context) => UserPage(currentAccount: currentAccount)),
         );
     }
   }
@@ -77,7 +110,8 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => RegisterPage(true, _email, '0', false, false)),
+          builder: (context) =>
+              RegisterPage(true, _email, '0', false, currentAccount)),
     );
   }
 

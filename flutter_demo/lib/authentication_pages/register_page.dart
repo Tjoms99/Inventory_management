@@ -7,16 +7,18 @@ import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:http/http.dart' as http;
 
+import '../classes/account.dart';
+
 //TODO Add filed for account type for admin, add user does not work
 class RegisterPage extends StatefulWidget {
   final bool _doRegister;
   final String _email;
   final String _index;
   final bool _isLoggedIn;
-  final bool? _isAdmin;
+  Account? currentAccount;
 
-  const RegisterPage(this._doRegister, this._email, this._index,
-      this._isLoggedIn, this._isAdmin);
+  RegisterPage(this._doRegister, this._email, this._index, this._isLoggedIn,
+      this.currentAccount);
 
   @override
   _RegisterPage createState() => _RegisterPage();
@@ -29,6 +31,8 @@ class _RegisterPage extends State<RegisterPage> {
   final TextEditingController _passwordConfirmController =
       TextEditingController();
   final TextEditingController _accountRoleController = TextEditingController();
+  final TextEditingController _customerIDController = TextEditingController();
+
   List accounts = [];
   bool _isRegistered = false;
 
@@ -53,7 +57,7 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   String getCustomerID() {
-    return "0";
+    return _customerIDController.text.trim();
   }
 
   //TODO: get rfid tag from database
@@ -93,15 +97,19 @@ class _RegisterPage extends State<RegisterPage> {
 
   Future gotoPage() async {
     if (widget._isLoggedIn) {
-      if (widget._isAdmin!) {
+      if (widget.currentAccount?.accountRole == "admin") {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const AdminPage()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  AdminPage(currentAccount: widget.currentAccount)),
         );
       } else {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const CustomerPage()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  CustomerPage(currentAccount: widget.currentAccount)),
         );
       }
     } else {
@@ -256,7 +264,7 @@ class _RegisterPage extends State<RegisterPage> {
                               fillColor: textfieldBackgroundColor,
                               filled: true,
                             ),
-                            enabled: widget._doRegister,
+                            //enabled: widget._doRegister,
                           ),
                         ),
                         const SizedBox(height: thirdBoxHeight),
@@ -319,31 +327,69 @@ class _RegisterPage extends State<RegisterPage> {
                         ),
                         const SizedBox(height: thirdBoxHeight),
 
-                        //Account role
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: texfieldPadding),
-                          child: TextField(
-                            controller: _accountRoleController,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: textfieldEnabledBorderColor),
-                                borderRadius:
-                                    BorderRadius.circular(texfieldBorderRadius),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: textfieldFocusedBorderColor),
-                                borderRadius:
-                                    BorderRadius.circular(texfieldBorderRadius),
-                              ),
-                              hintText: 'Account role',
-                              fillColor: textfieldBackgroundColor,
-                              filled: true,
-                            ),
-                          ),
-                        ),
+                        //Account role'
+                        widget.currentAccount?.accountRole == "admin"
+                            ? Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: texfieldPadding),
+                                    child: TextField(
+                                      controller: _accountRoleController,
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldEnabledBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldFocusedBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
+                                        ),
+                                        hintText: 'Account role',
+                                        fillColor: textfieldBackgroundColor,
+                                        filled: true,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: thirdBoxHeight),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: texfieldPadding),
+                                    child: TextField(
+                                      controller: _customerIDController,
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldEnabledBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldFocusedBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
+                                        ),
+                                        hintText: 'Customer ID',
+                                        fillColor: textfieldBackgroundColor,
+                                        filled: true,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            :
+                            //Display nothing
+                            const SizedBox(),
+
                         const SizedBox(height: thirdBoxHeight),
 
                         //Sign-up
@@ -388,7 +434,8 @@ class _RegisterPage extends State<RegisterPage> {
                               ),
                             )
                           ],
-                        )
+                        ),
+                        const SizedBox(height: thirdBoxHeight),
                       ],
                     );
                   } else {

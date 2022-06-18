@@ -12,9 +12,11 @@ import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
 
 import '../../authentication_pages/login_page.dart';
+import '../../classes/account.dart';
 
 class CustomerPage extends StatefulWidget {
-  const CustomerPage({Key? key}) : super(key: key);
+  Account? currentAccount;
+  CustomerPage({required this.currentAccount});
 
   @override
   State<CustomerPage> createState() => _CustomerPageState();
@@ -25,13 +27,7 @@ class _CustomerPageState extends State<CustomerPage> {
   var userFeedback = '';
   var userTask = '';
   int _currentIndex = 3;
-
-  List<Widget> pages = [
-    const UsersListPage(false),
-    const ItemsListPage(),
-    const AssistUserPage(),
-    const UserBodyPage(),
-  ];
+  List<Widget> pages = [];
 
   Future signOut() async {
     //Shown in debug console
@@ -60,12 +56,20 @@ class _CustomerPageState extends State<CustomerPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => const RegisterPage(true, "", '0', true, false)),
+          builder: (context) =>
+              RegisterPage(true, "", '0', true, widget.currentAccount)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    pages = [
+      UsersListPage(widget.currentAccount),
+      const ItemsListPage(),
+      const AssistUserPage(),
+      const UserBodyPage(),
+    ];
+
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/classes/account.dart';
 
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
@@ -12,7 +13,8 @@ import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
 
 class AdminPage extends StatefulWidget {
-  const AdminPage({Key? key}) : super(key: key);
+  Account? currentAccount;
+  AdminPage({required this.currentAccount});
 
   @override
   State<AdminPage> createState() => _AdminPageState();
@@ -24,12 +26,7 @@ class _AdminPageState extends State<AdminPage> {
   var userTask = '';
   int _currentIndex = 3;
 
-  List<Widget> pages = [
-    const UsersListPage(true),
-    const ItemsListPage(),
-    const AssistUserPage(),
-    const UserBodyPage(),
-  ];
+  List<Widget> pages = [];
 
   Future signOut() async {
     //Shown in debug console
@@ -55,12 +52,20 @@ class _AdminPageState extends State<AdminPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => const RegisterPage(true, "", '0', true, true)),
+          builder: (context) =>
+              RegisterPage(true, "", '0', true, widget.currentAccount)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    pages = [
+      UsersListPage(widget.currentAccount),
+      const ItemsListPage(),
+      const AssistUserPage(),
+      const UserBodyPage(),
+    ];
+
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(

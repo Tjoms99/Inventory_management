@@ -1,18 +1,16 @@
 class Account {
   int id;
-  String account_name;
-  String account_role;
+  String accountName;
+  String accountRole;
+  String password;
+  String rfid;
+  String customerId;
 
   Account(
       {required this.id,
-      required this.account_name,
-      required this.account_role});
-
-  factory Account.fromJson(Map<String, dynamic> json) {
-    return Account(
-      id: json['id'] as int,
-      account_name: json['account_name'] as String,
-      account_role: json['account_role'] as String,
-    );
-  }
+      required this.accountName,
+      required this.accountRole,
+      required this.password,
+      required this.rfid,
+      required this.customerId});
 }

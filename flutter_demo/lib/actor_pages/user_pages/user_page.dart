@@ -4,8 +4,11 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
 
+import '../../classes/account.dart';
+
 class UserPage extends StatefulWidget {
-  const UserPage({Key? key}) : super(key: key);
+  Account? currentAccount;
+  UserPage({required this.currentAccount});
 
   @override
   State<UserPage> createState() => _UserPage();
