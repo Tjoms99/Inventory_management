@@ -50,6 +50,7 @@ bool isDefualt(Account account) {
 
 bool isAdmin(Account account) {
   bool _isAdmin = false;
+
   if (account.accountRole == "admin") _isAdmin = true;
 
   return _isAdmin;

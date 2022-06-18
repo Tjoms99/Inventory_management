@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/constants.dart';
 
 import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 
@@ -156,44 +155,55 @@ class _ExpandableListViewState extends State<ExpandableListView> {
             ),
           ),
           ExpandableContainer(
-              expanded: expandFlag,
-              child: ListView.builder(
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1.0, color: Colors.white),
-                        color: Colors.white),
-                    child: ListTile(
-                      //TODO: Import info from database
-                      title: Text(
-                        widget.listToBuild[index],
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                      onTap: () => _setSelectedIndex(index),
-                      selected: index == _selectedIndex,
-
-                      trailing: Visibility(
-                        visible: _selectedIndex == index,
-                        child: Wrap(
-                          spacing: 12,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: modify,
-                              child: const Icon(Icons.create),
-                            ),
-                            GestureDetector(
-                              onTap: delete,
-                              child: const Icon(Icons.delete),
-                            ),
-                          ],
+            expanded: expandFlag,
+            child: expandFlag
+                ? DataTable(
+                    columns: const <DataColumn>[
+                      DataColumn(
+                        label: Text(
+                          'Name',
+                          style: TextStyle(fontStyle: FontStyle.italic),
                         ),
                       ),
-                    ),
-                  );
-                },
-                //TODO: Fit to the items from the database
-                itemCount: widget.listToBuild.length,
-              ))
+                      DataColumn(
+                        label: Text(
+                          'Age',
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Role',
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ],
+                    rows: const <DataRow>[
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('Sarah')),
+                          DataCell(Text('19')),
+                          DataCell(Text('Student')),
+                        ],
+                      ),
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('Janine')),
+                          DataCell(Text('43')),
+                          DataCell(Text('Professor')),
+                        ],
+                      ),
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('William')),
+                          DataCell(Text('27')),
+                          DataCell(Text('Associate Professor')),
+                        ],
+                      ),
+                    ],
+                  )
+                : const SizedBox(),
+          ),
         ],
       ),
     );
@@ -217,7 +227,7 @@ class ExpandableContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return AnimatedContainer(
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 100),
       curve: Curves.easeInOut,
       width: screenWidth,
       height: expanded ? expandedHeight : collapsedHeight,
