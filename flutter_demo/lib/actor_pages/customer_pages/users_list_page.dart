@@ -34,6 +34,9 @@ class _UsersListPageState extends State<UsersListPage> {
       //Remove all admins and customers
       if ((isAdmin(account) || isCustomer(account))) {
         accounts.removeAt(index);
+
+        //Update index due to list length change
+        index = index - 1;
       }
     }
   }

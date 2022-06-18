@@ -23,8 +23,8 @@ class _LoginPageState extends State<LoginPage> {
   //Controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  //Accounts
   List accounts = [];
-  //Default account
   Account currentAccount = createDefaultAccount();
 
   Future signIn() async {
@@ -34,19 +34,14 @@ class _LoginPageState extends State<LoginPage> {
     print("account role ${currentAccount.accountRole}");
 
     //Show approriate window depending on account role
-    if (accountIndex == -1) {
+    if (isDefualt(currentAccount)) {
       print("no account");
       return;
     }
 
-    if (accounts[accountIndex]['password'] != _passwordController.text.trim()) {
-      print("wrong password");
-      return;
-    }
+    print("Signed in ${currentAccount.accountName}");
 
-    print("Signed in ${_emailController.text.trim()}");
-
-    switch (accounts[accountIndex]['account_role']) {
+    switch (currentAccount.accountRole) {
       case "customer":
         Navigator.push(
           context,
