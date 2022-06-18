@@ -36,7 +36,7 @@ void addItem(Item item) {
     'rfid': item.rfid,
     'description': item.description,
     'location': item.location,
-    'registeredCustomerId': item.registeredCustomerId,
+    'registered_customer_id': item.registeredCustomerId,
   });
 }
 
