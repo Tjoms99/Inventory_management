@@ -15,7 +15,7 @@ import '../../authentication_pages/login_page.dart';
 import '../../classes/account.dart';
 
 class CustomerPage extends StatefulWidget {
-  Account? currentAccount;
+  Account currentAccount;
   CustomerPage({required this.currentAccount});
 
   @override

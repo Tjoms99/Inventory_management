@@ -24,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   List accounts = [];
+  //Default account
   Account currentAccount = Account(
       id: 0,
       accountName: "accountName",
@@ -32,33 +33,14 @@ class _LoginPageState extends State<LoginPage> {
       rfid: "01230123",
       customerId: "customerId");
 
-//TODO rfid returns null for some reason. fix;
   Future signIn() async {
     //Check if user exists
     int accountIndex = -1;
     for (int index = 0; index < accounts.length; index++) {
       if (accounts[index]['account_name'] == (_emailController.text.trim())) {
         accountIndex = index;
+        currentAccount = createAccountFromJson(accounts, accountIndex);
 
-        print(accounts[index]['id']);
-        print(accounts[index]['account_name']);
-        print(accounts[index]['account_role']);
-        print(accounts[index]['password']);
-        print(accounts[index]['rfid']);
-        print(accounts[index]['customer_id']);
-
-        print(accounts);
-        /*
-        currentAccount.id = jsonDecode(accounts[index]['id']);
-        currentAccount.accountName = accounts[index]['account_name'] as String;
-        currentAccount.accountRole = accounts[index]['account_role'] as String;
-        currentAccount.password = accounts[index]['password'] as String;
-        currentAccount.rfid = accounts[index]['rfid'] as String;
-        currentAccount.customerId = accounts[index]['customer_id'] as String;
-
-        */
-
-        currentAccount = currentAccount.fromJson(accounts, accountIndex);
         print(currentAccount);
         break;
       }

@@ -15,7 +15,7 @@ import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
 import '../../authentication_pages/login_page.dart';
 
 class AdminPage extends StatefulWidget {
-  Account? currentAccount;
+  Account currentAccount;
   AdminPage({required this.currentAccount});
 
   @override

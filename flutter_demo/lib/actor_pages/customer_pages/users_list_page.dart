@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import '../../classes/account.dart';
 
 class UsersListPage extends StatefulWidget {
-  Account? currentAccount;
+  Account currentAccount;
 
   UsersListPage(this.currentAccount);
 
@@ -24,15 +24,15 @@ class _UsersListPageState extends State<UsersListPage> {
 
   //Remove admin and customer accounts for everyone except admin
   void setAccounts() {
-    print("account role ${widget.currentAccount?.accountRole}");
-    if (widget.currentAccount?.accountRole == "admin") {
+    if (isAdmin(widget.currentAccount)) {
       return;
     }
 
     for (int index = 0; index < accounts.length; index++) {
-      if (accounts[index]['account_role'] == "admin" ||
-          accounts[index]['account_role'] == "customer") {
-        print(accounts[index]['account_name']);
+      Account account = createAccountFromJson(accounts, index);
+
+      //Remove all admins and customers
+      if ((isAdmin(account) || isCustomer(account))) {
         accounts.removeAt(index);
       }
     }
@@ -77,8 +77,8 @@ class _UsersListPageState extends State<UsersListPage> {
 
 class ListBuilder extends StatefulWidget {
   final List? listToBuild;
-  Account? currentAccount;
-  ListBuilder({this.listToBuild, this.currentAccount});
+  Account currentAccount;
+  ListBuilder({this.listToBuild, required this.currentAccount});
 
   @override
   State<ListBuilder> createState() => _ListBuilderState();
@@ -97,15 +97,10 @@ class _ListBuilderState extends State<ListBuilder> {
     });
   }
 
-  /// _updateActionModify
-  ///
-  /// TODO: Update user in database
   void _updateActionModify() {
     String _email = widget.listToBuild![_selectedIndex]['account_name'];
 
-    print("modify");
     //Go to update user page
-    //TODO edit this page
     if (_hasPressedModify) {
       Navigator.push(
         context,
@@ -131,7 +126,6 @@ class _ListBuilderState extends State<ListBuilder> {
     });
   }
 
-  // TODO: Delete user from database
   void _updateActionDelete() {
     String id = widget.listToBuild![_selectedIndex]['id'];
     print("Delete");

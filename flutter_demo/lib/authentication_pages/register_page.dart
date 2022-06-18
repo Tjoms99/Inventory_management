@@ -15,7 +15,7 @@ class RegisterPage extends StatefulWidget {
   final String _email;
   final String _index;
   final bool _isLoggedIn;
-  Account? currentAccount;
+  Account currentAccount;
 
   RegisterPage(this._doRegister, this._email, this._index, this._isLoggedIn,
       this.currentAccount);
@@ -97,7 +97,7 @@ class _RegisterPage extends State<RegisterPage> {
 
   Future gotoPage() async {
     if (widget._isLoggedIn) {
-      if (widget.currentAccount?.accountRole == "admin") {
+      if (widget.currentAccount.accountRole == "admin") {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -328,7 +328,7 @@ class _RegisterPage extends State<RegisterPage> {
                         const SizedBox(height: thirdBoxHeight),
 
                         //Account role'
-                        widget.currentAccount?.accountRole == "admin"
+                        widget.currentAccount.accountRole == "admin"
                             ? Column(
                                 children: [
                                   Padding(
