@@ -33,6 +33,7 @@ class _RegisterPage extends State<RegisterPage> {
 
   List<Account> accounts = [];
   bool _isRegistered = false;
+  String rfid_tag = "";
 
   String getEmail() {
     return _emailController.text.trim();
@@ -51,7 +52,7 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   String getRFID() {
-    return "012345678901234567890001";
+    return rfid_tag;
   }
 
   String getCustomerID() {
@@ -59,8 +60,8 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   //TODO: get rfid tag from database
-  String getTag() {
-    return '1234567890';
+  void setTag(String rfidString) {
+    rfid_tag = rfidString;
   }
 
   @override
@@ -89,6 +90,7 @@ class _RegisterPage extends State<RegisterPage> {
         _isRegistered = true;
         _accountRoleController.text = accounts[index].accountRole;
         _customerIDController.text = accounts[index].customerId;
+        setTag(accounts[index].rfid);
         break;
       }
     }
@@ -151,13 +153,12 @@ class _RegisterPage extends State<RegisterPage> {
       }
 
       addAccount(account);
-      gotoPage();
       print("registered");
     } else {
       updateAccount(account);
-      gotoPage();
       print("updated");
     }
+    gotoPage();
   }
 
   @override
@@ -195,7 +196,7 @@ class _RegisterPage extends State<RegisterPage> {
                           child: Text(
                             widget._doRegister
                                 ? 'Scan your RFID tag'
-                                : 'Scan to update RFID\nCurrent: ${getTag()}',
+                                : 'Scan to update RFID\nCurrent: ${getRFID()}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: secondFontSize,
