@@ -25,26 +25,11 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   List accounts = [];
   //Default account
-  Account currentAccount = Account(
-      id: 0,
-      accountName: "accountName",
-      accountRole: "accountRole",
-      password: "password",
-      rfid: "01230123",
-      customerId: "customerId");
+  Account currentAccount = createDefaultAccount();
 
   Future signIn() async {
-    //Check if user exists
-    int accountIndex = -1;
-    for (int index = 0; index < accounts.length; index++) {
-      if (accounts[index]['account_name'] == (_emailController.text.trim())) {
-        accountIndex = index;
-        currentAccount = createAccountFromJson(accounts, accountIndex);
-
-        print(currentAccount);
-        break;
-      }
-    }
+    currentAccount = getAccountFromList(accounts, _emailController.text.trim(),
+        _passwordController.text.trim());
 
     print("account role ${currentAccount.accountRole}");
 

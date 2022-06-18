@@ -27,6 +27,23 @@ Account createAccountFromJson(List<dynamic> accounts, int index) {
       customerId: accounts[index]['customer_id'] as String);
 }
 
+Account createDefaultAccount() {
+  return Account(
+      id: 0,
+      accountName: "accountName",
+      accountRole: "accountRole",
+      password: "password",
+      rfid: "rfid",
+      customerId: "customerId");
+}
+
+bool isDefualt(Account account) {
+  bool _isDefault = false;
+  if (account.accountRole == "accountRole") _isDefault = true;
+
+  return _isDefault;
+}
+
 bool isAdmin(Account account) {
   bool _isAdmin = false;
   if (account.accountRole == "admin") _isAdmin = true;
@@ -39,4 +56,23 @@ bool isCustomer(Account account) {
   if (account.accountRole == "customer") _isCustomer = true;
 
   return _isCustomer;
+}
+
+Account getAccountFromList(
+    List<dynamic> accounts, String email, String password) {
+  Account thisAccount = createDefaultAccount();
+
+  for (int index = 0; index < accounts.length; index++) {
+    Account account = createAccountFromJson(accounts, index);
+
+    if (account.accountName == email) {
+      if (account.password == password) {
+        thisAccount = account;
+        break;
+      }
+    }
+  }
+
+  print(thisAccount);
+  return thisAccount;
 }

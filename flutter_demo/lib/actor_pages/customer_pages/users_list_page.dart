@@ -58,7 +58,7 @@ class _UsersListPageState extends State<UsersListPage> {
           future: getAccounts(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              print("Error");
+              //error
             }
             if (snapshot.hasData) {
               accounts = snapshot.data as List;
@@ -128,8 +128,6 @@ class _ListBuilderState extends State<ListBuilder> {
 
   void _updateActionDelete() {
     String id = widget.listToBuild![_selectedIndex]['id'];
-    print("Delete");
-    print(id);
 
     setState(() {
       _hasPressedModify = false;
