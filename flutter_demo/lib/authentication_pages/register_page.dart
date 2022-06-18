@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/constants.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_demo/server/service.dart';
 
 import '../classes/account.dart';
 
@@ -33,7 +31,7 @@ class _RegisterPage extends State<RegisterPage> {
   final TextEditingController _accountRoleController = TextEditingController();
   final TextEditingController _customerIDController = TextEditingController();
 
-  List accounts = [];
+  List<Account> accounts = [];
   bool _isRegistered = false;
 
   String getEmail() {
@@ -87,9 +85,10 @@ class _RegisterPage extends State<RegisterPage> {
     print("check for user");
 
     for (int index = 0; index < accounts.length; index++) {
-      if (accounts[index]['account_name'] == (getEmail())) {
+      if (accounts[index].accountName == (getEmail())) {
         _isRegistered = true;
-        _accountRoleController.text = accounts[index]['account_role'];
+        _accountRoleController.text = accounts[index].accountRole;
+        _customerIDController.text = accounts[index].customerId;
         break;
       }
     }
@@ -132,14 +131,13 @@ class _RegisterPage extends State<RegisterPage> {
     String rfid = getRFID();
     String customerId = getCustomerID();
 
-    var uri = widget._doRegister
-        ? Uri.parse("http://192.168.1.201/dashboard/flutter_db/addAccounts.php")
-        : Uri.parse(
-            "http://192.168.1.201/dashboard/flutter_db/updateAccount.php");
-
-    print(uri);
-    print(widget._index);
-    print(widget._doRegister);
+    Account account = Account(
+        id: widget._index,
+        accountName: email,
+        accountRole: accountRole,
+        password: password,
+        rfid: rfid,
+        customerId: customerId);
 
     if (confirmPassword != password) {
       print("incorrect password");
@@ -152,37 +150,14 @@ class _RegisterPage extends State<RegisterPage> {
         return;
       }
 
-      http.post(uri, body: {
-        "account_name": email,
-        "account_role": accountRole,
-        "password": password,
-        "rfid": rfid,
-        "customer_id": customerId,
-      });
-
+      addAccount(account);
       gotoPage();
       print("registered");
     } else {
-      http.post(uri, body: {
-        'id': widget._index,
-        'account_name': email,
-        'account_role': accountRole,
-        "password": password,
-        "rfid": rfid,
-        "customer_id": customerId,
-      });
-
+      updateAccount(account);
       gotoPage();
       print("updated");
     }
-  }
-
-  Future<List> getAccounts() async {
-    var uri =
-        Uri.parse("http://192.168.1.201/dashboard/flutter_db/getAccounts.php");
-    final response = await http.get(uri);
-
-    return jsonDecode(response.body);
   }
 
   @override
@@ -192,14 +167,14 @@ class _RegisterPage extends State<RegisterPage> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            child: FutureBuilder<List>(
+            child: FutureBuilder<List<Account>>(
                 future: getAccounts(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     print("Error");
                   }
                   if (snapshot.hasData) {
-                    accounts = snapshot.data as List;
+                    accounts = snapshot.data!;
                     _checkAccount();
 
                     return Column(

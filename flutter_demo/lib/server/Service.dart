@@ -28,3 +28,30 @@ void deleteAccount(int id) {
     'id': jsonEncode(id),
   });
 }
+
+void addAccount(Account account) {
+  var uri =
+      Uri.parse("http://192.168.1.201/dashboard/flutter_db/addAccounts.php");
+
+  http.post(uri, body: {
+    "account_name": account.accountName,
+    "account_role": account.accountRole,
+    "password": account.password,
+    "rfid": account.rfid,
+    "customer_id": account.customerId,
+  });
+}
+
+void updateAccount(Account account) {
+  var uri =
+      Uri.parse("http://192.168.1.201/dashboard/flutter_db/updateAccount.php");
+
+  http.post(uri, body: {
+    'id': jsonEncode(account.id),
+    "account_name": account.accountName,
+    "account_role": account.accountRole,
+    "password": account.password,
+    "rfid": account.rfid,
+    "customer_id": account.customerId,
+  });
+}
