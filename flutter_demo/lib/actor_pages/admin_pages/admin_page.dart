@@ -12,6 +12,8 @@ import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
 
+import '../../authentication_pages/login_page.dart';
+
 class AdminPage extends StatefulWidget {
   Account? currentAccount;
   AdminPage({required this.currentAccount});
@@ -31,7 +33,10 @@ class _AdminPageState extends State<AdminPage> {
   Future signOut() async {
     //Shown in debug console
     print("Signed out admin");
-    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
   }
 
   Future search() async {
