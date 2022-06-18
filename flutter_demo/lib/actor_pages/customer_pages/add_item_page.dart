@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 
-import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
-import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
+import '../../classes/account.dart';
+import '../../classes/item.dart';
+import '../../server/item_service.dart';
+import '../admin_pages/admin_page.dart';
+import 'customer_page.dart';
 
 class AddItemPage extends StatefulWidget {
   final bool doAddItem;
+  Account currentAccount;
 
-  const AddItemPage(this.doAddItem);
+  AddItemPage({required this.doAddItem, required this.currentAccount});
 
   @override
   State<AddItemPage> createState() => _AddItemPageState();
@@ -15,20 +19,82 @@ class AddItemPage extends StatefulWidget {
 
 class _AddItemPageState extends State<AddItemPage> {
   //Controllers
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _typeController = TextEditingController();
+  final TextEditingController _statusController = TextEditingController();
+  final TextEditingController _rfidController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _registeredCustomerIdController =
+      TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
   }
 
-  Future update() async {
-    Navigator.pop(context);
+  String getType() {
+    return _typeController.text.trim();
+  }
+
+  String getStatus() {
+    return _statusController.text.trim();
+  }
+
+  String getRfid() {
+    _rfidController.text = "01234567890001";
+    return _rfidController.text.trim();
+  }
+
+  String getDescription() {
+    return _descriptionController.text.trim();
+  }
+
+  String getLocation() {
+    return _locationController.text.trim();
+  }
+
+  String getCustomerId() {
+    return _registeredCustomerIdController.text.trim();
+  }
+
+  Future _updateItem() async {
+    gotoPage();
+  }
+
+  Future _addItem() async {
+    Item item = Item(
+        id: 0,
+        name: getType(),
+        status: getStatus(),
+        rfid: getRfid(),
+        description: getDescription(),
+        location: getLocation(),
+        registeredCustomerId: getCustomerId());
+
+    addItem(item);
+    gotoPage();
   }
 
   Future cancelUpdate() async {
-    Navigator.pop(context);
+    gotoPage();
+  }
+
+  Future gotoPage() async {
+    if (widget.currentAccount.accountRole == "admin") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                AdminPage(currentAccount: widget.currentAccount)),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                CustomerPage(currentAccount: widget.currentAccount)),
+      );
+    }
   }
 
   @override
@@ -62,7 +128,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: texfieldPadding),
                   child: TextField(
-                    controller: _emailController,
+                    controller: _typeController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -89,8 +155,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: texfieldPadding),
                   child: TextField(
-                    controller: _passwordController,
-                    obscureText: true,
+                    controller: _descriptionController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -117,8 +182,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: texfieldPadding),
                   child: TextField(
-                    controller: _passwordController,
-                    obscureText: true,
+                    controller: _statusController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -145,8 +209,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: texfieldPadding),
                   child: TextField(
-                    controller: _passwordController,
-                    obscureText: true,
+                    controller: _locationController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -167,12 +230,40 @@ class _AddItemPageState extends State<AddItemPage> {
                   ),
                 ),
                 const SizedBox(height: thirdBoxHeight),
-                //Update
+
+                //LOCATION
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: texfieldPadding),
+                  child: TextField(
+                    controller: _registeredCustomerIdController,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            color: textfieldEnabledBorderColor),
+                        borderRadius:
+                            BorderRadius.circular(texfieldBorderRadius),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            color: textfieldFocusedBorderColor),
+                        borderRadius:
+                            BorderRadius.circular(texfieldBorderRadius),
+                      ),
+                      hintText: 'Registered customer ID',
+                      fillColor: textfieldBackgroundColor,
+                      filled: true,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: thirdBoxHeight),
+
+                //Add/Update
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: standardPadding),
                   child: GestureDetector(
-                    onTap: update,
+                    onTap: widget.doAddItem ? _addItem : _updateItem,
                     child: Container(
                       padding: const EdgeInsets.all(buttonPadding),
                       decoration: const BoxDecoration(
@@ -200,7 +291,7 @@ class _AddItemPageState extends State<AddItemPage> {
                     GestureDetector(
                       onTap: cancelUpdate,
                       child: const Text(
-                        'Cancel here',
+                        'Cancel',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,

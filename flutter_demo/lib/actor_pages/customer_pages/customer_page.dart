@@ -49,7 +49,9 @@ class _CustomerPageState extends State<CustomerPage> {
   Future _addItem() async {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const AddItemPage(true)),
+      MaterialPageRoute(
+          builder: (context) => AddItemPage(
+              doAddItem: true, currentAccount: widget.currentAccount)),
     );
   }
 
@@ -65,8 +67,8 @@ class _CustomerPageState extends State<CustomerPage> {
   @override
   Widget build(BuildContext context) {
     pages = [
-      UsersListPage(widget.currentAccount),
-      const ItemsListPage(),
+      UsersListPage(currentAccount: widget.currentAccount),
+      ItemsListPage(currentAccount: widget.currentAccount),
       const AssistUserPage(),
       const UserBodyPage(),
     ];

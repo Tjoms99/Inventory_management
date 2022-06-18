@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 
+import '../../classes/account.dart';
+
 class ItemsListPage extends StatefulWidget {
-  const ItemsListPage({Key? key}) : super(key: key);
+  Account currentAccount;
+  ItemsListPage({required this.currentAccount});
 
   @override
   State<ItemsListPage> createState() => _ItemsListPageState();
@@ -34,15 +37,14 @@ class _ItemsListPageState extends State<ItemsListPage> {
     return Scaffold(
         body: ListBuilder(
       listToBuild: _itemTypes,
+      currentAccount: widget.currentAccount,
     ));
   }
 }
 
 class ListBuilder extends StatefulWidget {
-  const ListBuilder({
-    Key? key,
-    required this.listToBuild,
-  }) : super(key: key);
+  Account currentAccount;
+  ListBuilder({required this.listToBuild, required this.currentAccount});
 
   final List<String> listToBuild;
 
@@ -77,25 +79,32 @@ class _ListBuilderState extends State<ListBuilder> {
     ];
   }
 
+//TODO: for each type (widget.listToBuild[index]) create expandable view; Show all instances of type in expandable view list (_items)
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: widget.listToBuild.length,
       itemBuilder: (_, int index) {
         return ExpandableListView(
-            title: widget.listToBuild[index], listToBuild: _items);
+          title: widget.listToBuild[index],
+          listToBuild: _items,
+          currentAccount: widget.currentAccount,
+        );
       },
     );
   }
 }
 
+//TODO: change list type from string to items
 class ExpandableListView extends StatefulWidget {
   final String title;
   final List<String> listToBuild;
+  Account currentAccount;
 
-  const ExpandableListView(
-      {Key? key, required this.title, required this.listToBuild})
-      : super(key: key);
+  ExpandableListView(
+      {required this.title,
+      required this.listToBuild,
+      required this.currentAccount});
 
   @override
   _ExpandableListViewState createState() => _ExpandableListViewState();
@@ -115,7 +124,9 @@ class _ExpandableListViewState extends State<ExpandableListView> {
     print("Modify");
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const AddItemPage(false)),
+      MaterialPageRoute(
+          builder: (context) => AddItemPage(
+              doAddItem: false, currentAccount: widget.currentAccount)),
     );
   }
 
@@ -161,19 +172,19 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                     columns: const <DataColumn>[
                       DataColumn(
                         label: Text(
-                          'Name',
+                          'Status',
                           style: TextStyle(fontStyle: FontStyle.italic),
                         ),
                       ),
                       DataColumn(
                         label: Text(
-                          'Age',
+                          'Location',
                           style: TextStyle(fontStyle: FontStyle.italic),
                         ),
                       ),
                       DataColumn(
                         label: Text(
-                          'Role',
+                          'RFID',
                           style: TextStyle(fontStyle: FontStyle.italic),
                         ),
                       ),
@@ -181,23 +192,23 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                     rows: const <DataRow>[
                       DataRow(
                         cells: <DataCell>[
-                          DataCell(Text('Sarah')),
-                          DataCell(Text('19')),
-                          DataCell(Text('Student')),
+                          DataCell(Text('Borrowed')),
+                          DataCell(Text('marcus.alex@live.no')),
+                          DataCell(Text('rfid')),
                         ],
                       ),
                       DataRow(
                         cells: <DataCell>[
-                          DataCell(Text('Janine')),
-                          DataCell(Text('43')),
-                          DataCell(Text('Professor')),
+                          DataCell(Text('Unassigned')),
+                          DataCell(Text('Some location')),
+                          DataCell(Text('rfid')),
                         ],
                       ),
                       DataRow(
                         cells: <DataCell>[
-                          DataCell(Text('William')),
-                          DataCell(Text('27')),
-                          DataCell(Text('Associate Professor')),
+                          DataCell(Text('Returned')),
+                          DataCell(Text('Some location')),
+                          DataCell(Text('rfid')),
                         ],
                       ),
                     ],

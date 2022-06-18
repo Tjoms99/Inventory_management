@@ -7,7 +7,7 @@ import '../../server/account_service.dart';
 class UsersListPage extends StatefulWidget {
   Account currentAccount;
 
-  UsersListPage(this.currentAccount);
+  UsersListPage({required this.currentAccount});
 
   @override
   State<UsersListPage> createState() => _UsersListPageState();
