@@ -5,6 +5,7 @@ import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:http/http.dart' as http;
 
 import '../../classes/account.dart';
+import '../../server/service.dart';
 
 class UsersListPage extends StatefulWidget {
   Account currentAccount;
@@ -16,7 +17,7 @@ class UsersListPage extends StatefulWidget {
 }
 
 class _UsersListPageState extends State<UsersListPage> {
-  List accounts = [];
+  List<Account> accounts = [];
   @override
   void initState() {
     super.initState();
@@ -41,14 +42,6 @@ class _UsersListPageState extends State<UsersListPage> {
     }
   }
 
-  Future<List> getAccounts() async {
-    var uri =
-        Uri.parse("http://192.168.1.201/dashboard/flutter_db/getAccounts.php");
-    final response = await http.get(uri);
-
-    return jsonDecode(response.body);
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -57,17 +50,17 @@ class _UsersListPageState extends State<UsersListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List>(
+      body: FutureBuilder<List<Account>>(
           future: getAccounts(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               //error
             }
             if (snapshot.hasData) {
-              accounts = snapshot.data as List;
+              accounts = snapshot.data!;
               setAccounts();
               return ListBuilder(
-                listToBuild: accounts,
+                listOfAccounts: accounts,
                 currentAccount: widget.currentAccount,
               );
             } else {
@@ -79,9 +72,9 @@ class _UsersListPageState extends State<UsersListPage> {
 }
 
 class ListBuilder extends StatefulWidget {
-  final List? listToBuild;
+  List<Account> listOfAccounts;
   Account currentAccount;
-  ListBuilder({this.listToBuild, required this.currentAccount});
+  ListBuilder({required this.listOfAccounts, required this.currentAccount});
 
   @override
   State<ListBuilder> createState() => _ListBuilderState();
@@ -101,7 +94,7 @@ class _ListBuilderState extends State<ListBuilder> {
   }
 
   void _updateActionModify() {
-    String _email = widget.listToBuild![_selectedIndex]['account_name'];
+    String _email = widget.listOfAccounts[_selectedIndex].accountName;
 
     //Go to update user page
     if (_hasPressedModify) {
@@ -111,7 +104,7 @@ class _ListBuilderState extends State<ListBuilder> {
           builder: (context) => RegisterPage(
               false,
               _email,
-              widget.listToBuild![_selectedIndex]['id'],
+              widget.listOfAccounts[_selectedIndex].id,
               true,
               widget.currentAccount),
         ),
@@ -130,7 +123,7 @@ class _ListBuilderState extends State<ListBuilder> {
   }
 
   void _updateActionDelete() {
-    String id = widget.listToBuild![_selectedIndex]['id'];
+    int id = widget.listOfAccounts[_selectedIndex].id;
 
     setState(() {
       _hasPressedModify = false;
@@ -141,7 +134,7 @@ class _ListBuilderState extends State<ListBuilder> {
           'id': id,
         });
 
-        widget.listToBuild?.removeAt(_selectedIndex);
+        widget.listOfAccounts.removeAt(_selectedIndex);
         _hasPressedDelete = false;
       } else {
         _hasPressedDelete = true;
@@ -153,16 +146,16 @@ class _ListBuilderState extends State<ListBuilder> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: widget.listToBuild?.length,
+      itemCount: widget.listOfAccounts.length,
       itemBuilder: (_, int index) {
         return ListTile(
           onTap: () => _setSelectedIndex(index),
           title: Text(
-            widget.listToBuild![index]['account_name'],
+            widget.listOfAccounts[index].accountName,
             style: const TextStyle(color: Colors.black, fontSize: 20),
           ),
           subtitle: Text(
-            widget.listToBuild![index]['account_role'],
+            widget.listOfAccounts[index].accountRole,
             style: const TextStyle(color: Colors.black, fontSize: 20),
           ),
           selected: index == _selectedIndex,

@@ -13,7 +13,7 @@ import '../classes/account.dart';
 class RegisterPage extends StatefulWidget {
   final bool _doRegister;
   final String _email;
-  final String _index;
+  final int _index;
   final bool _isLoggedIn;
   Account currentAccount;
 

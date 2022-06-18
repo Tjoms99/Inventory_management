@@ -58,7 +58,7 @@ class _AdminPageState extends State<AdminPage> {
       context,
       MaterialPageRoute(
           builder: (context) =>
-              RegisterPage(true, "", '0', true, widget.currentAccount)),
+              RegisterPage(true, "", 0, true, widget.currentAccount)),
     );
   }
 

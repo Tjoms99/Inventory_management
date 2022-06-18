@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
       context,
       MaterialPageRoute(
           builder: (context) =>
-              RegisterPage(true, _email, '0', false, currentAccount)),
+              RegisterPage(true, _email, 0, false, currentAccount)),
     );
   }
 
