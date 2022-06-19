@@ -28,7 +28,9 @@ class _UsersListPageState extends State<UsersListPage> {
     print("Setting accounts");
     for (int index = 0; index < accounts.length; index++) {
       //Remove all admins and customers
-      if ((isAdmin(accounts[index]) || isCustomer(accounts[index]))) {
+      if (isAdmin(accounts[index]) ||
+          isCustomer(accounts[index]) ||
+          !isUserRegisteredAtCustomer(accounts[index], widget.currentAccount)) {
         accounts.removeAt(index);
 
         //Update index due to list length change

@@ -149,7 +149,6 @@ class _RegisterPage extends State<RegisterPage> {
         customerId: customerId,
         registeredCustomerId: registeredCustomerId);
 
-    print(account.registeredCustomerId);
     if (confirmPassword != password) {
       print("incorrect password");
       return;

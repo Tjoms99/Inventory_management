@@ -68,6 +68,17 @@ bool isCustomer(Account account) {
   return _isCustomer;
 }
 
+bool isUserRegisteredAtCustomer(Account user, Account customer) {
+  bool isRegistered = false;
+  int indexCustomerId = customer.customerId.indexOf("1");
+
+  if (user.registeredCustomerId.startsWith("1", indexCustomerId)) {
+    print("user is registered");
+    isRegistered = true;
+  }
+  return isRegistered;
+}
+
 Account getAccountFromList(
     List<Account> accounts, String email, String password) {
   Account thisAccount = createDefaultAccount();
