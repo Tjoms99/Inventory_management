@@ -60,13 +60,12 @@ class _ListBuilderState extends State<ListBuilder> {
     super.dispose();
   }
 
-//TODO: Get items from database
-
-//TODO: for each type (widget.listToBuild[index]) create expandable view; Show all instances of type in expandable view list (_items)
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Item>>(
-        future: getItems(),
+        future: isAdmin(widget.currentAccount)
+            ? getItems()
+            : getItemsForCustomer(widget.currentAccount),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             //error
@@ -93,7 +92,6 @@ class _ListBuilderState extends State<ListBuilder> {
   }
 }
 
-//TODO: change list type from string to items
 class ExpandableListView extends StatefulWidget {
   String title;
   List<Item> listToBuild;

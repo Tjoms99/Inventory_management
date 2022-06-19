@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter_demo/classes/account.dart';
+
+import '../server/item_service.dart';
+
 class Item {
   int id;
   String name;
@@ -74,4 +78,24 @@ List<Item> getItemsInType(List<Item> items, String type) {
   }
 
   return itemsInType;
+}
+
+Future<List<Item>> getItemsForCustomer(Account customer) async {
+  List<Item> items = await getItems();
+  List<Item> itemsForCustomer = [];
+  int indexCustomerId = customer.customerId.indexOf("1");
+
+  print("getting items for customer");
+  print(customer.customerId);
+  print(indexCustomerId);
+  for (int index = 0; index < items.length; index++) {
+    if (items[index].registeredCustomerId.startsWith("1", indexCustomerId)) {
+      itemsForCustomer.add(items[index]);
+      print("added item");
+    }
+    print(items[index]);
+  }
+
+  print(items.length);
+  return itemsForCustomer;
 }
