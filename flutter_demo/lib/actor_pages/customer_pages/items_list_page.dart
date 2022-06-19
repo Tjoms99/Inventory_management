@@ -166,36 +166,46 @@ class _ExpandableListViewState extends State<ExpandableListView> {
           ExpandableContainer(
             expanded: expandFlag,
             child: expandFlag
-                ? DataTable(
-                    columns: const <DataColumn>[
-                      DataColumn(
-                        label: Text(
-                          'Status',
-                          style: TextStyle(fontStyle: FontStyle.italic),
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columns: const <DataColumn>[
+                        DataColumn(
+                          label: Text(
+                            'Status',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Location',
-                          style: TextStyle(fontStyle: FontStyle.italic),
+                        DataColumn(
+                          label: Text(
+                            'Description',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'RFID',
-                          style: TextStyle(fontStyle: FontStyle.italic),
+                        DataColumn(
+                          label: Text(
+                            'Location',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
                         ),
-                      ),
-                    ],
-                    rows: widget.listToBuild
-                        .map(((item) => DataRow(
-                              cells: <DataCell>[
-                                DataCell(Text(item.status)),
-                                DataCell(Text(item.location)),
-                                DataCell(Text(item.rfid)),
-                              ],
-                            )))
-                        .toList(),
+                        DataColumn(
+                          label: Text(
+                            'RFID',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                      ],
+                      rows: widget.listToBuild
+                          .map(((item) => DataRow(
+                                cells: <DataCell>[
+                                  DataCell(Text(item.status)),
+                                  DataCell(Text(item.description)),
+                                  DataCell(Text(item.location)),
+                                  DataCell(Text(item.rfid)),
+                                ],
+                              )))
+                          .toList(),
+                    ),
                   )
                 : const SizedBox(),
           ),
@@ -222,7 +232,7 @@ class ExpandableContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 125),
       curve: Curves.easeInOut,
       width: screenWidth,
       height: expanded ? expandedHeight : collapsedHeight,
