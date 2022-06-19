@@ -7,6 +7,7 @@ class Account {
   String password;
   String rfid;
   String customerId;
+  String registeredCustomerId;
 
   Account(
       {required this.id,
@@ -14,7 +15,8 @@ class Account {
       required this.accountRole,
       required this.password,
       required this.rfid,
-      required this.customerId});
+      required this.customerId,
+      required this.registeredCustomerId});
 }
 
 Account createAccountFromJson(List<dynamic> accounts, int index) {
@@ -28,7 +30,9 @@ Account createAccountFromJson(List<dynamic> accounts, int index) {
       accountRole: accounts[index]['account_role'] as String,
       password: accounts[index]['password'] as String,
       rfid: accounts[index]['rfid'] as String,
-      customerId: accounts[index]['customer_id'] as String);
+      customerId: accounts[index]['customer_id'] as String,
+      registeredCustomerId:
+          accounts[index]['registered_customer_id'] as String);
 }
 
 Account createDefaultAccount() {
@@ -38,7 +42,8 @@ Account createDefaultAccount() {
       accountRole: "accountRole",
       password: "password",
       rfid: "rfid",
-      customerId: "customerId");
+      customerId: "customerId",
+      registeredCustomerId: "registeredCustomerId");
 }
 
 bool isDefualt(Account account) {

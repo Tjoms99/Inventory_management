@@ -30,6 +30,8 @@ class _RegisterPage extends State<RegisterPage> {
       TextEditingController();
   final TextEditingController _accountRoleController = TextEditingController();
   final TextEditingController _customerIDController = TextEditingController();
+  final TextEditingController _registeredCustomerIDController =
+      TextEditingController();
 
   List<Account> accounts = [];
   bool _isRegistered = false;
@@ -57,6 +59,10 @@ class _RegisterPage extends State<RegisterPage> {
 
   String getCustomerID() {
     return _customerIDController.text.trim();
+  }
+
+  String getReigstedCustomerId() {
+    return _registeredCustomerIDController.text.trim();
   }
 
   //TODO: get rfid tag from database
@@ -132,6 +138,7 @@ class _RegisterPage extends State<RegisterPage> {
     String accountRole = getRole();
     String rfid = getRFID();
     String customerId = getCustomerID();
+    String registeredCustomerId = getReigstedCustomerId();
 
     Account account = Account(
         id: widget._index,
@@ -139,8 +146,10 @@ class _RegisterPage extends State<RegisterPage> {
         accountRole: accountRole,
         password: password,
         rfid: rfid,
-        customerId: customerId);
+        customerId: customerId,
+        registeredCustomerId: registeredCustomerId);
 
+    print(account.registeredCustomerId);
     if (confirmPassword != password) {
       print("incorrect password");
       return;
@@ -355,6 +364,34 @@ class _RegisterPage extends State<RegisterPage> {
                                               texfieldBorderRadius),
                                         ),
                                         hintText: 'Customer ID',
+                                        fillColor: textfieldBackgroundColor,
+                                        filled: true,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: thirdBoxHeight),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: texfieldPadding),
+                                    child: TextField(
+                                      controller:
+                                          _registeredCustomerIDController,
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldEnabledBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldFocusedBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
+                                        ),
+                                        hintText: 'Registered Customer ID',
                                         fillColor: textfieldBackgroundColor,
                                         filled: true,
                                       ),
