@@ -8,6 +8,8 @@ Future<List<Item>> getItems() async {
 
 //Fetch data from server
   var uri = Uri.parse("http://192.168.1.201/dashboard/flutter_db/getItems.php");
+  print(uri);
+
   final response = await http.get(uri);
 
 //Convert from json object to a list of Account(s)
@@ -51,6 +53,6 @@ void updateItem(Item item) {
     'rfid': item.rfid,
     'description': item.description,
     'location': item.location,
-    'registeredCustomerId': item.registeredCustomerId,
+    'registered_customer_id': item.registeredCustomerId,
   });
 }

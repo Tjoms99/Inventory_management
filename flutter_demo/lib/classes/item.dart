@@ -27,7 +27,7 @@ Item createItemFromJson(List<dynamic> items, int index) {
       rfid: items[index]['rfid'] as String,
       description: items[index]['description'] as String,
       location: items[index]['location'] as String,
-      registeredCustomerId: items[index]['registeredCustomerId'] as String);
+      registeredCustomerId: items[index]['registered_customer_id'] as String);
 }
 
 Item createDefaultItem() {
@@ -38,7 +38,7 @@ Item createDefaultItem() {
       rfid: "rfid",
       description: "description",
       location: "location",
-      registeredCustomerId: "registeredCustomerId");
+      registeredCustomerId: "registered_customer_id");
 }
 
 Item getItemFromList(List<dynamic> items, String rfid) {

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 
 import '../../classes/account.dart';
+import '../../classes/item.dart';
+import '../../server/item_service.dart';
 
 class ItemsListPage extends StatefulWidget {
   Account currentAccount;
@@ -18,12 +20,6 @@ class _ItemsListPageState extends State<ItemsListPage> {
   @override
   void initState() {
     super.initState();
-    initializeItemTypes();
-  }
-
-  //TODO: Init items from database
-  void initializeItemTypes() {
-    _itemTypes = ['Book', 'Pen', 'Paper', 'Calculator', 'Chair', 'Table'];
   }
 
   @override
@@ -36,7 +32,6 @@ class _ItemsListPageState extends State<ItemsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListBuilder(
-      listToBuild: _itemTypes,
       currentAccount: widget.currentAccount,
     ));
   }
@@ -44,21 +39,19 @@ class _ItemsListPageState extends State<ItemsListPage> {
 
 class ListBuilder extends StatefulWidget {
   Account currentAccount;
-  ListBuilder({required this.listToBuild, required this.currentAccount});
-
-  final List<String> listToBuild;
+  ListBuilder({required this.currentAccount});
 
   @override
   State<ListBuilder> createState() => _ListBuilderState();
 }
 
 class _ListBuilderState extends State<ListBuilder> {
-  late List<String> _items;
+  List<Item> _items = [];
+  final List<String> _types = [];
 
   @override
   void initState() {
     super.initState();
-    initializeItems();
   }
 
   @override
@@ -68,37 +61,48 @@ class _ListBuilderState extends State<ListBuilder> {
   }
 
   //TODO: Get items from database
-  void initializeItems() {
-    _items = [
-      'RFID:     1234567890001\nSTATUS:      borrowed\nLOCATION:     marcus@gmail.com',
-      'RFID:      1234567890002\nSTATUS:      borrowed\nLOCATION:     andreas@gmail.com',
-      'RFID:      1234567890003\nSTATUS:      unassigned\nLOCATION:     inventory',
-      'RFID:      1234567890004\nSTATUS:      unassigned\nLOCATION:     inventory',
-      'RFID:      1234567890005\nSTATUS:      unassigned\nLOCATION:     inventory',
-      'RFID:      1234567890006\nSTATUS:      unassigned\nLOCATION:     inventory',
-    ];
+
+  void setItemTypes() {
+    for (int index = 0; index < _items.length; index++) {
+      if (!_types.contains(_items[index].name)) _types.add(_items[index].name);
+    }
   }
 
 //TODO: for each type (widget.listToBuild[index]) create expandable view; Show all instances of type in expandable view list (_items)
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.listToBuild.length,
-      itemBuilder: (_, int index) {
-        return ExpandableListView(
-          title: widget.listToBuild[index],
-          listToBuild: _items,
-          currentAccount: widget.currentAccount,
-        );
-      },
-    );
+    return FutureBuilder<List<Item>>(
+        future: getItems(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            //error
+          }
+          if (snapshot.hasData) {
+            _items = snapshot.data as List<Item>;
+            setItemTypes();
+            print(_items);
+
+            return ListView.builder(
+              itemCount: _types.length,
+              itemBuilder: (_, int index) {
+                return ExpandableListView(
+                  title: _types[index],
+                  listToBuild: _items,
+                  currentAccount: widget.currentAccount,
+                );
+              },
+            );
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
   }
 }
 
 //TODO: change list type from string to items
 class ExpandableListView extends StatefulWidget {
-  final String title;
-  final List<String> listToBuild;
+  String title;
+  List<Item> listToBuild;
   Account currentAccount;
 
   ExpandableListView(
