@@ -46,6 +46,7 @@ void addAccount(Account account) {
     "password": account.password,
     "rfid": account.rfid,
     "customer_id": account.customerId,
+    "registered_customer_id": account.registeredCustomerId,
   });
 }
 
@@ -60,5 +61,6 @@ void updateAccount(Account account) {
     "password": account.password,
     "rfid": account.rfid,
     "customer_id": account.customerId,
+    "registered_customer_id": account.registeredCustomerId,
   });
 }
