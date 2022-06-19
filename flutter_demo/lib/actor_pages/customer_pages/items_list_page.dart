@@ -47,7 +47,7 @@ class ListBuilder extends StatefulWidget {
 
 class _ListBuilderState extends State<ListBuilder> {
   List<Item> _items = [];
-  final List<String> _types = [];
+  List<String> _types = [];
 
   @override
   void initState() {
@@ -62,12 +62,6 @@ class _ListBuilderState extends State<ListBuilder> {
 
   //TODO: Get items from database
 
-  void setItemTypes() {
-    for (int index = 0; index < _items.length; index++) {
-      if (!_types.contains(_items[index].name)) _types.add(_items[index].name);
-    }
-  }
-
 //TODO: for each type (widget.listToBuild[index]) create expandable view; Show all instances of type in expandable view list (_items)
   @override
   Widget build(BuildContext context) {
@@ -79,7 +73,7 @@ class _ListBuilderState extends State<ListBuilder> {
           }
           if (snapshot.hasData) {
             _items = snapshot.data as List<Item>;
-            setItemTypes();
+            _types = getItemTypes(_items);
             print(_items);
 
             return ListView.builder(
@@ -87,7 +81,7 @@ class _ListBuilderState extends State<ListBuilder> {
               itemBuilder: (_, int index) {
                 return ExpandableListView(
                   title: _types[index],
-                  listToBuild: _items,
+                  listToBuild: getItemsInType(_items, _types[index]),
                   currentAccount: widget.currentAccount,
                 );
               },
@@ -193,29 +187,15 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                         ),
                       ),
                     ],
-                    rows: const <DataRow>[
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text('Borrowed')),
-                          DataCell(Text('marcus.alex@live.no')),
-                          DataCell(Text('rfid')),
-                        ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text('Unassigned')),
-                          DataCell(Text('Some location')),
-                          DataCell(Text('rfid')),
-                        ],
-                      ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text('Returned')),
-                          DataCell(Text('Some location')),
-                          DataCell(Text('rfid')),
-                        ],
-                      ),
-                    ],
+                    rows: widget.listToBuild
+                        .map(((item) => DataRow(
+                              cells: <DataCell>[
+                                DataCell(Text(item.status)),
+                                DataCell(Text(item.location)),
+                                DataCell(Text(item.rfid)),
+                              ],
+                            )))
+                        .toList(),
                   )
                 : const SizedBox(),
           ),

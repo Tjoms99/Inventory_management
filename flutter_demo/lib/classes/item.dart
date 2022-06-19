@@ -56,3 +56,22 @@ Item getItemFromList(List<dynamic> items, String rfid) {
   print(thisItem);
   return thisItem;
 }
+
+List<String> getItemTypes(List<Item> items) {
+  List<String> types = [];
+  for (int index = 0; index < items.length; index++) {
+    if (!types.contains(items[index].name)) types.add(items[index].name);
+  }
+
+  return types;
+}
+
+List<Item> getItemsInType(List<Item> items, String type) {
+  List<Item> itemsInType = [];
+
+  for (int index = 0; index < items.length; index++) {
+    if (items[index].name.contains(type)) itemsInType.add(items[index]);
+  }
+
+  return itemsInType;
+}
