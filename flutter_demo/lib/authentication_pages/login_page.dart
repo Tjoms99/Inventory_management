@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 
@@ -8,9 +6,8 @@ import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 
-import 'package:http/http.dart' as http;
-
 import '../classes/account.dart';
+import '../server/account_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -24,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   //Accounts
-  List accounts = [];
+  List<Account> accounts = [];
   Account currentAccount = createDefaultAccount();
 
   Future signIn() async {
@@ -88,14 +85,6 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  Future<List> getAccounts() async {
-    var uri =
-        Uri.parse("http://192.168.1.201/dashboard/flutter_db/getAccounts.php");
-    final response = await http.get(uri);
-
-    return jsonDecode(response.body);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,14 +92,14 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            child: FutureBuilder<List>(
+            child: FutureBuilder<List<Account>>(
                 future: getAccounts(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     print("Error");
                   }
                   if (snapshot.hasData) {
-                    accounts = snapshot.data as List;
+                    accounts = snapshot.data as List<Account>;
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

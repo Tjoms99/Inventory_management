@@ -60,7 +60,7 @@ class _ListBuilderState extends State<ListBuilder> {
     super.dispose();
   }
 
-  //TODO: Get items from database
+//TODO: Get items from database
 
 //TODO: for each type (widget.listToBuild[index]) create expandable view; Show all instances of type in expandable view list (_items)
   @override
@@ -110,7 +110,7 @@ class ExpandableListView extends StatefulWidget {
 
 class _ExpandableListViewState extends State<ExpandableListView> {
   bool expandFlag = false;
-  int _selectedIndex = 0;
+  int _selectedIndex = -1;
 
   void _setSelectedIndex(int index) {
     setState(() {
@@ -194,6 +194,12 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                             style: TextStyle(fontStyle: FontStyle.italic),
                           ),
                         ),
+                        DataColumn(
+                          label: Text(
+                            'Action',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
                       ],
                       rows: widget.listToBuild
                           .map(((item) => DataRow(
@@ -202,7 +208,14 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                                   DataCell(Text(item.description)),
                                   DataCell(Text(item.location)),
                                   DataCell(Text(item.rfid)),
+                                  DataCell(Row(
+                                    children: const [
+                                      Icon(Icons.create, color: Colors.black),
+                                      Icon(Icons.delete, color: Colors.black),
+                                    ],
+                                  ))
                                 ],
+                                selected: true,
                               )))
                           .toList(),
                     ),
