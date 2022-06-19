@@ -64,15 +64,13 @@ bool isCustomer(Account account) {
 }
 
 Account getAccountFromList(
-    List<dynamic> accounts, String email, String password) {
+    List<Account> accounts, String email, String password) {
   Account thisAccount = createDefaultAccount();
 
   for (int index = 0; index < accounts.length; index++) {
-    Account account = createAccountFromJson(accounts, index);
-
-    if (account.accountName == email) {
-      if (account.password == password) {
-        thisAccount = account;
+    if (accounts[index].accountName == email) {
+      if (accounts[index].password == password) {
+        thisAccount = accounts[index];
         break;
       }
     }

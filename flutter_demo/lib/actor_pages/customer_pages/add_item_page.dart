@@ -10,8 +10,10 @@ import 'customer_page.dart';
 class AddItemPage extends StatefulWidget {
   final bool doAddItem;
   Account currentAccount;
+  Item? item;
 
-  AddItemPage({required this.doAddItem, required this.currentAccount});
+  AddItemPage(
+      {required this.doAddItem, required this.currentAccount, this.item});
 
   @override
   State<AddItemPage> createState() => _AddItemPageState();
@@ -30,6 +32,25 @@ class _AddItemPageState extends State<AddItemPage> {
   @override
   void dispose() {
     super.dispose();
+    _typeController.dispose();
+    _statusController.dispose();
+    _rfidController.dispose();
+    _descriptionController.dispose();
+    _locationController.dispose();
+    _registeredCustomerIdController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.item != null) {
+      _typeController.text = widget.item!.name;
+      _statusController.text = widget.item!.status;
+      _rfidController.text = widget.item!.rfid;
+      _descriptionController.text = widget.item!.description;
+      _locationController.text = widget.item!.location;
+      _registeredCustomerIdController.text = widget.item!.registeredCustomerId;
+    }
   }
 
   String getType() {
@@ -58,6 +79,16 @@ class _AddItemPageState extends State<AddItemPage> {
   }
 
   Future _updateItem() async {
+    Item item = Item(
+        id: widget.item!.id,
+        name: getType(),
+        status: getStatus(),
+        rfid: getRfid(),
+        description: getDescription(),
+        location: getLocation(),
+        registeredCustomerId: getCustomerId());
+
+    updateItem(item);
     gotoPage();
   }
 

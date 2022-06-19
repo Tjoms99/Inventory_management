@@ -74,7 +74,7 @@ class _ListBuilderState extends State<ListBuilder> {
           if (snapshot.hasData) {
             _items = snapshot.data as List<Item>;
             _types = getItemTypes(_items);
-            print(_items);
+            print(_types);
 
             return ListView.builder(
               itemCount: _types.length,
@@ -110,28 +110,95 @@ class ExpandableListView extends StatefulWidget {
 
 class _ExpandableListViewState extends State<ExpandableListView> {
   bool expandFlag = false;
+  final List<bool> _hasPressedDelete = [];
+  final List<bool> _hasPressedModify = [];
   int _selectedIndex = -1;
 
-  void _setSelectedIndex(int index) {
+  @override
+  void initState() {
+    super.initState();
+    initPressedDelete();
+    initPressedModify();
+  }
+
+  void initPressedModify() {
+    for (int index = 0; index < widget.listToBuild.length; index++) {
+      _hasPressedModify.add(false);
+    }
+  }
+
+  void initPressedDelete() {
+    for (int index = 0; index < widget.listToBuild.length; index++) {
+      _hasPressedDelete.add(false);
+    }
+  }
+
+  void clearPressedModify() {
+    for (int index = 0; index < widget.listToBuild.length; index++) {
+      _hasPressedModify[index] = false;
+    }
+  }
+
+  void clearPressedDelete() {
+    for (int index = 0; index < widget.listToBuild.length; index++) {
+      _hasPressedDelete[index] = false;
+    }
+  }
+
+  int getIndex(Item thisItem) {
+    final index =
+        widget.listToBuild.indexWhere((element) => element.id == thisItem.id);
+
+    return index;
+  }
+
+  void setSelected(Item item) {
     setState(() {
-      _selectedIndex = index;
+      _selectedIndex = getIndex(item);
+      clearPressedModify();
+      clearPressedDelete();
     });
   }
 
-  void modify() {
-    print("Modify");
-    Navigator.push(
-      context,
-      MaterialPageRoute(
+  void _updateItem(Item item) {
+    //Go to update user page
+    if (_hasPressedModify[getIndex(item)]) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
           builder: (context) => AddItemPage(
-              doAddItem: false, currentAccount: widget.currentAccount)),
-    );
+            currentAccount: widget.currentAccount,
+            doAddItem: false,
+            item: item,
+          ),
+        ),
+      );
+    }
+
+    //Update state
+    setState(() {
+      setSelected(item);
+      if (_hasPressedModify[getIndex(item)]) {
+        clearPressedModify();
+      } else {
+        _hasPressedModify[getIndex(item)] = true;
+        clearPressedDelete();
+      }
+    });
   }
 
-  void delete() {
-    print("Delete");
+  void _deleteItem(Item item) {
     setState(() {
-      widget.listToBuild.removeAt(_selectedIndex);
+      _hasPressedModify[getIndex(item)] = false;
+      if (_hasPressedDelete[getIndex(item)]) {
+        deleteItem(item.id);
+        widget.listToBuild.removeAt(getIndex(item));
+
+        clearPressedDelete();
+      } else {
+        _hasPressedDelete[getIndex(item)] = true;
+        clearPressedModify();
+      }
     });
   }
 
@@ -209,13 +276,27 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                                   DataCell(Text(item.location)),
                                   DataCell(Text(item.rfid)),
                                   DataCell(Row(
-                                    children: const [
-                                      Icon(Icons.create, color: Colors.black),
-                                      Icon(Icons.delete, color: Colors.black),
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => _updateItem(item),
+                                        child: _hasPressedModify[getIndex(item)]
+                                            ? const Icon(Icons.done,
+                                                color: Colors.black)
+                                            : const Icon(Icons.create,
+                                                color: Colors.black),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () => _deleteItem(item),
+                                        child: _hasPressedDelete[getIndex(item)]
+                                            ? const Icon(Icons.done,
+                                                color: Colors.black)
+                                            : const Icon(Icons.delete,
+                                                color: Colors.black),
+                                      ),
                                     ],
                                   ))
                                 ],
-                                selected: true,
+                                selected: getIndex(item) == _selectedIndex,
                               )))
                           .toList(),
                     ),
