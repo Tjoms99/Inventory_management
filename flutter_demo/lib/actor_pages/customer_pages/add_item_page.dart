@@ -120,15 +120,19 @@ class _AddItemPageState extends State<AddItemPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                AdminPage(currentAccount: widget.currentAccount)),
+            builder: (context) => AdminPage(
+                  currentAccount: widget.currentAccount,
+                  currentIndex: 1,
+                )),
       );
     } else {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                CustomerPage(currentAccount: widget.currentAccount)),
+            builder: (context) => CustomerPage(
+                  currentAccount: widget.currentAccount,
+                  currentIndex: 1,
+                )),
       );
     }
   }

@@ -61,7 +61,7 @@ class _UsersListPageState extends State<UsersListPage> {
                 currentAccount: widget.currentAccount,
               );
             } else {
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
             }
           }),
     );

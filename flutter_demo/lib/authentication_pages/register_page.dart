@@ -93,6 +93,7 @@ class _RegisterPage extends State<RegisterPage> {
 
   void initializeControllers() {
     _emailController.text = widget._email;
+    if (isAdmin(widget.currentAccount)) {}
   }
 
   @override
@@ -100,6 +101,9 @@ class _RegisterPage extends State<RegisterPage> {
     _emailController.dispose();
     _passwordController.dispose();
     _passwordConfirmController.dispose();
+    _accountRoleController.dispose();
+    _customerIDController.dispose();
+    _registeredCustomerIDController.dispose();
     super.dispose();
   }
 
@@ -123,15 +127,19 @@ class _RegisterPage extends State<RegisterPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  AdminPage(currentAccount: widget.currentAccount)),
+              builder: (context) => AdminPage(
+                    currentAccount: widget.currentAccount,
+                    currentIndex: 0,
+                  )),
         );
       } else {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  CustomerPage(currentAccount: widget.currentAccount)),
+              builder: (context) => CustomerPage(
+                    currentAccount: widget.currentAccount,
+                    currentIndex: 0,
+                  )),
         );
       }
     } else {

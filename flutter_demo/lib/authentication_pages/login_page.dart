@@ -50,8 +50,10 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  CustomerPage(currentAccount: currentAccount)),
+              builder: (context) => CustomerPage(
+                    currentAccount: currentAccount,
+                    currentIndex: 3,
+                  )),
         );
 
         break;
@@ -60,7 +62,10 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => AdminPage(currentAccount: currentAccount)),
+              builder: (context) => AdminPage(
+                    currentAccount: currentAccount,
+                    currentIndex: 3,
+                  )),
         );
         break;
 
@@ -245,7 +250,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     );
                   } else {
-                    return const CircularProgressIndicator();
+                    return const Center(child: CircularProgressIndicator());
                   }
                 }),
           ),

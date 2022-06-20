@@ -86,7 +86,7 @@ class _ListBuilderState extends State<ListBuilder> {
               },
             );
           } else {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
         });
   }
@@ -191,6 +191,9 @@ class _ExpandableListViewState extends State<ExpandableListView> {
       if (_hasPressedDelete[getIndex(item)]) {
         deleteItem(item.id);
         widget.listToBuild.removeAt(getIndex(item));
+        if (widget.listToBuild.isEmpty) {
+          widget.title = "";
+        }
 
         clearPressedDelete();
       } else {
@@ -204,105 +207,110 @@ class _ExpandableListViewState extends State<ExpandableListView> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 1.0),
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: Row(
+      child: widget.title != ""
+          ? Column(
               children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    expandFlag ? Icons.list_outlined : Icons.list,
-                    size: 30.0,
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          expandFlag ? Icons.list_outlined : Icons.list,
+                          size: 30.0,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            expandFlag = !expandFlag;
+                          });
+                        },
+                      ),
+                      Text(
+                        widget.title,
+                        style: const TextStyle(fontSize: 20),
+                      )
+                    ],
                   ),
-                  onPressed: () {
-                    setState(() {
-                      expandFlag = !expandFlag;
-                    });
-                  },
                 ),
-                Text(
-                  widget.title,
-                  style: const TextStyle(fontSize: 20),
-                )
+                ExpandableContainer(
+                  expanded: expandFlag,
+                  child: expandFlag
+                      ? SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                            columns: const <DataColumn>[
+                              DataColumn(
+                                label: Text(
+                                  'Status',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Description',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Location',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'RFID',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Action',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ],
+                            rows: widget.listToBuild
+                                .map(((item) => DataRow(
+                                      cells: <DataCell>[
+                                        DataCell(Text(item.status)),
+                                        DataCell(Text(item.description)),
+                                        DataCell(Text(item.location)),
+                                        DataCell(Text(item.rfid)),
+                                        DataCell(Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () => _updateItem(item),
+                                              child: _hasPressedModify[
+                                                      getIndex(item)]
+                                                  ? const Icon(Icons.done,
+                                                      color: Colors.black)
+                                                  : const Icon(Icons.create,
+                                                      color: Colors.black),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () => _deleteItem(item),
+                                              child: _hasPressedDelete[
+                                                      getIndex(item)]
+                                                  ? const Icon(Icons.done,
+                                                      color: Colors.black)
+                                                  : const Icon(Icons.delete,
+                                                      color: Colors.black),
+                                            ),
+                                          ],
+                                        ))
+                                      ],
+                                      selected:
+                                          getIndex(item) == _selectedIndex,
+                                    )))
+                                .toList(),
+                          ),
+                        )
+                      : const SizedBox(),
+                ),
               ],
-            ),
-          ),
-          ExpandableContainer(
-            expanded: expandFlag,
-            child: expandFlag
-                ? SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      columns: const <DataColumn>[
-                        DataColumn(
-                          label: Text(
-                            'Status',
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Description',
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Location',
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'RFID',
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Action',
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        ),
-                      ],
-                      rows: widget.listToBuild
-                          .map(((item) => DataRow(
-                                cells: <DataCell>[
-                                  DataCell(Text(item.status)),
-                                  DataCell(Text(item.description)),
-                                  DataCell(Text(item.location)),
-                                  DataCell(Text(item.rfid)),
-                                  DataCell(Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () => _updateItem(item),
-                                        child: _hasPressedModify[getIndex(item)]
-                                            ? const Icon(Icons.done,
-                                                color: Colors.black)
-                                            : const Icon(Icons.create,
-                                                color: Colors.black),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () => _deleteItem(item),
-                                        child: _hasPressedDelete[getIndex(item)]
-                                            ? const Icon(Icons.done,
-                                                color: Colors.black)
-                                            : const Icon(Icons.delete,
-                                                color: Colors.black),
-                                      ),
-                                    ],
-                                  ))
-                                ],
-                                selected: getIndex(item) == _selectedIndex,
-                              )))
-                          .toList(),
-                    ),
-                  )
-                : const SizedBox(),
-          ),
-        ],
-      ),
+            )
+          : const SizedBox(),
     );
   }
 }

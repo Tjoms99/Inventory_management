@@ -16,7 +16,8 @@ import '../../authentication_pages/login_page.dart';
 
 class AdminPage extends StatefulWidget {
   Account currentAccount;
-  AdminPage({required this.currentAccount});
+  int currentIndex = 3;
+  AdminPage({required this.currentAccount, required this.currentIndex});
 
   @override
   State<AdminPage> createState() => _AdminPageState();
@@ -26,7 +27,6 @@ class _AdminPageState extends State<AdminPage> {
   var userInput = 0;
   var userFeedback = '';
   var userTask = '';
-  int _currentIndex = 3;
 
   List<Widget> pages = [];
 
@@ -88,14 +88,14 @@ class _AdminPageState extends State<AdminPage> {
             ),
           ]),
       body: IndexedStack(
-        index: _currentIndex,
+        index: widget.currentIndex,
         children: pages,
       ),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
+        selectedIndex: widget.currentIndex,
         onDestinationSelected: (int newIndex) {
           setState(() {
-            _currentIndex = newIndex;
+            widget.currentIndex = newIndex;
           });
         },
         destinations: const [
@@ -123,10 +123,10 @@ class _AdminPageState extends State<AdminPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Visibility(
-        visible: _currentIndex == 1 || _currentIndex == 0,
+        visible: widget.currentIndex == 1 || widget.currentIndex == 0,
         child: FloatingActionButton(
           backgroundColor: Colors.orange[400],
-          onPressed: _currentIndex == 1 ? _addItem : _addUser,
+          onPressed: widget.currentIndex == 1 ? _addItem : _addUser,
           tooltip: 'Increment',
           child: const Icon(Icons.add),
         ),
