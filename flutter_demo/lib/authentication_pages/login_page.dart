@@ -25,8 +25,15 @@ class _LoginPageState extends State<LoginPage> {
   Account currentAccount = createDefaultAccount();
 
   Future signIn() async {
-    currentAccount = getAccountFromList(accounts, _emailController.text.trim(),
-        _passwordController.text.trim());
+    currentAccount.accountName = _emailController.text.trim();
+    currentAccount.password = _passwordController.text.trim();
+
+    if (isAccountRegistered(accounts, currentAccount.accountName)) {
+      currentAccount = await getAccount(currentAccount);
+    }
+
+    //getAccountFromList(accounts, _emailController.text.trim(),
+    //_passwordController.text.trim());
 
     print("account role ${currentAccount.accountRole}");
 

@@ -79,19 +79,13 @@ bool isUserRegisteredAtCustomer(Account user, Account customer) {
   return isRegistered;
 }
 
-Account getAccountFromList(
-    List<Account> accounts, String email, String password) {
-  Account thisAccount = createDefaultAccount();
-
+bool isAccountRegistered(List<Account> accounts, String email) {
+  bool isRegistered = false;
   for (int index = 0; index < accounts.length; index++) {
     if (accounts[index].accountName == email) {
-      if (accounts[index].password == password) {
-        thisAccount = accounts[index];
-        break;
-      }
+      isRegistered = true;
+      break;
     }
   }
-
-  print(thisAccount);
-  return thisAccount;
+  return isRegistered;
 }

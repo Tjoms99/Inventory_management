@@ -50,7 +50,11 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   String getRole() {
-    return _accountRoleController.text.trim();
+    String role = "user";
+    if (isAdmin(widget.currentAccount)) {
+      role = _accountRoleController.text.trim();
+    }
+    return role;
   }
 
   String getRFID() {
@@ -101,7 +105,7 @@ class _RegisterPage extends State<RegisterPage> {
 
   void _checkAccount() {
     print("check for user");
-
+    _isRegistered = false;
     for (int index = 0; index < accounts.length; index++) {
       if (accounts[index].accountName == (getEmail())) {
         _isRegistered = true;
