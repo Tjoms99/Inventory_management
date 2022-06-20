@@ -58,11 +58,22 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   String getCustomerID() {
-    return _customerIDController.text.trim();
+    String customerId = _customerIDController.text.trim();
+    //Should be length of 200
+    while (customerId.length < 200) {
+      customerId = customerId + "0";
+    }
+    return customerId;
   }
 
   String getReigstedCustomerId() {
-    return _registeredCustomerIDController.text.trim();
+    String registeredCustomerId = _registeredCustomerIDController.text.trim();
+    //Should be length of 200
+    while (registeredCustomerId.length < 200) {
+      registeredCustomerId = registeredCustomerId + "0";
+    }
+
+    return registeredCustomerId;
   }
 
   //TODO: get rfid tag from database

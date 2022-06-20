@@ -75,7 +75,12 @@ class _AddItemPageState extends State<AddItemPage> {
   }
 
   String getCustomerId() {
-    return _registeredCustomerIdController.text.trim();
+    String registeredCustomerId = _registeredCustomerIdController.text.trim();
+    //Should be length of 200
+    while (registeredCustomerId.length < 200) {
+      registeredCustomerId = registeredCustomerId + "0";
+    }
+    return registeredCustomerId;
   }
 
   Future _updateItem() async {
