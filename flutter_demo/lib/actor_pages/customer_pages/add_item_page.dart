@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 
 import '../../classes/account.dart';
 import '../../classes/item.dart';
@@ -23,18 +26,18 @@ class _AddItemPageState extends State<AddItemPage> {
   //Controllers
   final TextEditingController _typeController = TextEditingController();
   final TextEditingController _statusController = TextEditingController();
-  final TextEditingController _rfidController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _registeredCustomerIdController =
       TextEditingController();
+
+  String rfid_tag = "";
 
   @override
   void dispose() {
     super.dispose();
     _typeController.dispose();
     _statusController.dispose();
-    _rfidController.dispose();
     _descriptionController.dispose();
     _locationController.dispose();
     _registeredCustomerIdController.dispose();
@@ -46,7 +49,7 @@ class _AddItemPageState extends State<AddItemPage> {
     if (widget.item != null) {
       _typeController.text = widget.item!.name;
       _statusController.text = widget.item!.status;
-      _rfidController.text = widget.item!.rfid;
+      rfid_tag = widget.item!.rfid;
       _descriptionController.text = widget.item!.description;
       _locationController.text = widget.item!.location;
       _registeredCustomerIdController.text = widget.item!.registeredCustomerId;
@@ -61,9 +64,8 @@ class _AddItemPageState extends State<AddItemPage> {
     return _statusController.text.trim();
   }
 
-  String getRfid() {
-    _rfidController.text = "01234567890001";
-    return _rfidController.text.trim();
+  String getRFID() {
+    return rfid_tag;
   }
 
   String getDescription() {
@@ -88,11 +90,29 @@ class _AddItemPageState extends State<AddItemPage> {
         id: widget.item!.id,
         name: getType(),
         status: getStatus(),
-        rfid: getRfid(),
+        rfid: getRFID(),
         description: getDescription(),
         location: getLocation(),
         registeredCustomerId: getCustomerId());
 
+    if (item.name.isEmpty) {
+      return;
+    }
+    if (item.status.isEmpty) {
+      return;
+    }
+    if (item.rfid.isEmpty) {
+      return;
+    }
+    if (item.description.isEmpty) {
+      return;
+    }
+    if (item.location.isEmpty) {
+      return;
+    }
+    if (item.registeredCustomerId.isEmpty) {
+      return;
+    }
     updateItem(item);
     gotoPage();
   }
@@ -102,11 +122,29 @@ class _AddItemPageState extends State<AddItemPage> {
         id: 0,
         name: getType(),
         status: getStatus(),
-        rfid: getRfid(),
+        rfid: getRFID(),
         description: getDescription(),
         location: getLocation(),
         registeredCustomerId: getCustomerId());
 
+    if (item.name.isEmpty) {
+      return;
+    }
+    if (item.status.isEmpty) {
+      return;
+    }
+    if (item.rfid.isEmpty) {
+      return;
+    }
+    if (item.description.isEmpty) {
+      return;
+    }
+    if (item.location.isEmpty) {
+      return;
+    }
+    if (item.registeredCustomerId.isEmpty) {
+      return;
+    }
     addItem(item);
     gotoPage();
   }
@@ -137,6 +175,24 @@ class _AddItemPageState extends State<AddItemPage> {
     }
   }
 
+  Future setRFID() async {
+    var info;
+    var availability = await FlutterNfcKit.nfcAvailability;
+    if (availability != NFCAvailability.available) {
+      print("rfid not working");
+      return;
+    } else {
+      print("rfid working");
+      var tag = await FlutterNfcKit.poll();
+      info = jsonEncode(tag);
+      info = jsonDecode(info);
+    }
+
+    setState(() {
+      rfid_tag = info['id'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,19 +204,35 @@ class _AddItemPageState extends State<AddItemPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //Icon
-                const ImageIcon(
-                  AssetImage("assets/images/rfid_transparent.png"),
-                  color: Color.fromARGB(255, 37, 174, 53),
-                  size: 100,
+                GestureDetector(
+                  onTap: setRFID,
+                  child: const ImageIcon(
+                    AssetImage("assets/images/rfid_transparent.png"),
+                    color: Color.fromARGB(255, 37, 174, 53),
+                    size: 100,
+                  ),
                 ),
 
                 //Hello
                 Text(
-                  widget.doAddItem ? 'Add Item' : 'Update Item',
+                  widget.doAddItem
+                      ? 'TAP TO SCAN RFID\nID: ${getRFID()}'
+                      : 'TAP TO UPDATE RFID\nID: ${getRFID()}',
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: secondFontSize),
                 ),
 
+                const SizedBox(height: firstBoxHeight),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: standardPadding),
+                  child: Text(
+                    widget.doAddItem ? '---AND---' : '---OR---',
+                    style: const TextStyle(
+                      fontSize: forthFontSize,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: firstBoxHeight),
 
                 //Type

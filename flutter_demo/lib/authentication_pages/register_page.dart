@@ -272,12 +272,12 @@ class _RegisterPage extends State<RegisterPage> {
                         ),
                         const SizedBox(height: firstBoxHeight),
 
-                        const Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: standardPadding),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: standardPadding),
                           child: Text(
-                            '---AND---',
-                            style: TextStyle(
+                            widget._doRegister ? '---AND---' : '---OR---',
+                            style: const TextStyle(
                               fontSize: forthFontSize,
                             ),
                           ),
