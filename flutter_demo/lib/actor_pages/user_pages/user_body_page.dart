@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 
 class UserBodyPage extends StatefulWidget {
   const UserBodyPage({Key? key}) : super(key: key);
@@ -12,14 +15,27 @@ class _UserBodyPageState extends State<UserBodyPage> {
   var userInput = 0;
   var userFeedback = '';
   var userTask = '';
+  var info;
 
   //Should update the database when a user scans an item
   Future changeUserTask() async {
-    print('RFID detected');
+    var availability = await FlutterNfcKit.nfcAvailability;
+    if (availability != NFCAvailability.available) {
+      print("rfid not working");
+      return;
+    } else {
+      print("rfid working");
+      var tag = await FlutterNfcKit.poll();
+      info = jsonEncode(tag);
+      info = jsonDecode(info);
+    }
+
+    print(info['id']);
 
     setState(() {
       userTask = userTask.contains('BORROWED') ? 'RETURNED' : 'BORROWED';
-      userFeedback = 'You have ' + userTask + ' this item';
+      userFeedback =
+          'You have ' + userTask + ' this item with id: ' + '${info['id']}';
     });
 
     print(userFeedback);

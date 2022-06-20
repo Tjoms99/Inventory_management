@@ -89,3 +89,15 @@ bool isAccountRegistered(List<Account> accounts, String email) {
   }
   return isRegistered;
 }
+
+Account getAccountUsingRFID(List<Account> accounts, String rfid) {
+  Account account = createDefaultAccount();
+  for (int index = 0; index < accounts.length; index++) {
+    if (accounts[index].rfid == rfid) {
+      account = accounts[index];
+      break;
+    }
+  }
+
+  return account;
+}

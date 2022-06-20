@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/server/account_service.dart';
+import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 
 import '../classes/account.dart';
 
@@ -34,6 +37,7 @@ class _RegisterPage extends State<RegisterPage> {
       TextEditingController();
 
   List<Account> accounts = [];
+  bool firstReload = false;
   bool _isRegistered = false;
   String rfid_tag = "";
 
@@ -59,6 +63,24 @@ class _RegisterPage extends State<RegisterPage> {
 
   String getRFID() {
     return rfid_tag;
+  }
+
+  Future setRFID() async {
+    var info;
+    var availability = await FlutterNfcKit.nfcAvailability;
+    if (availability != NFCAvailability.available) {
+      print("rfid not working");
+      return;
+    } else {
+      print("rfid working");
+      var tag = await FlutterNfcKit.poll();
+      info = jsonEncode(tag);
+      info = jsonDecode(info);
+    }
+
+    setState(() {
+      rfid_tag = info['id'];
+    });
   }
 
   String getCustomerID() {
@@ -115,7 +137,8 @@ class _RegisterPage extends State<RegisterPage> {
         _isRegistered = true;
         _accountRoleController.text = accounts[index].accountRole;
         _customerIDController.text = accounts[index].customerId;
-        setTag(accounts[index].rfid);
+        rfid_tag = accounts[index].rfid;
+        firstReload = true;
         break;
       }
     }
@@ -172,8 +195,18 @@ class _RegisterPage extends State<RegisterPage> {
         customerId: customerId,
         registeredCustomerId: registeredCustomerId);
 
-    if (confirmPassword != password) {
+    if (confirmPassword != password && password.isEmpty) {
       print("incorrect password");
+      return;
+    }
+
+    if (rfid.isEmpty) {
+      print("No rfid tag detected");
+      return;
+    }
+
+    if (email.isEmpty) {
+      print("No email");
       return;
     }
 
@@ -207,17 +240,20 @@ class _RegisterPage extends State<RegisterPage> {
                   }
                   if (snapshot.hasData) {
                     accounts = snapshot.data!;
-                    _checkAccount();
+                    if (!firstReload) _checkAccount();
 
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const SizedBox(height: firstBoxHeight),
                         //Icon
-                        const ImageIcon(
-                          AssetImage("assets/images/rfid_transparent.png"),
-                          color: Color.fromARGB(255, 37, 174, 53),
-                          size: 100,
+                        GestureDetector(
+                          onTap: setRFID,
+                          child: const ImageIcon(
+                            AssetImage("assets/images/rfid_transparent.png"),
+                            color: Color.fromARGB(255, 37, 174, 53),
+                            size: 100,
+                          ),
                         ),
                         //Info text
                         //TODO add compatibility with RFID
@@ -226,8 +262,8 @@ class _RegisterPage extends State<RegisterPage> {
                               horizontal: standardPadding),
                           child: Text(
                             widget._doRegister
-                                ? 'Scan your RFID tag'
-                                : 'Scan to update RFID\nCurrent: ${getRFID()}',
+                                ? 'TAP ICON TO SCAN RFID \nID: ${getRFID()}'
+                                : 'TAP ICON TO UPDATE RFID\nID: ${getRFID()}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: secondFontSize,
