@@ -53,6 +53,13 @@ bool isDefualt(Account account) {
   return _isDefault;
 }
 
+bool isUser(Account account) {
+  bool _isDefault = false;
+  if (account.accountRole == "user") _isDefault = true;
+
+  return _isDefault;
+}
+
 bool isAdmin(Account account) {
   bool _isAdmin = false;
 

@@ -36,8 +36,8 @@ Item createItemFromJson(List<dynamic> items, int index) {
 Item createDefaultItem() {
   return Item(
       id: 0,
-      name: "accountName",
-      status: "accountRole",
+      name: "name",
+      status: "status",
       rfid: "rfid",
       description: "description",
       location: "location",

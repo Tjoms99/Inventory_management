@@ -45,6 +45,15 @@ class _UserBodyPageState extends State<UserBodyPage> {
 
         item = getItemFromRFID(items, rfid_tag);
 
+        print(item.id);
+        //Return if no item found
+        if (item.rfid == "rfid") {
+          setState(() {
+            infoText = 'item with id: ' + rfid_tag + ' \ndoes not exist';
+          });
+          return;
+        }
+
         print(item.status);
         switch (item.status) {
           case 'unassigned':
@@ -59,6 +68,9 @@ class _UserBodyPageState extends State<UserBodyPage> {
             break;
 
           case 'returned':
+            if (isUser(widget.currentAccount)) {
+              return;
+            }
             item.status = 'unassigned';
             item.location = 'inventory (defualt)';
             break;
