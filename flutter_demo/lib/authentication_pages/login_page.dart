@@ -42,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
         tag = await FlutterNfcKit.poll();
         info = jsonEncode(tag);
         info = jsonDecode(info);
+        print(info);
         rfid_tag = info['id'];
       } catch (e) {}
     }

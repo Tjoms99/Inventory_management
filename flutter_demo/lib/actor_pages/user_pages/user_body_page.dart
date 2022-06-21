@@ -3,10 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/Services/item_service.dart';
 import 'package:flutter_demo/classes/account.dart';
+import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
-
-import '../../classes/item.dart';
 
 class UserBodyPage extends StatefulWidget {
   Account currentAccount;
