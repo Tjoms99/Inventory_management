@@ -11,7 +11,8 @@ $registered_customer_id = $_POST['registered_customer_id'];
 
 
 $id = intval($id);
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 
-$sql = "UPDATE `accounts` SET `account_name` = '$account_name', `account_role` = '$account_role' , `password` = '$password', `rfid` = '$rfid', `customer_id` = '$customer_id', `registered_customer_id` = '$registered_customer_id' WHERE `accounts`.`id` = $id";
+$sql = "UPDATE `accounts` SET `account_name` = '$account_name', `account_role` = '$account_role' , `password` = '$hashed_password', `rfid` = '$rfid', `customer_id` = '$customer_id', `registered_customer_id` = '$registered_customer_id' WHERE `accounts`.`id` = $id";
 $conn->query($sql);
