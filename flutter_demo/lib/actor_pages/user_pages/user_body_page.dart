@@ -49,7 +49,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
         //Return if no item found
         if (item.rfid == "rfid") {
           setState(() {
-            infoText = 'item with id: ' + rfid_tag + ' \ndoes not exist';
+            infoText = 'This item does not exist\n          ID: ' + rfid_tag;
           });
           return;
         }
@@ -62,6 +62,15 @@ class _UserBodyPageState extends State<UserBodyPage> {
             break;
 
           case 'borrowed':
+            if (item.location != widget.currentAccount.accountName) {
+              setState(() {
+                infoText =
+                    'This item is not yours to return\n                ID: ' +
+                        rfid_tag;
+              });
+              return;
+            }
+
             item.status = 'returned';
             item.location = widget.currentAccount.accountName + ' (returned)';
 
@@ -69,6 +78,11 @@ class _UserBodyPageState extends State<UserBodyPage> {
 
           case 'returned':
             if (isUser(widget.currentAccount)) {
+              setState(() {
+                infoText =
+                    'You can not borrow this item \n Customer action  is needed\n              ID: ' +
+                        rfid_tag;
+              });
               return;
             }
             item.status = 'unassigned';

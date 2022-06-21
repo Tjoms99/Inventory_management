@@ -28,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   Account currentAccount = createDefaultAccount();
 
   Future setRFID() async {
+    accounts = await getAccounts();
     rfid_tag = "";
     var info;
     NFCTag tag;
