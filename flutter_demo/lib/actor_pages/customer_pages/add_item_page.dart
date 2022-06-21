@@ -407,12 +407,13 @@ class _AddItemPageState extends State<AddItemPage> {
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
-                          fontSize: forthFontSize,
+                          fontSize: thirdFontSize,
                         ),
                       ),
                     )
                   ],
-                )
+                ),
+                const SizedBox(height: firstBoxHeight),
               ],
             ),
           ),

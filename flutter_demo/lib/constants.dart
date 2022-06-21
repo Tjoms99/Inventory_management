@@ -16,7 +16,7 @@ const Color textfieldTextColor = Color.fromARGB(225, 224, 224, 224);
 /* Text sizes */
 const double firstFontSize = 36;
 const double secondFontSize = 24;
-const double thirdFontSize = 20;
+const double thirdFontSize = 16;
 const double forthFontSize = 14;
 
 const double buttonFontSize = 16;

@@ -137,6 +137,8 @@ class _RegisterPage extends State<RegisterPage> {
         _isRegistered = true;
         _accountRoleController.text = accounts[index].accountRole;
         _customerIDController.text = accounts[index].customerId;
+        _registeredCustomerIDController.text =
+            accounts[index].registeredCustomerId;
         rfid_tag = accounts[index].rfid;
         firstReload = true;
         break;
@@ -500,17 +502,17 @@ class _RegisterPage extends State<RegisterPage> {
                                 style: TextStyle(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: forthFontSize,
+                                  fontSize: thirdFontSize,
                                 ),
                               ),
                             )
                           ],
                         ),
-                        const SizedBox(height: thirdBoxHeight),
+                        const SizedBox(height: firstBoxHeight),
                       ],
                     );
                   } else {
-                    return const CircularProgressIndicator();
+                    return const Center(child: CircularProgressIndicator());
                   }
                 }),
           ),
