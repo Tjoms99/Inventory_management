@@ -16,7 +16,7 @@ def main():
 	while True:
 		rfid, text = reader.read()
 		rfid = hex(rfid)
-		data = {'mac':mac, 'rfid':rfid}
+		data = {'rfid':rfid}
 		r = requests.post(url = api_endpoint, data = data)
 		time.sleep(3)
 
