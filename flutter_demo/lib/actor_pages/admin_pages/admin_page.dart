@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 
 import 'package:flutter_demo/constants.dart';
@@ -11,8 +12,6 @@ import 'package:flutter_demo/actor_pages/customer_pages/assist_user_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
-
-import '../../authentication_pages/login_page.dart';
 
 class AdminPage extends StatefulWidget {
   Account currentAccount;
@@ -70,7 +69,9 @@ class _AdminPageState extends State<AdminPage> {
       UsersListPage(currentAccount: widget.currentAccount),
       ItemsListPage(currentAccount: widget.currentAccount),
       const AssistUserPage(),
-      const UserBodyPage(),
+      UserBodyPage(
+        currentAccount: widget.currentAccount,
+      ),
     ];
 
     return Scaffold(

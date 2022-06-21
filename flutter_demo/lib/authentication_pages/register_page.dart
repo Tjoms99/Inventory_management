@@ -1,14 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/Services/account_service.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
+import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
-import 'package:flutter_demo/server/account_service.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
-
-import '../classes/account.dart';
 
 //TODO Add filed for account type for admin, add user does not work
 class RegisterPage extends StatefulWidget {
@@ -202,10 +201,11 @@ class _RegisterPage extends State<RegisterPage> {
       return;
     }
 
-    if (rfid.isEmpty) {
+    //Will be unable to add accounts in web
+    /*if (rfid.isEmpty) {
       print("No rfid tag detected");
       return;
-    }
+    } */
 
     if (email.isEmpty) {
       print("No email");

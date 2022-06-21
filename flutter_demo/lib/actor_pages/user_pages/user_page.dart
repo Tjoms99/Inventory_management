@@ -7,7 +7,7 @@ import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
 import '../../classes/account.dart';
 
 class UserPage extends StatefulWidget {
-  Account? currentAccount;
+  Account currentAccount;
   UserPage({required this.currentAccount});
 
   @override
@@ -44,7 +44,7 @@ class _UserPage extends State<UserPage> {
               icon: const Icon(Icons.search),
             ),
           ]),
-      body: const UserBodyPage(),
+      body: UserBodyPage(currentAccount: widget.currentAccount),
     );
   }
 }

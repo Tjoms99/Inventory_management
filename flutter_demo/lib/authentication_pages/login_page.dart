@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/Services/account_service.dart';
+import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
 
 import 'package:flutter_demo/authentication_pages/register_page.dart';
@@ -8,9 +10,6 @@ import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
-
-import '../classes/account.dart';
-import '../server/account_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -29,19 +28,22 @@ class _LoginPageState extends State<LoginPage> {
   Account currentAccount = createDefaultAccount();
 
   Future setRFID() async {
+    rfid_tag = "";
     var info;
+    NFCTag tag;
     var availability = await FlutterNfcKit.nfcAvailability;
     if (availability != NFCAvailability.available) {
       print("rfid not working");
       return;
     } else {
       print("rfid working");
-      var tag = await FlutterNfcKit.poll();
-      info = jsonEncode(tag);
-      info = jsonDecode(info);
+      try {
+        tag = await FlutterNfcKit.poll();
+        info = jsonEncode(tag);
+        info = jsonDecode(info);
+        rfid_tag = info['id'];
+      } catch (e) {}
     }
-
-    rfid_tag = info['id'];
 
     currentAccount = getAccountUsingRFID(accounts, rfid_tag);
     if (!isDefualt(currentAccount)) {

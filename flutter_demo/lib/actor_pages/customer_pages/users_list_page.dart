@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/Services/account_service.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
-
-import '../../classes/account.dart';
-import '../../server/account_service.dart';
+import 'package:flutter_demo/classes/account.dart';
 
 class UsersListPage extends StatefulWidget {
   Account currentAccount;

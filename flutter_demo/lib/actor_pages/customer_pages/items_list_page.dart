@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/Services/item_service.dart';
 
 import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
-
-import '../../classes/account.dart';
-import '../../classes/item.dart';
-import '../../server/item_service.dart';
+import 'package:flutter_demo/classes/account.dart';
+import 'package:flutter_demo/classes/item.dart';
 
 class ItemsListPage extends StatefulWidget {
   Account currentAccount;

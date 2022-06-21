@@ -1,14 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
+import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
+import 'package:flutter_demo/classes/account.dart';
+import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/services/item_service.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
-
-import '../../classes/account.dart';
-import '../../classes/item.dart';
-import '../../server/item_service.dart';
-import '../admin_pages/admin_page.dart';
-import 'customer_page.dart';
 
 class AddItemPage extends StatefulWidget {
   final bool doAddItem;
@@ -133,9 +132,11 @@ class _AddItemPageState extends State<AddItemPage> {
     if (item.status.isEmpty) {
       return;
     }
-    if (item.rfid.isEmpty) {
+    //Will only work on mobile
+    /*if (item.rfid.isEmpty) {
       return;
-    }
+    } */
+
     if (item.description.isEmpty) {
       return;
     }

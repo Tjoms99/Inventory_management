@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/authentication_pages/login_page.dart';
+import 'package:flutter_demo/classes/account.dart';
 
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
@@ -10,9 +12,6 @@ import 'package:flutter_demo/actor_pages/customer_pages/assist_user_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
-
-import '../../authentication_pages/login_page.dart';
-import '../../classes/account.dart';
 
 class CustomerPage extends StatefulWidget {
   Account currentAccount = createDefaultAccount();
@@ -70,7 +69,9 @@ class _CustomerPageState extends State<CustomerPage> {
       UsersListPage(currentAccount: widget.currentAccount),
       ItemsListPage(currentAccount: widget.currentAccount),
       const AssistUserPage(),
-      const UserBodyPage(),
+      UserBodyPage(
+        currentAccount: widget.currentAccount,
+      ),
     ];
 
     return Scaffold(

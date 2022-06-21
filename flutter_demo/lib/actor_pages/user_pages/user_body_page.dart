@@ -1,11 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/Services/item_service.dart';
+import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 
+import '../../classes/item.dart';
+
 class UserBodyPage extends StatefulWidget {
-  const UserBodyPage({Key? key}) : super(key: key);
+  Account currentAccount;
+  UserBodyPage({required this.currentAccount});
 
   @override
   State<UserBodyPage> createState() => _UserBodyPageState();
@@ -13,32 +18,64 @@ class UserBodyPage extends StatefulWidget {
 
 class _UserBodyPageState extends State<UserBodyPage> {
   var userInput = 0;
-  var userFeedback = '';
-  var userTask = '';
+  var infoText = '';
+  var rfid_tag = "";
   var info;
+  List<Item> items = [];
 
   //Should update the database when a user scans an item
   Future changeUserTask() async {
+    items = await getItemsForUser(widget.currentAccount);
+    Item item = createDefaultItem();
+    var info;
+    rfid_tag = "";
+    NFCTag tag;
+
     var availability = await FlutterNfcKit.nfcAvailability;
     if (availability != NFCAvailability.available) {
       print("rfid not working");
       return;
     } else {
       print("rfid working");
-      var tag = await FlutterNfcKit.poll();
-      info = jsonEncode(tag);
-      info = jsonDecode(info);
+      try {
+        tag = await FlutterNfcKit.poll();
+        info = jsonEncode(tag);
+        info = jsonDecode(info);
+        rfid_tag = info['id'];
+
+        item = getItemFromRFID(items, rfid_tag);
+
+        print(item.status);
+        switch (item.status) {
+          case 'unassigned':
+            item.status = 'borrowed';
+            item.location = widget.currentAccount.accountName;
+            break;
+
+          case 'borrowed':
+            item.status = 'returned';
+            item.location = widget.currentAccount.accountName + ' (returned)';
+
+            break;
+
+          case 'returned':
+            item.status = 'unassigned';
+            item.location = 'inventory (defualt)';
+            break;
+          default:
+            item.status = 'unknown';
+        }
+
+        print(item.rfid);
+        setState(() {
+          infoText =
+              'You have ' + item.status + ' \nitem with id: ' + item.rfid;
+          updateItem(item);
+        });
+      } catch (e) {
+        print("waited too long to scan RFID");
+      }
     }
-
-    print(info['id']);
-
-    setState(() {
-      userTask = userTask.contains('BORROWED') ? 'RETURNED' : 'BORROWED';
-      userFeedback =
-          'You have ' + userTask + ' this item with id: ' + '${info['id']}';
-    });
-
-    print(userFeedback);
   }
 
   @override
@@ -59,7 +96,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
               ),
               //Hello
               const Text(
-                'Scan the item RFID tag',
+                'SCAN AND TAP',
                 style: TextStyle(
                     fontWeight: FontWeight.bold, fontSize: secondFontSize),
               ),
@@ -69,7 +106,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
               const SizedBox(height: firstBoxHeight * 3),
 
               Text(
-                userFeedback,
+                infoText,
                 style: const TextStyle(
                     fontWeight: FontWeight.bold, fontSize: secondFontSize),
               ),

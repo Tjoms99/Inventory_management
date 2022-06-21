@@ -1,8 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter_demo/Services/item_service.dart';
 import 'package:flutter_demo/classes/account.dart';
-
-import '../server/item_service.dart';
 
 class Item {
   int id;
@@ -98,4 +97,49 @@ Future<List<Item>> getItemsForCustomer(Account customer) async {
 
   print(items.length);
   return itemsForCustomer;
+}
+
+Future<List<Item>> getItemsForUser(Account user) async {
+  List<Item> items = await getItems();
+  List<Item> itemsForUser = [];
+  List<int> customerIndex = [];
+
+  print("getting items for user");
+  print(user.registeredCustomerId);
+
+  //Get all 1's registered to get index of customer id
+  for (int index = 0; index < user.registeredCustomerId.length; index++) {
+    if (user.registeredCustomerId.startsWith("1", index)) {
+      customerIndex.add(index);
+    }
+  }
+
+  //Get all items with correct customer id index (all items belongs to user)
+  for (int index = 0; index < items.length; index++) {
+    for (int indexCustomer = 0;
+        indexCustomer < customerIndex.length;
+        indexCustomer++) {
+      if (items[index].registeredCustomerId.startsWith("1", indexCustomer)) {
+        itemsForUser.add(items[index]);
+        print("added item");
+        print(items[index].rfid);
+      }
+    }
+  }
+
+  print(items.length);
+  return itemsForUser;
+}
+
+Item getItemFromRFID(items, rfidTag) {
+  Item thisItem = createDefaultItem();
+
+  for (int index = 0; index < items.length; index++) {
+    if (items[index].rfid == rfidTag) {
+      thisItem = items[index];
+      break;
+    }
+  }
+
+  return thisItem;
 }
