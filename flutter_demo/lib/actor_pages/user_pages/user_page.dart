@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/classes/account.dart';
 
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
-
-import '../../classes/account.dart';
 
 class UserPage extends StatefulWidget {
   Account currentAccount;

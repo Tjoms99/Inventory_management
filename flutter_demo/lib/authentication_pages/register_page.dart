@@ -65,21 +65,25 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   Future setRFID() async {
+    rfid_tag = "";
     var info;
+
     var availability = await FlutterNfcKit.nfcAvailability;
     if (availability != NFCAvailability.available) {
       print("rfid not working");
       return;
     } else {
       print("rfid working");
-      var tag = await FlutterNfcKit.poll();
-      info = jsonEncode(tag);
-      info = jsonDecode(info);
-    }
+      try {
+        var tag = await FlutterNfcKit.poll();
+        info = jsonEncode(tag);
+        info = jsonDecode(info);
 
-    setState(() {
-      rfid_tag = info['id'];
-    });
+        setState(() {
+          rfid_tag = info['id'];
+        });
+      } catch (e) {}
+    }
   }
 
   String getCustomerID() {
@@ -101,7 +105,6 @@ class _RegisterPage extends State<RegisterPage> {
     return registeredCustomerId;
   }
 
-  //TODO: get rfid tag from database
   void setTag(String rfidString) {
     rfid_tag = rfidString;
   }
@@ -264,8 +267,20 @@ class _RegisterPage extends State<RegisterPage> {
                               horizontal: standardPadding),
                           child: Text(
                             widget._doRegister
-                                ? 'TAP ICON TO SCAN RFID \nID: ${getRFID()}'
-                                : 'TAP ICON TO UPDATE RFID\nID: ${getRFID()}',
+                                ? 'TAP ICON TO SCAN RFID'
+                                : 'TAP ICON TO UPDATE RFID',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: secondFontSize,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: thirdBoxHeight),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: standardPadding),
+                          child: Text(
+                            'ID: ' + getRFID(),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: secondFontSize,

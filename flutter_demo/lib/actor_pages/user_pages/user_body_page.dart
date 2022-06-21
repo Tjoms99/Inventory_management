@@ -49,7 +49,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
         //Return if no item found
         if (item.rfid == "rfid") {
           setState(() {
-            infoText = 'This item does not exist\n          ID: ' + rfid_tag;
+            infoText = 'This item does not exist';
           });
           return;
         }
@@ -64,9 +64,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
           case 'borrowed':
             if (item.location != widget.currentAccount.accountName) {
               setState(() {
-                infoText =
-                    'This item is not yours to return\n                ID: ' +
-                        rfid_tag;
+                infoText = 'This item is not yours to return';
               });
               return;
             }
@@ -80,8 +78,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
             if (isUser(widget.currentAccount)) {
               setState(() {
                 infoText =
-                    'You can not borrow this item \n Customer action  is needed\n              ID: ' +
-                        rfid_tag;
+                    'You can not borrow this item \n Customer action  is needed';
               });
               return;
             }
@@ -94,8 +91,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
 
         print(item.rfid);
         setState(() {
-          infoText =
-              'You have ' + item.status + ' \nitem with id: ' + item.rfid;
+          infoText = 'You have ' + item.status + ' this item';
           updateItem(item);
         });
       } catch (e) {
@@ -133,6 +129,14 @@ class _UserBodyPageState extends State<UserBodyPage> {
 
               Text(
                 infoText,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: secondFontSize),
+              ),
+
+              const SizedBox(height: firstBoxHeight),
+
+              Text(
+                'ID:' + rfid_tag,
                 style: const TextStyle(
                     fontWeight: FontWeight.bold, fontSize: secondFontSize),
               ),
