@@ -9,6 +9,7 @@ import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
+import 'package:flutter_demo/services/totem_service.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 
 class LoginPage extends StatefulWidget {
@@ -29,25 +30,36 @@ class _LoginPageState extends State<LoginPage> {
 
   Future setRFID() async {
     accounts = await getAccounts();
-    rfid_tag = "";
+    currentAccount = createDefaultAccount();
+    rfid_tag = await getTotemRFID();
+    var availability = await FlutterNfcKit.nfcAvailability;
+
     var info;
     NFCTag tag;
-    var availability = await FlutterNfcKit.nfcAvailability;
-    if (availability != NFCAvailability.available) {
-      print("rfid not working");
-      return;
+
+    if (rfid_tag.isNotEmpty) {
+      print("got rfid!!!");
+      print(rfid_tag);
     } else {
-      print("rfid working");
-      try {
-        tag = await FlutterNfcKit.poll();
-        info = jsonEncode(tag);
-        info = jsonDecode(info);
-        print(info);
-        rfid_tag = info['id'];
-      } catch (e) {}
+      if (availability != NFCAvailability.available) {
+        print("rfid not working");
+        return;
+      } else {
+        print("rfid working");
+        try {
+          tag = await FlutterNfcKit.poll();
+          info = jsonEncode(tag);
+          info = jsonDecode(info);
+          print(info);
+          rfid_tag = info['id'];
+        } catch (e) {}
+      }
     }
 
+    print(rfid_tag);
     currentAccount = getAccountUsingRFID(accounts, rfid_tag);
+    setState(() {});
+    print(currentAccount.accountName);
     if (!isDefualt(currentAccount)) {
       gotoPage();
     }
@@ -158,9 +170,9 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         //Hello
-                        const Text(
-                          'TAP ICON TO SCAN RFID',
-                          style: TextStyle(
+                        Text(
+                          'TAP ICON TO SCAN RFID' + rfid_tag,
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: secondFontSize),
                         ),

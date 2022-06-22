@@ -100,8 +100,9 @@ bool isAccountRegistered(List<Account> accounts, String email) {
 Account getAccountUsingRFID(List<Account> accounts, String rfid) {
   Account account = createDefaultAccount();
   for (int index = 0; index < accounts.length; index++) {
-    if (accounts[index].rfid == rfid) {
+    if (accounts[index].rfid.toUpperCase() == rfid.toUpperCase()) {
       account = accounts[index];
+      print("account found using rfid!");
       break;
     }
   }

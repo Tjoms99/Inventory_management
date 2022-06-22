@@ -9,7 +9,6 @@ import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 
-//TODO Add filed for account type for admin, add user does not work
 class RegisterPage extends StatefulWidget {
   final bool _doRegister;
   final String _email;
@@ -65,7 +64,6 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   Future setRFID() async {
-    rfid_tag = "";
     var info;
 
     var availability = await FlutterNfcKit.nfcAvailability;

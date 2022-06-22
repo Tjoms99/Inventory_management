@@ -1,7 +1,6 @@
 import 'dart:convert';
+import 'package:flutter_demo/classes/item.dart';
 import 'package:http/http.dart' as http;
-
-import '../classes/item.dart';
 
 Future<List<Item>> getItems() async {
   List<Item> items = [];
