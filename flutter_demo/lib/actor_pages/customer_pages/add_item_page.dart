@@ -11,10 +11,12 @@ import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.
 class AddItemPage extends StatefulWidget {
   final bool doAddItem;
   final Account currentAccount;
-  Item? item;
+  Item item;
 
   AddItemPage(
-      {required this.doAddItem, required this.currentAccount, this.item});
+      {required this.doAddItem,
+      required this.currentAccount,
+      required this.item});
 
   @override
   State<AddItemPage> createState() => _AddItemPageState();
@@ -58,14 +60,13 @@ class _AddItemPageState extends State<AddItemPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.item != null) {
-      _typeController.text = widget.item!.name;
-      _statusController.text = widget.item!.status;
-      rfidTag = widget.item!.rfid;
-      _descriptionController.text = widget.item!.description;
-      _locationController.text = widget.item!.location;
-      _registeredCustomerIdController.text = widget.item!.registeredCustomerId;
-    }
+    _typeController.text = widget.item.name;
+    _statusController.text = widget.item.status;
+    rfidTag = widget.item.rfid;
+    _descriptionController.text = widget.item.description;
+    _locationController.text = widget.item.location;
+    _registeredCustomerIdController.text = widget.item.registeredCustomerId;
+    setRegisteredCustomerID();
 
     //keyboard
     _focusType.addListener(_onFocusChangeType);
@@ -78,6 +79,11 @@ class _AddItemPageState extends State<AddItemPage> {
   void setRegisteredCustomerID() {
     int customerIndex = -1;
     String id = "";
+
+    if (!widget.doAddItem) {
+      _registeredCustomerIdController.text = widget.item.registeredCustomerId;
+      return;
+    }
 
     //Should be length of 200
     while (id.length < 200) {
@@ -100,7 +106,7 @@ class _AddItemPageState extends State<AddItemPage> {
             customerIndex,
           ) +
           "1" +
-          id.substring(customerIndex, id.length - 1);
+          id.substring(customerIndex + 1, id.length - 1);
       _registeredCustomerIdController.text = id;
 
       debugPrint("New ID: $id");
@@ -141,7 +147,7 @@ class _AddItemPageState extends State<AddItemPage> {
 
   Future _updateItem() async {
     Item item = Item(
-        id: widget.item!.id,
+        id: widget.item.id,
         name: getType(),
         status: getStatus(),
         rfid: getRFID(),
@@ -276,7 +282,6 @@ class _AddItemPageState extends State<AddItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    setRegisteredCustomerID();
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: SafeArea(

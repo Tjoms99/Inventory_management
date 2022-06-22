@@ -61,6 +61,7 @@ class _ListBuilderState extends State<ListBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     return FutureBuilder<List<Item>>(
         future: isAdmin(widget.currentAccount)
             ? getItems()
@@ -204,6 +205,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 1.0),
       child: widget.title != ""

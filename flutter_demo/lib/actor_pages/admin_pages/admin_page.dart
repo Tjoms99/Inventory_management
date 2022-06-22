@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/classes/account.dart';
+import 'package:flutter_demo/classes/item.dart';
 
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/search_page.dart';
@@ -50,7 +51,10 @@ class _AdminPageState extends State<AdminPage> {
       context,
       MaterialPageRoute(
           builder: (context) => AddItemPage(
-              doAddItem: true, currentAccount: widget.currentAccount)),
+                doAddItem: true,
+                currentAccount: widget.currentAccount,
+                item: createDefaultItem(),
+              )),
     );
   }
 

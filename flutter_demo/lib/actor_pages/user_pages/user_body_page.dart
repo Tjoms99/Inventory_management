@@ -54,8 +54,6 @@ class _UserBodyPageState extends State<UserBodyPage> {
             widget.currentAccount.registeredCustomerId,
             item.registeredCustomerId);
 
-        debugPrint(
-            "Updated acount with new ID: " + widget.currentAccount.customerId);
         updateAccountRegisteredCustomerID(widget.currentAccount);
         break;
 
