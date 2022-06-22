@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/Services/account_service.dart';
 import 'package:flutter_demo/classes/account.dart';
@@ -10,7 +8,6 @@ import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 import 'package:flutter_demo/services/totem_service.dart';
-import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -28,37 +25,16 @@ class _LoginPageState extends State<LoginPage> {
   List<Account> accounts = [];
   Account currentAccount = createDefaultAccount();
 
-  Future setRFID() async {
+  Future signInRFID() async {
     accounts = await getAccounts();
     currentAccount = createDefaultAccount();
-    rfid_tag = await getTotemRFID();
-    var availability = await FlutterNfcKit.nfcAvailability;
-
-    var info;
-    NFCTag tag;
-
-    if (rfid_tag.isNotEmpty) {
-      print("got rfid!!!");
-      print(rfid_tag);
-    } else {
-      if (availability != NFCAvailability.available) {
-        print("rfid not working");
-        return;
-      } else {
-        print("rfid working");
-        try {
-          tag = await FlutterNfcKit.poll();
-          info = jsonEncode(tag);
-          info = jsonDecode(info);
-          print(info);
-          rfid_tag = info['id'];
-        } catch (e) {}
-      }
-    }
-
-    print(rfid_tag);
+    rfid_tag = await getRFIDorNFC();
     currentAccount = getAccountUsingRFID(accounts, rfid_tag);
+
+    //Update page
     setState(() {});
+
+    //Login if user exist
     print(currentAccount.accountName);
     if (!isDefualt(currentAccount)) {
       gotoPage();
@@ -162,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         //Icon
                         GestureDetector(
-                          onTap: setRFID,
+                          onTap: signInRFID,
                           child: const ImageIcon(
                             AssetImage("assets/images/rfid_transparent.png"),
                             color: Color.fromARGB(255, 37, 174, 53),
@@ -170,9 +146,9 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         //Hello
-                        Text(
-                          'TAP ICON TO SCAN RFID' + rfid_tag,
-                          style: const TextStyle(
+                        const Text(
+                          'TAP ICON TO SCAN RFID',
+                          style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: secondFontSize),
                         ),

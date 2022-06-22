@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
@@ -7,7 +5,7 @@ import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/services/item_service.dart';
-import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
+import 'package:flutter_demo/services/totem_service.dart';
 
 class AddItemPage extends StatefulWidget {
   final bool doAddItem;
@@ -61,6 +59,11 @@ class _AddItemPageState extends State<AddItemPage> {
 
   String getStatus() {
     return _statusController.text.trim();
+  }
+
+  Future setRFID() async {
+    rfid_tag = await getRFIDorNFC();
+    setState(() {});
   }
 
   String getRFID() {
@@ -176,24 +179,6 @@ class _AddItemPageState extends State<AddItemPage> {
     }
   }
 
-  Future setRFID() async {
-    var info;
-    var availability = await FlutterNfcKit.nfcAvailability;
-    if (availability != NFCAvailability.available) {
-      print("rfid not working");
-      return;
-    } else {
-      print("rfid working");
-      var tag = await FlutterNfcKit.poll();
-      info = jsonEncode(tag);
-      info = jsonDecode(info);
-    }
-
-    setState(() {
-      rfid_tag = info['id'];
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -216,9 +201,13 @@ class _AddItemPageState extends State<AddItemPage> {
 
                 //Hello
                 Text(
-                  widget.doAddItem
-                      ? 'TAP TO SCAN RFID\nID: ${getRFID()}'
-                      : 'TAP TO UPDATE RFID\nID: ${getRFID()}',
+                  widget.doAddItem ? 'TAP TO SCAN RFID' : 'TAP TO UPDATE RFID',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: secondFontSize),
+                ),
+                const SizedBox(height: thirdBoxHeight),
+                Text(
+                  'ID: ' + rfid_tag,
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: secondFontSize),
                 ),

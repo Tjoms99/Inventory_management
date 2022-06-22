@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/Services/item_service.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
-import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
+import 'package:flutter_demo/services/totem_service.dart';
 
 class UserBodyPage extends StatefulWidget {
   Account currentAccount;
@@ -23,80 +21,66 @@ class _UserBodyPageState extends State<UserBodyPage> {
   List<Item> items = [];
 
   //Should update the database when a user scans an item
-  Future changeUserTask() async {
+  Future updateAction() async {
     items = await getItemsForUser(widget.currentAccount);
     Item item = createDefaultItem();
-    var info;
-    rfid_tag = "";
-    NFCTag tag;
 
-    var availability = await FlutterNfcKit.nfcAvailability;
-    if (availability != NFCAvailability.available) {
-      print("rfid not working");
+    rfid_tag = await getRFIDorNFC();
+    if (rfid_tag.isEmpty) {
+      setState(() {
+        infoText = 'You have not scanned anything';
+      });
       return;
-    } else {
-      print("rfid working");
-      try {
-        tag = await FlutterNfcKit.poll();
-        info = jsonEncode(tag);
-        info = jsonDecode(info);
-        rfid_tag = info['id'];
+    }
 
-        item = getItemFromRFID(items, rfid_tag);
+    item = getItemFromRFID(items, rfid_tag);
 
-        print(item.id);
-        //Return if no item found
-        if (item.rfid == "rfid") {
+    //Return if no item is found
+    if (item.rfid == "rfid") {
+      setState(() {
+        infoText = 'This item does not exist';
+      });
+      return;
+    }
+
+    switch (item.status) {
+      case 'unassigned':
+        item.status = 'borrowed';
+        item.location = widget.currentAccount.accountName;
+        break;
+
+      case 'borrowed':
+        if (item.location != widget.currentAccount.accountName) {
           setState(() {
-            infoText = 'This item does not exist';
+            infoText = 'This item is not yours to return';
           });
           return;
         }
 
-        print(item.status);
-        switch (item.status) {
-          case 'unassigned':
-            item.status = 'borrowed';
-            item.location = widget.currentAccount.accountName;
-            break;
+        item.status = 'returned';
+        item.location = widget.currentAccount.accountName + ' (returned)';
 
-          case 'borrowed':
-            if (item.location != widget.currentAccount.accountName) {
-              setState(() {
-                infoText = 'This item is not yours to return';
-              });
-              return;
-            }
+        break;
 
-            item.status = 'returned';
-            item.location = widget.currentAccount.accountName + ' (returned)';
-
-            break;
-
-          case 'returned':
-            if (isUser(widget.currentAccount)) {
-              setState(() {
-                infoText =
-                    'You can not borrow this item \n Customer action  is needed';
-              });
-              return;
-            }
-            item.status = 'unassigned';
-            item.location = 'inventory (defualt)';
-            break;
-          default:
-            item.status = 'unknown';
+      case 'returned':
+        if (isUser(widget.currentAccount)) {
+          setState(() {
+            infoText =
+                'You can not borrow this item \n Customer action  is needed';
+          });
+          return;
         }
-
-        print(item.rfid);
-        setState(() {
-          infoText = 'You have ' + item.status + ' this item';
-          updateItem(item);
-        });
-      } catch (e) {
-        print("waited too long to scan RFID");
-      }
+        item.status = 'unassigned';
+        item.location = 'inventory (defualt)';
+        break;
+      default:
+        item.status = 'unknown';
     }
+
+    setState(() {
+      infoText = 'You have ' + item.status + ' this item';
+      updateItem(item);
+    });
   }
 
   @override
@@ -108,7 +92,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
             children: [
               //Icon
               GestureDetector(
-                onTap: changeUserTask,
+                onTap: updateAction,
                 child: const ImageIcon(
                   AssetImage("assets/images/rfid_transparent.png"),
                   color: Color.fromARGB(255, 37, 174, 53),

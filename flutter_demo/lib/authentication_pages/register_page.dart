@@ -7,6 +7,7 @@ import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/services/totem_service.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -65,22 +66,31 @@ class _RegisterPage extends State<RegisterPage> {
 
   Future setRFID() async {
     var info;
+    rfid_tag = await getTotemRFID();
 
-    var availability = await FlutterNfcKit.nfcAvailability;
-    if (availability != NFCAvailability.available) {
-      print("rfid not working");
-      return;
+    if (rfid_tag.isNotEmpty) {
+      print("got rfid!!!");
+      print(rfid_tag);
+      setState(() {
+        rfid_tag;
+      });
     } else {
-      print("rfid working");
-      try {
-        var tag = await FlutterNfcKit.poll();
-        info = jsonEncode(tag);
-        info = jsonDecode(info);
+      var availability = await FlutterNfcKit.nfcAvailability;
+      if (availability != NFCAvailability.available) {
+        print("rfid not working");
+        return;
+      } else {
+        print("rfid working");
+        try {
+          var tag = await FlutterNfcKit.poll();
+          info = jsonEncode(tag);
+          info = jsonDecode(info);
 
-        setState(() {
-          rfid_tag = info['id'];
-        });
-      } catch (e) {}
+          setState(() {
+            rfid_tag = info['id'];
+          });
+        } catch (e) {}
+      }
     }
   }
 

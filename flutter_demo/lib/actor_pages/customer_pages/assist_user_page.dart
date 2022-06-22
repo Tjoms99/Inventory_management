@@ -1,13 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/Services/account_service.dart';
-import 'package:flutter_demo/Services/item_service.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
-import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
+import 'package:flutter_demo/services/totem_service.dart';
 
 class AssistUserPage extends StatefulWidget {
   const AssistUserPage({Key? key}) : super(key: key);
@@ -29,24 +26,9 @@ class _AssistUserPageState extends State<AssistUserPage> {
     super.dispose();
   }
 
-  Future setRFID() async {
+  Future signInUser() async {
     accounts = await getAccounts();
-    rfid_tag = "";
-    var info;
-    NFCTag tag;
-    var availability = await FlutterNfcKit.nfcAvailability;
-    if (availability != NFCAvailability.available) {
-      print("rfid not working");
-      return;
-    } else {
-      print("rfid working");
-      try {
-        tag = await FlutterNfcKit.poll();
-        info = jsonEncode(tag);
-        info = jsonDecode(info);
-        rfid_tag = info['id'];
-      } catch (e) {}
-    }
+    rfid_tag = await getRFIDorNFC();
 
     currentAccount = getAccountUsingRFID(accounts, rfid_tag);
 
@@ -73,7 +55,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
               children: [
                 //Icon
                 GestureDetector(
-                  onTap: setRFID,
+                  onTap: signInUser,
                   child: const ImageIcon(
                     AssetImage("assets/images/rfid_transparent.png"),
                     color: Color.fromARGB(255, 37, 174, 53),
