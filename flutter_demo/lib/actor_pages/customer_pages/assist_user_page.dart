@@ -64,7 +64,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
                 ),
                 //Hello
                 const Text(
-                  'TAP TO SCAN RFID AND LOGIN',
+                  'TAP ICON TO SCAN RFID AND LOGIN',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: secondFontSize),
                 ),
