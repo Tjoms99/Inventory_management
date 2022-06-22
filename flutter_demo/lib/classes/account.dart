@@ -112,3 +112,14 @@ Account getAccountUsingRFID(List<Account> accounts, String rfid) {
 
   return account;
 }
+
+String getNewRegisteredCustomerID(String currentID, String itemCustomerID) {
+  String newID = currentID;
+  int indexCustomerId = itemCustomerID.indexOf("1");
+
+  newID = newID.substring(0, indexCustomerId) +
+      "1" +
+      newID.substring(indexCustomerId + 1, newID.length - 1);
+
+  return newID;
+}

@@ -3,11 +3,12 @@ import 'package:flutter_demo/Services/item_service.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 
 class UserBodyPage extends StatefulWidget {
-  final Account currentAccount;
-  const UserBodyPage({required this.currentAccount});
+  Account currentAccount;
+  UserBodyPage({required this.currentAccount});
 
   @override
   State<UserBodyPage> createState() => _UserBodyPageState();
@@ -22,7 +23,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
 
   //Should update the database when a user scans an item
   Future updateAction() async {
-    items = await getItemsForUser(widget.currentAccount);
+    items = await getItems(); //getItemsForUser(widget.currentAccount);
     Item item = createDefaultItem();
 
     rfidTag = await getRFIDorNFC();
@@ -47,6 +48,15 @@ class _UserBodyPageState extends State<UserBodyPage> {
       case 'unassigned':
         item.status = 'borrowed';
         item.location = widget.currentAccount.accountName;
+
+        //Update current user and assign them to the customer of the item
+        widget.currentAccount.registeredCustomerId = getNewRegisteredCustomerID(
+            widget.currentAccount.registeredCustomerId,
+            item.registeredCustomerId);
+
+        debugPrint(
+            "Updated acount with new ID: " + widget.currentAccount.customerId);
+        updateAccountRegisteredCustomerID(widget.currentAccount);
         break;
 
       case 'borrowed':
@@ -66,7 +76,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
         if (isUser(widget.currentAccount)) {
           setState(() {
             infoText =
-                'You can not borrow this item \n Customer action  is needed';
+                'You can not borrow this item \n Customer action is needed';
           });
           return;
         }

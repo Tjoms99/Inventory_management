@@ -95,3 +95,17 @@ void updateAccount(Account account) {
     debugPrint("Failed to update account: $e");
   }
 }
+
+void updateAccountRegisteredCustomerID(Account account) {
+  try {
+    var uri = Uri.parse(
+        "http://192.168.1.201/dashboard/flutter_db/updateAccountRegisteredCustomerID.php");
+
+    http.post(uri, body: {
+      'id': jsonEncode(account.id),
+      "registered_customer_id": account.registeredCustomerId,
+    });
+  } catch (e) {
+    debugPrint("Failed to update account: $e");
+  }
+}

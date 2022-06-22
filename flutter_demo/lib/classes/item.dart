@@ -128,7 +128,7 @@ Future<List<Item>> getItemsForUser(Account user) async {
     }
   }
 
-  debugPrint("Item list length: ${items.length}");
+  debugPrint("Item list: $items");
   return itemsForUser;
 }
 
