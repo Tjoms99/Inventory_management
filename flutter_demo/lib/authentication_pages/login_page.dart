@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         //Hello
                         const Text(
-                          'TAP ICON TO SCAN RFID',
+                          'TAP ICON TO SCAN RFID AND LOGIN',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: secondFontSize),

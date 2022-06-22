@@ -53,6 +53,43 @@ class _AddItemPageState extends State<AddItemPage> {
     }
   }
 
+  void setRegisteredCustomerID() {
+    int customerIndex = -1;
+    String id = "";
+
+    //Should be length of 200
+    while (id.length < 200) {
+      id = id + "0";
+    }
+
+    for (int index = 0;
+        index < widget.currentAccount.customerId.length;
+        index++) {
+      if (widget.currentAccount.customerId.startsWith("1", index)) {
+        customerIndex = index;
+        break;
+      }
+    }
+
+    print("custoemr index");
+    print(customerIndex);
+    if (isCustomer(widget.currentAccount) && customerIndex != -1) {
+      id = id.substring(
+            0,
+            customerIndex,
+          ) +
+          "1" +
+          id.substring(customerIndex, id.length - 1);
+      print("replaced id");
+      print(id);
+      _registeredCustomerIdController.text = id;
+      print("textfield id");
+      print(_registeredCustomerIdController.text);
+    }
+
+    setState(() {});
+  }
+
   String getType() {
     return _typeController.text.trim();
   }
@@ -80,10 +117,6 @@ class _AddItemPageState extends State<AddItemPage> {
 
   String getCustomerId() {
     String registeredCustomerId = _registeredCustomerIdController.text.trim();
-    //Should be length of 200
-    while (registeredCustomerId.length < 200) {
-      registeredCustomerId = registeredCustomerId + "0";
-    }
     return registeredCustomerId;
   }
 
@@ -181,6 +214,7 @@ class _AddItemPageState extends State<AddItemPage> {
 
   @override
   Widget build(BuildContext context) {
+    setRegisteredCustomerID();
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: SafeArea(
@@ -201,7 +235,9 @@ class _AddItemPageState extends State<AddItemPage> {
 
                 //Hello
                 Text(
-                  widget.doAddItem ? 'TAP TO SCAN RFID' : 'TAP TO UPDATE RFID',
+                  widget.doAddItem
+                      ? 'TAP ICON TO SCAN RFID'
+                      : 'TAP ICON TO SCAN AND UPDATE RFID',
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: secondFontSize),
                 ),
@@ -356,6 +392,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       fillColor: textfieldBackgroundColor,
                       filled: true,
                     ),
+                    enabled: !isCustomer(widget.currentAccount),
                   ),
                 ),
                 const SizedBox(height: thirdBoxHeight),
