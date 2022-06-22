@@ -6,8 +6,8 @@ import 'package:flutter_demo/search_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
 
 class UserPage extends StatefulWidget {
-  Account currentAccount;
-  UserPage({required this.currentAccount});
+  final Account currentAccount;
+  const UserPage({required this.currentAccount});
 
   @override
   State<UserPage> createState() => _UserPage();
@@ -16,7 +16,7 @@ class UserPage extends StatefulWidget {
 class _UserPage extends State<UserPage> {
   Future signOut() async {
     //Shown in debug console
-    print("Signed out user");
+    debugPrint("Signed out " + widget.currentAccount.accountName);
     Navigator.pop(context);
   }
 

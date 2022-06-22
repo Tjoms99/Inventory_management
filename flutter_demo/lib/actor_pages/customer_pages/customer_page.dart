@@ -14,8 +14,8 @@ import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
 
 class CustomerPage extends StatefulWidget {
-  Account currentAccount = createDefaultAccount();
-  int currentIndex = 3;
+  final Account currentAccount;
+  int currentIndex;
   CustomerPage({required this.currentAccount, required this.currentIndex});
 
   @override
@@ -31,7 +31,7 @@ class _CustomerPageState extends State<CustomerPage> {
 
   Future signOut() async {
     //Shown in debug console
-    print("Signed out customer");
+    debugPrint("Signed out " + widget.currentAccount.accountName);
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),

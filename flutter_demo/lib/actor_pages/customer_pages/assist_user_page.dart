@@ -14,12 +14,11 @@ class AssistUserPage extends StatefulWidget {
 }
 
 class _AssistUserPageState extends State<AssistUserPage> {
-  final bool _isUserScanned = false;
   Account currentAccount = createDefaultAccount();
   List<Item> items = [];
   List<Account> accounts = [];
   String infoText = "";
-  var rfid_tag;
+  String rfidTag = "";
 
   @override
   void dispose() {
@@ -28,9 +27,9 @@ class _AssistUserPageState extends State<AssistUserPage> {
 
   Future signInUser() async {
     accounts = await getAccounts();
-    rfid_tag = await getRFIDorNFC();
+    rfidTag = await getRFIDorNFC();
 
-    currentAccount = getAccountUsingRFID(accounts, rfid_tag);
+    currentAccount = getAccountUsingRFID(accounts, rfidTag);
 
     if (isDefualt(currentAccount)) {
       return;

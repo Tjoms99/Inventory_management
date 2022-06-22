@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_demo/classes/item.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,7 +9,6 @@ Future<List<Item>> getItems() async {
 //Fetch data from server
     var uri =
         Uri.parse("http://192.168.1.201/dashboard/flutter_db/getItems.php");
-    print(uri);
 
     final response = await http.get(uri);
 
@@ -17,7 +17,9 @@ Future<List<Item>> getItems() async {
       Item item = createItemFromJson(jsonDecode(response.body) as List, index);
       items.add(item);
     }
-  } catch (e) {}
+  } catch (e) {
+    debugPrint("Failed to get items: $e");
+  }
   return items;
 }
 
@@ -28,7 +30,9 @@ void deleteItem(int id) {
     http.post(uri, body: {
       'id': jsonEncode(id),
     });
-  } catch (e) {}
+  } catch (e) {
+    debugPrint("Failed to delete item: $e");
+  }
 }
 
 void addItem(Item item) {
@@ -44,7 +48,9 @@ void addItem(Item item) {
       'location': item.location,
       'registered_customer_id': item.registeredCustomerId,
     });
-  } catch (e) {}
+  } catch (e) {
+    debugPrint("Failed to add item: $e");
+  }
 }
 
 void updateItem(Item item) {
@@ -61,5 +67,7 @@ void updateItem(Item item) {
       'location': item.location,
       'registered_customer_id': item.registeredCustomerId,
     });
-  } catch (e) {}
+  } catch (e) {
+    debugPrint("Failed to update item: $e");
+  }
 }

@@ -6,8 +6,8 @@ import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 
 class ItemsListPage extends StatefulWidget {
-  Account currentAccount;
-  ItemsListPage({required this.currentAccount});
+  final Account currentAccount;
+  const ItemsListPage({required this.currentAccount});
 
   @override
   State<ItemsListPage> createState() => _ItemsListPageState();
@@ -37,8 +37,8 @@ class _ItemsListPageState extends State<ItemsListPage> {
 }
 
 class ListBuilder extends StatefulWidget {
-  Account currentAccount;
-  ListBuilder({required this.currentAccount});
+  final Account currentAccount;
+  const ListBuilder({required this.currentAccount});
 
   @override
   State<ListBuilder> createState() => _ListBuilderState();
@@ -72,7 +72,7 @@ class _ListBuilderState extends State<ListBuilder> {
           if (snapshot.hasData) {
             _items = snapshot.data as List<Item>;
             _types = getItemTypes(_items);
-            print(_types);
+            debugPrint("Types of items:  $_types ");
 
             return ListView.builder(
               itemCount: _types.length,
@@ -93,8 +93,8 @@ class _ListBuilderState extends State<ListBuilder> {
 
 class ExpandableListView extends StatefulWidget {
   String title;
-  List<Item> listToBuild;
-  Account currentAccount;
+  final List<Item> listToBuild;
+  final Account currentAccount;
 
   ExpandableListView(
       {required this.title,

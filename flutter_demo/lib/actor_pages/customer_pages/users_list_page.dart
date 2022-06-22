@@ -4,9 +4,9 @@ import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 
 class UsersListPage extends StatefulWidget {
-  Account currentAccount;
+  final Account currentAccount;
 
-  UsersListPage({required this.currentAccount});
+  const UsersListPage({required this.currentAccount});
 
   @override
   State<UsersListPage> createState() => _UsersListPageState();
@@ -24,7 +24,7 @@ class _UsersListPageState extends State<UsersListPage> {
     if (isAdmin(widget.currentAccount)) {
       return;
     }
-    print("Setting accounts");
+    debugPrint("Setting  correct accounts for correct user");
     for (int index = 0; index < accounts.length; index++) {
       //Remove all admins and customers
       if (isAdmin(accounts[index]) ||

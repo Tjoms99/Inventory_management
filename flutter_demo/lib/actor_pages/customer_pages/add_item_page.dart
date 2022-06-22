@@ -10,7 +10,7 @@ import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.
 
 class AddItemPage extends StatefulWidget {
   final bool doAddItem;
-  Account currentAccount;
+  final Account currentAccount;
   Item? item;
 
   AddItemPage(
@@ -43,7 +43,7 @@ class _AddItemPageState extends State<AddItemPage> {
 
   bool _isKeyboardEnabled = false;
 
-  String rfid_tag = "";
+  String rfidTag = "";
 
   @override
   void dispose() {
@@ -61,7 +61,7 @@ class _AddItemPageState extends State<AddItemPage> {
     if (widget.item != null) {
       _typeController.text = widget.item!.name;
       _statusController.text = widget.item!.status;
-      rfid_tag = widget.item!.rfid;
+      rfidTag = widget.item!.rfid;
       _descriptionController.text = widget.item!.description;
       _locationController.text = widget.item!.location;
       _registeredCustomerIdController.text = widget.item!.registeredCustomerId;
@@ -93,20 +93,17 @@ class _AddItemPageState extends State<AddItemPage> {
       }
     }
 
-    print("custoemr index");
-    print(customerIndex);
-    if (isCustomer(widget.currentAccount) && customerIndex != -1) {
+    debugPrint("Registered CustomerID index: $customerIndex");
+    if (customerIndex != -1) {
       id = id.substring(
             0,
             customerIndex,
           ) +
           "1" +
           id.substring(customerIndex, id.length - 1);
-      print("replaced id");
-      print(id);
       _registeredCustomerIdController.text = id;
-      print("textfield id");
-      print(_registeredCustomerIdController.text);
+
+      debugPrint("New ID: $id");
     }
 
     setState(() {});
@@ -121,12 +118,12 @@ class _AddItemPageState extends State<AddItemPage> {
   }
 
   Future setRFID() async {
-    rfid_tag = await getRFIDorNFC();
+    rfidTag = await getRFIDorNFC();
     setState(() {});
   }
 
   String getRFID() {
-    return rfid_tag;
+    return rfidTag;
   }
 
   String getDescription() {
@@ -312,7 +309,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       ),
                       const SizedBox(height: thirdBoxHeight),
                       Text(
-                        'ID: ' + rfid_tag,
+                        'ID: ' + rfidTag,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: secondFontSize),

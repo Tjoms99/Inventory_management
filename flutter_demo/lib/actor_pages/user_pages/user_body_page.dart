@@ -6,17 +6,17 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 
 class UserBodyPage extends StatefulWidget {
-  Account currentAccount;
-  UserBodyPage({required this.currentAccount});
+  final Account currentAccount;
+  const UserBodyPage({required this.currentAccount});
 
   @override
   State<UserBodyPage> createState() => _UserBodyPageState();
 }
 
 class _UserBodyPageState extends State<UserBodyPage> {
-  var userInput = 0;
-  var infoText = '';
-  var rfid_tag = "";
+  String infoText = '';
+  String rfidTag = "";
+  // ignore: prefer_typing_uninitialized_variables
   var info;
   List<Item> items = [];
 
@@ -25,17 +25,17 @@ class _UserBodyPageState extends State<UserBodyPage> {
     items = await getItemsForUser(widget.currentAccount);
     Item item = createDefaultItem();
 
-    rfid_tag = await getRFIDorNFC();
-    if (rfid_tag.isEmpty) {
+    rfidTag = await getRFIDorNFC();
+    if (rfidTag.isEmpty) {
       setState(() {
         infoText = 'You have not scanned anything';
       });
       return;
     }
 
-    item = getItemFromRFID(items, rfid_tag);
+    item = getItemFromRFID(items, rfidTag);
 
-    //Return if no item is found
+    //Return if no item is  found
     if (item.rfid == "rfid") {
       setState(() {
         infoText = 'This item does not exist';
@@ -119,7 +119,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
               const SizedBox(height: firstBoxHeight),
 
               Text(
-                'ID:' + rfid_tag,
+                'ID:' + rfidTag,
                 style: const TextStyle(
                     fontWeight: FontWeight.bold, fontSize: secondFontSize),
               ),

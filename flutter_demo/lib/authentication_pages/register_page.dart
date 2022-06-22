@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/Services/account_service.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
@@ -8,7 +6,6 @@ import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/services/totem_service.dart';
-import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -16,10 +13,10 @@ class RegisterPage extends StatefulWidget {
   final String _email;
   final int _index;
   final bool _isLoggedIn;
-  Account currentAccount;
+  final Account currentAccount;
 
-  RegisterPage(this._doRegister, this._email, this._index, this._isLoggedIn,
-      this.currentAccount);
+  const RegisterPage(this._doRegister, this._email, this._index,
+      this._isLoggedIn, this.currentAccount);
 
   @override
   _RegisterPage createState() => _RegisterPage();
@@ -55,7 +52,7 @@ class _RegisterPage extends State<RegisterPage> {
   List<Account> accounts = [];
   bool firstReload = false;
   bool _isRegistered = false;
-  String rfid_tag = "";
+  String rfidTag = "";
 
   String getEmail() {
     return _emailController.text.trim();
@@ -78,37 +75,12 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   String getRFID() {
-    return rfid_tag;
+    return rfidTag;
   }
 
   Future setRFID() async {
-    var info;
-    rfid_tag = await getTotemRFID();
-
-    if (rfid_tag.isNotEmpty) {
-      print("got rfid!!!");
-      print(rfid_tag);
-      setState(() {
-        rfid_tag;
-      });
-    } else {
-      var availability = await FlutterNfcKit.nfcAvailability;
-      if (availability != NFCAvailability.available) {
-        print("rfid not working");
-        return;
-      } else {
-        print("rfid working");
-        try {
-          var tag = await FlutterNfcKit.poll();
-          info = jsonEncode(tag);
-          info = jsonDecode(info);
-
-          setState(() {
-            rfid_tag = info['id'];
-          });
-        } catch (e) {}
-      }
-    }
+    // ignore: prefer_typing_uninitialized_variables
+    rfidTag = await getRFIDorNFC();
   }
 
   String getCustomerID() {
@@ -131,7 +103,7 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   void setTag(String rfidString) {
-    rfid_tag = rfidString;
+    rfidTag = rfidString;
   }
 
   @override
@@ -163,7 +135,7 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   void _checkAccount() {
-    print("check for user");
+    debugPrint("Initialize textfields if user exist");
     _isRegistered = false;
     for (int index = 0; index < accounts.length; index++) {
       if (accounts[index].accountName == (getEmail())) {
@@ -172,7 +144,7 @@ class _RegisterPage extends State<RegisterPage> {
         _customerIDController.text = accounts[index].customerId;
         _registeredCustomerIDController.text =
             accounts[index].registeredCustomerId;
-        rfid_tag = accounts[index].rfid;
+        rfidTag = accounts[index].rfid;
         firstReload = true;
         break;
       }
@@ -201,7 +173,7 @@ class _RegisterPage extends State<RegisterPage> {
         );
       }
     } else {
-      print("goto login");
+      debugPrint("Go to login page");
 
       Navigator.push(
         context,
@@ -210,8 +182,6 @@ class _RegisterPage extends State<RegisterPage> {
     }
   }
 
-  //Should register/update the user
-  // TODO: Store info in database
   Future registerUser() async {
     String email = getEmail();
     String password = getPassword();
@@ -231,7 +201,7 @@ class _RegisterPage extends State<RegisterPage> {
         registeredCustomerId: registeredCustomerId);
 
     if (confirmPassword != password && password.isEmpty) {
-      print("incorrect password");
+      debugPrint("incorrect password");
       return;
     }
 
@@ -242,21 +212,21 @@ class _RegisterPage extends State<RegisterPage> {
     } */
 
     if (email.isEmpty) {
-      print("No email");
+      debugPrint("No email");
       return;
     }
 
     if (widget._doRegister) {
       if (_isRegistered) {
-        print("returns");
+        debugPrint("User already registered");
         return;
       }
 
       addAccount(account);
-      print("registered");
+      debugPrint("Registered user");
     } else {
       updateAccount(account);
-      print("updated");
+      debugPrint("Updated user");
     }
     gotoPage();
   }
@@ -312,14 +282,6 @@ class _RegisterPage extends State<RegisterPage> {
     });
   }
 
-  void _hideKeyboard() {
-    setState(() {
-      _openKeyboardEmail = false;
-      _openKeyboardPassword = false;
-      _openKeyboardConfirm = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -334,7 +296,7 @@ class _RegisterPage extends State<RegisterPage> {
                       future: getAccounts(),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
-                          print("Error");
+                          debugPrint("Failed to load accounts");
                         }
                         if (snapshot.hasData) {
                           accounts = snapshot.data!;
@@ -355,7 +317,6 @@ class _RegisterPage extends State<RegisterPage> {
                                 ),
                               ),
                               //Info text
-                              //TODO add compatibility with RFID
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: standardPadding),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../classes/account.dart';
@@ -17,7 +18,9 @@ Future<List<Account>> getAccounts() async {
           createAccountFromJson(jsonDecode(response.body) as List, index);
       accounts.add(account);
     }
-  } catch (e) {}
+  } catch (e) {
+    debugPrint("Failed to get accounts: $e");
+  }
 
   return accounts;
 }
@@ -34,11 +37,12 @@ Future<Account> getAccount(Account thisAccount) async {
     });
 
     final json = "[" + response.body + "]";
-    print(jsonDecode(json));
     if (response.body.isNotEmpty) {
       account = createAccountFromJson(jsonDecode(json) as List, 0);
     }
-  } catch (e) {}
+  } catch (e) {
+    debugPrint("Failed to get account: $e");
+  }
 
   return account;
 }
@@ -50,7 +54,9 @@ void deleteAccount(int id) {
     http.post(uri, body: {
       'id': jsonEncode(id),
     });
-  } catch (e) {}
+  } catch (e) {
+    debugPrint("Failed to delete account: $e");
+  }
 }
 
 void addAccount(Account account) {
@@ -66,7 +72,9 @@ void addAccount(Account account) {
       "customer_id": account.customerId,
       "registered_customer_id": account.registeredCustomerId,
     });
-  } catch (e) {}
+  } catch (e) {
+    debugPrint("Failed to add account: $e");
+  }
 }
 
 void updateAccount(Account account) {
@@ -83,5 +91,7 @@ void updateAccount(Account account) {
       "customer_id": account.customerId,
       "registered_customer_id": account.registeredCustomerId,
     });
-  } catch (e) {}
+  } catch (e) {
+    debugPrint("Failed to update account: $e");
+  }
 }

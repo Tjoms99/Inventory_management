@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 class Account {
   int id;
   String accountName;
@@ -80,7 +82,8 @@ bool isUserRegisteredAtCustomer(Account user, Account customer) {
   int indexCustomerId = customer.customerId.indexOf("1");
 
   if (user.registeredCustomerId.startsWith("1", indexCustomerId)) {
-    print("user is registered");
+    debugPrint(
+        "User ${user.accountName} is registered at this customer ${customer.accountName} ");
     isRegistered = true;
   }
   return isRegistered;
@@ -102,7 +105,7 @@ Account getAccountUsingRFID(List<Account> accounts, String rfid) {
   for (int index = 0; index < accounts.length; index++) {
     if (accounts[index].rfid.toUpperCase() == rfid.toUpperCase()) {
       account = accounts[index];
-      print("account found using rfid!");
+      debugPrint("Account ${account.accountName} found using rfid");
       break;
     }
   }

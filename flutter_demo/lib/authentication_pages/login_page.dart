@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _openKeyboardPassword = false;
   bool _isKeyboardEnabled = false;
 
-  String rfid_tag = "";
+  String rfidTag = "";
   //Accounts
   List<Account> accounts = [];
   Account currentAccount = createDefaultAccount();
@@ -37,14 +37,14 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {});
     accounts = await getAccounts();
     currentAccount = createDefaultAccount();
-    rfid_tag = await getRFIDorNFC();
-    currentAccount = getAccountUsingRFID(accounts, rfid_tag);
+    rfidTag = await getRFIDorNFC();
+    currentAccount = getAccountUsingRFID(accounts, rfidTag);
 
     //Update page
     setState(() {});
 
     //Login if user exist
-    print(currentAccount.accountName);
+    debugPrint("Login user if it exists:" + currentAccount.accountName);
     if (!isDefualt(currentAccount)) {
       gotoPage();
     }
@@ -62,15 +62,15 @@ class _LoginPageState extends State<LoginPage> {
     //getAccountFromList(accounts, _emailController.text.trim(),
     //_passwordController.text.trim());
 
-    print("account role ${currentAccount.accountRole}");
+    debugPrint("The role of this account is:  ${currentAccount.accountRole}");
 
     //Show approriate window depending on account role
     if (isDefualt(currentAccount)) {
-      print("no account");
+      debugPrint("This is a defualt account, cannot sign in");
       return;
     }
 
-    print("Signed in ${currentAccount.accountName}");
+    debugPrint("Signed in ${currentAccount.accountName}");
 
     gotoPage();
   }
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
     //Shown in debug console
     setState(() {});
     String _email = _emailController.text.trim();
-    print("Register user");
+    debugPrint("Go to register page");
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -136,13 +136,6 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _openKeyboardEmail = false;
       _openKeyboardPassword = true;
-    });
-  }
-
-  void _hideKeyboard() {
-    setState(() {
-      _openKeyboardEmail = false;
-      _openKeyboardPassword = false;
     });
   }
 
@@ -174,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                       future: getAccounts(),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
-                          print("Error");
+                          debugPrint("Error loading accounts");
                         }
                         if (snapshot.hasData) {
                           accounts = snapshot.data as List<Account>;

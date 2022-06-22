@@ -31,7 +31,7 @@ class _AdminPageState extends State<AdminPage> {
 
   Future signOut() async {
     //Shown in debug console
-    print("Signed out admin");
+    debugPrint("Signed out " + widget.currentAccount.accountName);
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_demo/Services/item_service.dart';
 import 'package:flutter_demo/classes/account.dart';
 
@@ -56,7 +57,7 @@ Item getItemFromList(List<dynamic> items, String rfid) {
     }
   }
 
-  print(thisItem);
+  debugPrint("Got this item from items list: $thisItem");
   return thisItem;
 }
 
@@ -84,18 +85,18 @@ Future<List<Item>> getItemsForCustomer(Account customer) async {
   List<Item> itemsForCustomer = [];
   int indexCustomerId = customer.customerId.indexOf("1");
 
-  print("getting items for customer");
-  print(customer.customerId);
-  print(indexCustomerId);
+  debugPrint("Getting items for customer: " +
+      customer.accountName +
+      "with id index: $indexCustomerId");
+
   for (int index = 0; index < items.length; index++) {
     if (items[index].registeredCustomerId.startsWith("1", indexCustomerId)) {
       itemsForCustomer.add(items[index]);
-      print("added item");
+      debugPrint("Added item with id: ${items[index].rfid}");
     }
-    print(items[index]);
   }
 
-  print(items.length);
+  debugPrint("Item list length: ${items.length}");
   return itemsForCustomer;
 }
 
@@ -104,13 +105,13 @@ Future<List<Item>> getItemsForUser(Account user) async {
   List<Item> itemsForUser = [];
   List<int> customerIndex = [];
 
-  print("getting items for user");
-  print(user.registeredCustomerId);
+  debugPrint("getting items for user with id" + user.registeredCustomerId);
 
   //Get all 1's registered to get index of customer id
   for (int index = 0; index < user.registeredCustomerId.length; index++) {
     if (user.registeredCustomerId.startsWith("1", index)) {
       customerIndex.add(index);
+      debugPrint("CustomerID index: $customerIndex");
     }
   }
 
@@ -121,22 +122,25 @@ Future<List<Item>> getItemsForUser(Account user) async {
         indexCustomer++) {
       if (items[index].registeredCustomerId.startsWith("1", indexCustomer)) {
         itemsForUser.add(items[index]);
-        print("added item");
-        print(items[index].rfid);
+        debugPrint(
+            "Added item  with id ${items[index].rfid} for ${user.accountName}");
       }
     }
   }
 
-  print(items.length);
+  debugPrint("Item list length: ${items.length}");
   return itemsForUser;
 }
 
-Item getItemFromRFID(items, rfidTag) {
+Item getItemFromRFID(List<Item> items, String rfidTag) {
   Item thisItem = createDefaultItem();
 
   for (int index = 0; index < items.length; index++) {
+    debugPrint("Checking item with rfid: " + items[index].rfid);
+
     if (items[index].rfid == rfidTag) {
       thisItem = items[index];
+      debugPrint("Found item with rfid: " + thisItem.rfid);
       break;
     }
   }
