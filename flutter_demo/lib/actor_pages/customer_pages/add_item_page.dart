@@ -61,6 +61,12 @@ class _AddItemPageState extends State<AddItemPage> {
   void initState() {
     super.initState();
     setRegisteredCustomerID();
+    //keyboard
+    _focusType.addListener(_onFocusChangeType);
+    _focusStatus.addListener(_onFocusChangeStatus);
+    _focusDescription.addListener(_onFocusChangeDescription);
+    _focusLocation.addListener(_onFocusLocation);
+    _focusRegisteredCustomerID.addListener(_onFocusChangeRegisteredCustomerID);
 
     if (widget.item.name == "name") {
       return;
@@ -72,13 +78,6 @@ class _AddItemPageState extends State<AddItemPage> {
     _descriptionController.text = widget.item.description;
     _locationController.text = widget.item.location;
     _registeredCustomerIdController.text = widget.item.registeredCustomerId;
-
-    //keyboard
-    _focusType.addListener(_onFocusChangeType);
-    _focusStatus.addListener(_onFocusChangeStatus);
-    _focusDescription.addListener(_onFocusChangeDescription);
-    _focusLocation.addListener(_onFocusLocation);
-    _focusRegisteredCustomerID.addListener(_onFocusChangeRegisteredCustomerID);
   }
 
   void setRegisteredCustomerID() {
