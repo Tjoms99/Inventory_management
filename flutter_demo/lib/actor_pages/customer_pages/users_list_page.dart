@@ -124,7 +124,13 @@ class _ListBuilderState extends State<ListBuilder> {
     setState(() {
       _hasPressedModify = false;
       if (_hasPressedDelete) {
-        deleteAccount(id);
+        //Admin removes from system, customer removes from customer list
+        if (isAdmin(widget.currentAccount)) {
+          deleteAccount(id);
+        } else {
+          updateAndRemoveFromCustomerList(
+              widget.listOfAccounts[_selectedIndex], widget.currentAccount);
+        }
         widget.listOfAccounts.removeAt(_selectedIndex);
 
         _hasPressedDelete = false;

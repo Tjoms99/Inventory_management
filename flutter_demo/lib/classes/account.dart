@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/services/account_service.dart';
 
 class Account {
   int id;
@@ -117,9 +118,33 @@ String getNewRegisteredCustomerID(String currentID, String itemCustomerID) {
   String newID = currentID;
   int indexCustomerId = itemCustomerID.indexOf("1");
 
-  newID = newID.substring(0, indexCustomerId) +
-      "1" +
-      newID.substring(indexCustomerId + 1, newID.length - 1);
+  if (indexCustomerId == 0) {
+    newID = "0" + newID.substring(1, newID.length - 1);
+  } else {
+    newID = newID.substring(0, indexCustomerId) +
+        "1" +
+        newID.substring(indexCustomerId + 1, newID.length - 1);
+  }
+  debugPrint("ID length: ${newID.length}");
 
   return newID;
+}
+
+void updateAndRemoveFromCustomerList(Account account, Account customer) {
+  int indexCustomerId = customer.customerId.indexOf("1");
+  String newID = account.registeredCustomerId;
+
+  if (indexCustomerId == 0) {
+    newID = "0" + newID.substring(1, newID.length - 1);
+  } else {
+    newID = newID.substring(0, indexCustomerId) +
+        "0" +
+        newID.substring(indexCustomerId + 1, newID.length - 1);
+    debugPrint("ID length: ${newID.length}");
+  }
+  account.registeredCustomerId = newID;
+  updateAccountRegisteredCustomerID(account);
+
+  debugPrint("Removed 1 at $indexCustomerId");
+  debugPrint("Actual new ID:  $newID");
 }

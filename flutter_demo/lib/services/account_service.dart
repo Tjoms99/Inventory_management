@@ -25,6 +25,27 @@ Future<List<Account>> getAccounts() async {
   return accounts;
 }
 
+Future<Account> getAccountFromName(String name) async {
+  Account account = createDefaultAccount();
+
+  try {
+    var uri = Uri.parse(
+        "http://192.168.1.201/dashboard/flutter_db/getAccountFromName.php");
+    final response = await http.post(uri, body: {
+      "account_name": name,
+    });
+
+    final json = "[" + response.body + "]";
+    if (response.body.isNotEmpty) {
+      account = createAccountFromJson(jsonDecode(json) as List, 0);
+    }
+  } catch (e) {
+    debugPrint("Failed to get account: $e");
+  }
+
+  return account;
+}
+
 Future<Account> getAccount(Account thisAccount) async {
   Account account = createDefaultAccount();
 

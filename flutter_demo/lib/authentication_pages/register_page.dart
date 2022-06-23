@@ -81,6 +81,7 @@ class _RegisterPage extends State<RegisterPage> {
   Future setRFID() async {
     // ignore: prefer_typing_uninitialized_variables
     rfidTag = await getRFIDorNFC();
+    setState(() {});
   }
 
   String getCustomerID() {
@@ -139,6 +140,7 @@ class _RegisterPage extends State<RegisterPage> {
     _isRegistered = false;
     for (int index = 0; index < accounts.length; index++) {
       if (accounts[index].accountName == (getEmail())) {
+        debugPrint("User ${accounts[index].accountName}exist");
         _isRegistered = true;
         _accountRoleController.text = accounts[index].accountRole;
         _customerIDController.text = accounts[index].customerId;
@@ -200,16 +202,19 @@ class _RegisterPage extends State<RegisterPage> {
         customerId: customerId,
         registeredCustomerId: registeredCustomerId);
 
+    _checkAccount();
+
     if (confirmPassword != password && password.isEmpty) {
       debugPrint("incorrect password");
       return;
     }
 
     //Will be unable to add accounts in web
-    /*if (rfid.isEmpty) {
-      print("No rfid tag detected");
-      return;
-    } */
+    if (rfid.isEmpty) {
+      debugPrint("No rfid tag detected");
+      account.rfid = "NO RFID ASSIGNED";
+      //return;
+    }
 
     if (email.isEmpty) {
       debugPrint("No email");
@@ -335,7 +340,7 @@ class _RegisterPage extends State<RegisterPage> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: standardPadding),
                                 child: Text(
-                                  'ID: ' + getRFID(),
+                                  'ID: ' + rfidTag,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: secondFontSize,

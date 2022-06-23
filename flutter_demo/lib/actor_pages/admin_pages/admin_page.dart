@@ -72,10 +72,8 @@ class _AdminPageState extends State<AdminPage> {
     pages = [
       UsersListPage(currentAccount: widget.currentAccount),
       ItemsListPage(currentAccount: widget.currentAccount),
-      const AssistUserPage(),
-      UserBodyPage(
-        currentAccount: widget.currentAccount,
-      ),
+      AssistUserPage(currentAccount: widget.currentAccount),
+      UserBodyPage(currentAccount: widget.currentAccount),
     ];
 
     return Scaffold(

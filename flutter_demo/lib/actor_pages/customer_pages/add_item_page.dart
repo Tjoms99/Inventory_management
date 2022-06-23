@@ -60,13 +60,18 @@ class _AddItemPageState extends State<AddItemPage> {
   @override
   void initState() {
     super.initState();
+    setRegisteredCustomerID();
+
+    if (widget.item.name == "name") {
+      return;
+    }
+
     _typeController.text = widget.item.name;
     _statusController.text = widget.item.status;
     rfidTag = widget.item.rfid;
     _descriptionController.text = widget.item.description;
     _locationController.text = widget.item.location;
     _registeredCustomerIdController.text = widget.item.registeredCustomerId;
-    setRegisteredCustomerID();
 
     //keyboard
     _focusType.addListener(_onFocusChangeType);
@@ -106,7 +111,7 @@ class _AddItemPageState extends State<AddItemPage> {
             customerIndex,
           ) +
           "1" +
-          id.substring(customerIndex + 1, id.length - 1);
+          id.substring(customerIndex, id.length - 1);
       _registeredCustomerIdController.text = id;
 
       debugPrint("New ID: $id");

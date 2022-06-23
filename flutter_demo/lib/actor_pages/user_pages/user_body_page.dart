@@ -45,18 +45,6 @@ class _UserBodyPageState extends State<UserBodyPage> {
     }
 
     switch (item.status) {
-      case 'unassigned':
-        item.status = 'borrowed';
-        item.location = widget.currentAccount.accountName;
-
-        //Update current user and assign them to the customer of the item
-        widget.currentAccount.registeredCustomerId = getNewRegisteredCustomerID(
-            widget.currentAccount.registeredCustomerId,
-            item.registeredCustomerId);
-
-        updateAccountRegisteredCustomerID(widget.currentAccount);
-        break;
-
       case 'borrowed':
         if (item.location != widget.currentAccount.accountName) {
           setState(() {
@@ -82,7 +70,15 @@ class _UserBodyPageState extends State<UserBodyPage> {
         item.location = 'inventory (defualt)';
         break;
       default:
-        item.status = 'unknown';
+        item.status = 'borrowed';
+        item.location = widget.currentAccount.accountName;
+
+        //Update current user and assign them to the customer of the item
+        widget.currentAccount.registeredCustomerId = getNewRegisteredCustomerID(
+            widget.currentAccount.registeredCustomerId,
+            item.registeredCustomerId);
+
+        updateAccountRegisteredCustomerID(widget.currentAccount);
     }
 
     setState(() {
