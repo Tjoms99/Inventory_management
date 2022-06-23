@@ -75,9 +75,6 @@ class _AssistUserPageState extends State<AssistUserPage> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      _isKeyboardEnabled ? FocusScope.of(context).unfocus() : "";
-    });
     return Scaffold(
       body: SafeArea(
         child: Center(
