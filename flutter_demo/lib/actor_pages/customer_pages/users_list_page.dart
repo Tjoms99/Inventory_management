@@ -3,6 +3,7 @@ import 'package:flutter_demo/Services/account_service.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 
+///This is a page where customers or admins can add/modify/delete [Account]s.
 class UsersListPage extends StatefulWidget {
   final Account currentAccount;
 
@@ -19,7 +20,9 @@ class _UsersListPageState extends State<UsersListPage> {
     super.initState();
   }
 
-  //Remove admin and customer accounts for everyone except admin
+  ///Removes admin and customer accounts for [widget.currentAccount].
+  ///
+  ///This does not apply for admin accounts.
   void setAccounts() {
     if (isAdmin(widget.currentAccount)) {
       return;
@@ -43,6 +46,7 @@ class _UsersListPageState extends State<UsersListPage> {
     super.dispose();
   }
 
+  ///Builds the basic page structure
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +71,7 @@ class _UsersListPageState extends State<UsersListPage> {
   }
 }
 
+///This is a page that shows a list of [Accounts].
 class ListBuilder extends StatefulWidget {
   List<Account> listOfAccounts = [];
   Account currentAccount = createDefaultAccount();
@@ -81,6 +86,7 @@ class _ListBuilderState extends State<ListBuilder> {
   bool _hasPressedModify = false;
   int _selectedIndex = -1;
 
+  ///Updates which [Icon] is pressed.
   void _setSelectedIndex(int index) {
     setState(() {
       _selectedIndex = index;
@@ -89,6 +95,7 @@ class _ListBuilderState extends State<ListBuilder> {
     });
   }
 
+  ///Updates the current page to an [Account] modify page when [Icon] is pressed twice.
   void _updateActionModify() {
     String _email = widget.listOfAccounts[_selectedIndex].accountName;
 
@@ -118,13 +125,14 @@ class _ListBuilderState extends State<ListBuilder> {
     });
   }
 
+  ///Deletes the selected [Account] when [Icon] is pressed twice.
   void _updateActionDelete() {
     int id = widget.listOfAccounts[_selectedIndex].id;
 
     setState(() {
       _hasPressedModify = false;
       if (_hasPressedDelete) {
-        //Admin removes from system, customer removes from customer list
+        //Admin removes from system, customer removes from customer list.
         if (isAdmin(widget.currentAccount)) {
           deleteAccount(id);
         } else {
@@ -141,6 +149,7 @@ class _ListBuilderState extends State<ListBuilder> {
     });
   }
 
+  ///Builds the list page.
   @override
   Widget build(BuildContext context) {
     return ListView.builder(

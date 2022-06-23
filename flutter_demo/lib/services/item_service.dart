@@ -4,15 +4,15 @@ import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:http/http.dart' as http;
 
+///Returns [items] from the database.
 Future<List<Item>> getItems() async {
   List<Item> items = [];
+  //Try to fetch data from server.
   try {
-//Fetch data from server
     var uri = Uri.parse("http://$ipAddress/dashboard/flutter_db/getItems.php");
-
     final response = await http.get(uri);
 
-//Convert from json object to a list of Account(s)
+//Convert from json object to a list of items.
     for (int index = 0; index < jsonDecode(response.body).length; index++) {
       Item item = createItemFromJson(jsonDecode(response.body) as List, index);
       items.add(item);
@@ -23,6 +23,7 @@ Future<List<Item>> getItems() async {
   return items;
 }
 
+///Deletes item with [id] from the database.
 void deleteItem(int id) {
   try {
     var uri =
@@ -35,6 +36,7 @@ void deleteItem(int id) {
   }
 }
 
+///Inserts [item] in the database.
 void addItem(Item item) {
   try {
     var uri = Uri.parse("http://$ipAddress/dashboard/flutter_db/addItem.php");
@@ -52,6 +54,7 @@ void addItem(Item item) {
   }
 }
 
+///Updates [item] in the dataves
 void updateItem(Item item) {
   try {
     var uri =

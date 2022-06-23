@@ -5,15 +5,15 @@ import 'package:http/http.dart' as http;
 
 import '../classes/account.dart';
 
+///Returns [accounts] from the database.
 Future<List<Account>> getAccounts() async {
   List<Account> accounts = [];
   try {
-//Fetch data from server
     var uri =
         Uri.parse("http://$ipAddress/dashboard/flutter_db/getAccounts.php");
     final response = await http.get(uri);
 
-//Convert from json object to a list of Account(s)
+//Convert from json object to a list of Account(s).
     for (int index = 0; index < jsonDecode(response.body).length; index++) {
       Account account =
           createAccountFromJson(jsonDecode(response.body) as List, index);
@@ -26,6 +26,9 @@ Future<List<Account>> getAccounts() async {
   return accounts;
 }
 
+///Returns [account] from database using [account.accountName].
+///
+///Returns a defualt account if there was no match.
 Future<Account> getAccountFromName(String name) async {
   Account account = createDefaultAccount();
 
@@ -47,6 +50,9 @@ Future<Account> getAccountFromName(String name) async {
   return account;
 }
 
+///Returns [account] from database using [account.accountName] and [account.password].
+///
+///Returns a defualt account if there was no match.
 Future<Account> getAccount(Account thisAccount) async {
   Account account = createDefaultAccount();
 
@@ -69,6 +75,7 @@ Future<Account> getAccount(Account thisAccount) async {
   return account;
 }
 
+///Deletes account with [id] from the database.
 void deleteAccount(int id) {
   try {
     var uri =
@@ -81,6 +88,7 @@ void deleteAccount(int id) {
   }
 }
 
+///Inserts [account] in the database.
 void addAccount(Account account) {
   try {
     var uri =
@@ -99,6 +107,7 @@ void addAccount(Account account) {
   }
 }
 
+///Updates [account] in the database.
 void updateAccount(Account account) {
   try {
     var uri =
@@ -118,6 +127,7 @@ void updateAccount(Account account) {
   }
 }
 
+///Updates [account] with the new [account.registeredCustomerId] in the database.
 void updateAccountRegisteredCustomerID(Account account) {
   try {
     var uri = Uri.parse(

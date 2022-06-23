@@ -23,6 +23,7 @@ class Item {
       required this.registeredCustomerId});
 }
 
+///Returns an [Item] from a list of json [items].
 Item createItemFromJson(List<dynamic> items, int index) {
   return Item(
       id: jsonDecode(items[index]['id']),
@@ -34,6 +35,7 @@ Item createItemFromJson(List<dynamic> items, int index) {
       registeredCustomerId: items[index]['registered_customer_id'] as String);
 }
 
+///Returns an [Item] with default values.
 Item createDefaultItem() {
   return Item(
       id: 0,
@@ -45,6 +47,7 @@ Item createDefaultItem() {
       registeredCustomerId: "registered_customer_id");
 }
 
+///Returns [Item] if it exists in [items] checking for matching [rfid].
 Item getItemFromList(List<dynamic> items, String rfid) {
   Item thisItem = createDefaultItem();
 
@@ -61,6 +64,7 @@ Item getItemFromList(List<dynamic> items, String rfid) {
   return thisItem;
 }
 
+///Returns a list of all [types] that is contained in [items].
 List<String> getItemTypes(List<Item> items) {
   List<String> types = [];
   for (int index = 0; index < items.length; index++) {
@@ -70,6 +74,7 @@ List<String> getItemTypes(List<Item> items) {
   return types;
 }
 
+///Returns a list of items with a certian [type].
 List<Item> getItemsInType(List<Item> items, String type) {
   List<Item> itemsInType = [];
 
@@ -80,6 +85,7 @@ List<Item> getItemsInType(List<Item> items, String type) {
   return itemsInType;
 }
 
+///Returns all [items] that belongs to a [customer].
 Future<List<Item>> getItemsForCustomer(Account customer) async {
   List<Item> items = await getItems();
   List<Item> itemsForCustomer = [];
@@ -89,6 +95,7 @@ Future<List<Item>> getItemsForCustomer(Account customer) async {
       customer.accountName +
       "with id index: $indexCustomerId");
 
+  //Check item for correct customerID
   for (int index = 0; index < items.length; index++) {
     if (items[index].registeredCustomerId.startsWith("1", indexCustomerId)) {
       itemsForCustomer.add(items[index]);
@@ -100,45 +107,14 @@ Future<List<Item>> getItemsForCustomer(Account customer) async {
   return itemsForCustomer;
 }
 
-Future<List<Item>> getItemsForUser(Account user) async {
-  List<Item> items = await getItems();
-  List<Item> itemsForUser = [];
-  List<int> customerIndex = [];
-
-  debugPrint("getting items for user with id" + user.registeredCustomerId);
-
-  //Get all 1's registered to get index of customer id
-  for (int index = 0; index < user.registeredCustomerId.length; index++) {
-    if (user.registeredCustomerId.startsWith("1", index)) {
-      customerIndex.add(index);
-      debugPrint("CustomerID index: $customerIndex");
-    }
-  }
-
-  //Get all items with correct customer id index (all items belongs to user)
-  for (int index = 0; index < items.length; index++) {
-    for (int indexCustomer = 0;
-        indexCustomer < customerIndex.length;
-        indexCustomer++) {
-      if (items[index].registeredCustomerId.startsWith("1", indexCustomer)) {
-        itemsForUser.add(items[index]);
-        debugPrint(
-            "Added item  with id ${items[index].rfid} for ${user.accountName}");
-      }
-    }
-  }
-
-  debugPrint("Item list: $items");
-  return itemsForUser;
-}
-
-Item getItemFromRFID(List<Item> items, String rfidTag) {
+///Returns [thisItem] from a list of [items] using its [rfid].
+Item getItemFromRFID(List<Item> items, String rfid) {
   Item thisItem = createDefaultItem();
 
   for (int index = 0; index < items.length; index++) {
     debugPrint("Checking item with rfid: " + items[index].rfid);
 
-    if (items[index].rfid == rfidTag) {
+    if (items[index].rfid == rfid) {
       thisItem = items[index];
       debugPrint("Found item with rfid: " + thisItem.rfid);
       break;

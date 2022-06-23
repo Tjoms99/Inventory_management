@@ -10,6 +10,7 @@ import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
+///This is a page where an account can signed in using an account from the database.
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -18,21 +19,25 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  //Controllers
+  //Controllers.
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  //Focus nodes.
   final FocusNode _focusEmail = FocusNode();
   final FocusNode _focusPassword = FocusNode();
 
+  //Keyboard checkers.
   bool _openKeyboardEmail = false;
   bool _openKeyboardPassword = false;
   bool _isKeyboardEnabled = false;
 
+  //Others.
   String rfidTag = "";
-  //Accounts
   List<Account> accounts = [];
   Account currentAccount = createDefaultAccount();
 
+  ///Signs in [currentAccount] using the [rfidTag].
   Future signInRFID() async {
     setState(() {});
     accounts = await getAccounts();
@@ -40,16 +45,17 @@ class _LoginPageState extends State<LoginPage> {
     rfidTag = await getRFIDorNFC();
     currentAccount = getAccountUsingRFID(accounts, rfidTag);
 
-    //Update page
+    //Update page.
     setState(() {});
 
-    //Login if user exist
+    //Login if user exist.
     debugPrint("Login user if it exists:" + currentAccount.accountName);
     if (!isDefualt(currentAccount)) {
       gotoPage();
     }
   }
 
+  ///Signs in [currentAccount] using the [_emailController] and the [_passwordController].
   Future signIn() async {
     setState(() {});
     currentAccount.accountName = _emailController.text.trim();
@@ -59,12 +65,8 @@ class _LoginPageState extends State<LoginPage> {
       currentAccount = await getAccount(currentAccount);
     }
 
-    //getAccountFromList(accounts, _emailController.text.trim(),
-    //_passwordController.text.trim());
-
     debugPrint("The role of this account is:  ${currentAccount.accountRole}");
 
-    //Show approriate window depending on account role
     if (isDefualt(currentAccount)) {
       debugPrint("This is a defualt account, cannot sign in");
       return;
@@ -75,6 +77,7 @@ class _LoginPageState extends State<LoginPage> {
     gotoPage();
   }
 
+  ///Changes the page depending on [widget.currentAccount.accountRole].
   void gotoPage() {
     switch (currentAccount.accountRole) {
       case "customer":
@@ -109,8 +112,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  ///Changes current page to a register page
   Future registerUser() async {
-    //Shown in debug console
     setState(() {});
     String _email = _emailController.text.trim();
     debugPrint("Go to register page");
@@ -122,6 +125,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  ///Connects the [_emailController] to the keyboard.
   void _onFocusChangeEmail() {
     debugPrint("Focus email: ${_focusEmail.hasFocus.toString()}");
     setState(() {
@@ -130,6 +134,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  ///Connects the [_passwordController] to the keyboard.
   void _onFocusChangePassword() {
     debugPrint("Focus pass: ${_focusPassword.hasFocus.toString()}");
 
@@ -153,6 +158,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  ///Builds the login page.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,6 +169,10 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: [
                 SingleChildScrollView(
+                  ///Load [accounts] from database.
+                  ///
+                  ///Show the register page if accounts found.
+                  ///Show circular progress bar if not.
                   child: FutureBuilder<List<Account>>(
                       future: getAccounts(),
                       builder: (context, snapshot) {
@@ -184,7 +194,8 @@ class _LoginPageState extends State<LoginPage> {
                                     size: 100,
                                   ),
                                 ),
-                                //Hello
+
+                                //INFO TEXT.
                                 const Text(
                                   'TAP ICON TO SCAN',
                                   style: TextStyle(
@@ -193,6 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 const SizedBox(height: firstBoxHeight),
 
+                                //INFO TEXT.
                                 const Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: standardPadding),
@@ -205,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 const SizedBox(height: firstBoxHeight),
 
-                                //Email
+                                //EMAIL
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: texfieldPadding),
@@ -233,7 +245,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 const SizedBox(height: thirdBoxHeight),
 
-                                //Password
+                                //PASSWORD
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: texfieldPadding),
@@ -262,7 +274,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 const SizedBox(height: thirdBoxHeight),
 
-                                //Sign-in
+                                //SIGN-IN
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: standardPadding),
@@ -289,7 +301,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 const SizedBox(height: thirdBoxHeight),
 
-                                //Not a member
+                                //REGISTER USER
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -320,7 +332,8 @@ class _LoginPageState extends State<LoginPage> {
                         }
                       }),
                 ),
-                //TAP TO OPEN KEYBOARD
+
+                //KEYBOARD
                 SingleChildScrollView(
                   child: _isKeyboardEnabled
                       ? Column(
@@ -361,7 +374,9 @@ class _LoginPageState extends State<LoginPage> {
                               type: VirtualKeyboardType.Alphanumeric,
                             ),
                           ],
-                        ) //TAP TO OPEN KEYBOARD
+                        )
+
+                      //TAP TO OPEN KEYBOARD
                       : GestureDetector(
                           onTap: () {
                             setState(() {

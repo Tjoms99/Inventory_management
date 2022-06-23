@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
-
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
-
 import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
-
 import 'package:flutter_demo/actor_pages/customer_pages/assist_user_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
 
+///This is a page where a customer can navigate between 4 action pages.
 class CustomerPage extends StatefulWidget {
   final Account currentAccount;
   int currentIndex;
@@ -25,8 +23,8 @@ class CustomerPage extends StatefulWidget {
 class _CustomerPageState extends State<CustomerPage> {
   List<Widget> pages = [];
 
+  ///Signs out [widget.currentAccount].
   Future _signOut() async {
-    //Shown in debug console
     debugPrint("Signed out " + widget.currentAccount.accountName);
     Navigator.push(
       context,
@@ -34,10 +32,12 @@ class _CustomerPageState extends State<CustomerPage> {
     );
   }
 
+  ///Updates current widget.
   Future _update() async {
     setState(() {});
   }
 
+  ///Goes to add [Item] page.
   Future _addItem() async {
     Navigator.push(
       context,
@@ -50,6 +50,7 @@ class _CustomerPageState extends State<CustomerPage> {
     );
   }
 
+  ///Goes to add [Account] page.
   Future _addUser() async {
     Navigator.push(
       context,
@@ -59,6 +60,9 @@ class _CustomerPageState extends State<CustomerPage> {
     );
   }
 
+  ///Builds 4 pages.
+  ///
+  ///[Account] list, [Item] list, help [Account] and play [Account].
   @override
   Widget build(BuildContext context) {
     pages = [
@@ -73,10 +77,14 @@ class _CustomerPageState extends State<CustomerPage> {
       appBar: AppBar(
           backgroundColor: secondaryBackgroundColor,
           title: Text(widget.currentAccount.accountName),
+
+          //SIGN OUT.
           leading: IconButton(
             onPressed: _signOut,
             icon: const Icon(Icons.logout),
           ),
+
+          //UPDATE STATE.
           actions: [
             IconButton(
               onPressed: _update,
@@ -87,6 +95,8 @@ class _CustomerPageState extends State<CustomerPage> {
         index: widget.currentIndex,
         children: pages,
       ),
+
+      //NAVIGATION BAR.
       bottomNavigationBar: NavigationBar(
         selectedIndex: widget.currentIndex,
         onDestinationSelected: (int newIndex) {
@@ -117,6 +127,8 @@ class _CustomerPageState extends State<CustomerPage> {
           ),
         ],
       ),
+
+      //ACTION BUTTON.
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Visibility(
         visible: widget.currentIndex == 1 || widget.currentIndex == 0,

@@ -8,6 +8,7 @@ import 'package:flutter_demo/services/item_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
+///This is a page where an [Item] can be inserted or updated into the database
 class AddItemPage extends StatefulWidget {
   final bool doAddItem;
   final Account currentAccount;
@@ -23,7 +24,7 @@ class AddItemPage extends StatefulWidget {
 }
 
 class _AddItemPageState extends State<AddItemPage> {
-  //Controllers
+  //Controllers.
   final TextEditingController _typeController = TextEditingController();
   final TextEditingController _statusController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -31,12 +32,14 @@ class _AddItemPageState extends State<AddItemPage> {
   final TextEditingController _registeredCustomerIdController =
       TextEditingController();
 
+  //Focus nodes.
   final FocusNode _focusType = FocusNode();
   final FocusNode _focusStatus = FocusNode();
   final FocusNode _focusDescription = FocusNode();
   final FocusNode _focusLocation = FocusNode();
   final FocusNode _focusRegisteredCustomerID = FocusNode();
 
+  //Keyboard checkers.
   bool _openKeyboardType = false;
   bool _openKeyboardStatus = false;
   bool _openKeyboardDescription = false;
@@ -45,6 +48,7 @@ class _AddItemPageState extends State<AddItemPage> {
 
   bool _isKeyboardEnabled = false;
 
+  //Others.
   String rfidTag = "";
 
   @override
@@ -61,17 +65,19 @@ class _AddItemPageState extends State<AddItemPage> {
   void initState() {
     super.initState();
     setRegisteredCustomerID();
-    //keyboard
+
+    //KEYBOARD
     _focusType.addListener(_onFocusChangeType);
     _focusStatus.addListener(_onFocusChangeStatus);
     _focusDescription.addListener(_onFocusChangeDescription);
     _focusLocation.addListener(_onFocusLocation);
     _focusRegisteredCustomerID.addListener(_onFocusChangeRegisteredCustomerID);
 
+    //Return if it is a default item.
     if (widget.item.name == "name") {
       return;
     }
-
+    //TextEditingController
     _typeController.text = widget.item.name;
     _statusController.text = widget.item.status;
     rfidTag = widget.item.rfid;
@@ -80,6 +86,9 @@ class _AddItemPageState extends State<AddItemPage> {
     _registeredCustomerIdController.text = widget.item.registeredCustomerId;
   }
 
+  ///Sets the [_registeredCustomerIdController] to a wanted value.
+  ///
+  ///Checks if the [_registeredCustomerIdController] can be edited.
   void setRegisteredCustomerID() {
     int customerIndex = -1;
     String id = "";
@@ -94,6 +103,7 @@ class _AddItemPageState extends State<AddItemPage> {
       id = id + "0";
     }
 
+    //Find customerID.
     for (int index = 0;
         index < widget.currentAccount.customerId.length;
         index++) {
@@ -102,8 +112,9 @@ class _AddItemPageState extends State<AddItemPage> {
         break;
       }
     }
-
     debugPrint("Registered CustomerID index: $customerIndex");
+
+    //Set new registered customer ID.
     if (customerIndex != -1) {
       id = id.substring(
             0,
@@ -119,10 +130,12 @@ class _AddItemPageState extends State<AddItemPage> {
     setState(() {});
   }
 
+  ///Returns the [String] located in the type textfield.
   String getType() {
     return _typeController.text.trim();
   }
 
+  ///Returns the [String] located in the status textfield.
   String getStatus() {
     return _statusController.text.trim();
   }
@@ -132,23 +145,29 @@ class _AddItemPageState extends State<AddItemPage> {
     setState(() {});
   }
 
+  ///Returns the [String] of the RFID.
   String getRFID() {
     return rfidTag;
   }
 
+  ///Returns the [String] located in the description textfield.
   String getDescription() {
     return _descriptionController.text.trim();
   }
 
+  ///Returns the [String] located in the location textfield.
   String getLocation() {
     return _locationController.text.trim();
   }
 
+  ///Returns the [String] located in the customerID textfield.
   String getCustomerId() {
-    String registeredCustomerId = _registeredCustomerIdController.text.trim();
-    return registeredCustomerId;
+    return _registeredCustomerIdController.text.trim();
   }
 
+  ///Updates [Item] in the database.
+  ///
+  ///Checks if [TextEditingController] has information before registering [Item].
   Future _updateItem() async {
     Item item = Item(
         id: widget.item.id,
@@ -181,6 +200,9 @@ class _AddItemPageState extends State<AddItemPage> {
     gotoPage();
   }
 
+  ///Adds [Item] in the database.
+  ///
+  ///Checks if [TextEditingController] has information before registering [Item].
   Future _addItem() async {
     Item item = Item(
         id: 0,
@@ -215,10 +237,12 @@ class _AddItemPageState extends State<AddItemPage> {
     gotoPage();
   }
 
+  ///Goes to another page.
   Future cancelUpdate() async {
     gotoPage();
   }
 
+  ///Changes the page depending on [widget.currentAccount.accountRole].
   Future gotoPage() async {
     if (widget.currentAccount.accountRole == "admin") {
       Navigator.push(
@@ -241,6 +265,7 @@ class _AddItemPageState extends State<AddItemPage> {
     }
   }
 
+  ///Resets keyboard checkers.
   void _resetSelectedTextfield() {
     _openKeyboardType = false;
     _openKeyboardStatus = false;
@@ -249,6 +274,7 @@ class _AddItemPageState extends State<AddItemPage> {
     _openKeyboardRegisteredCustomerID = false;
   }
 
+  ///Connects the [_typeController] to the keyboard.
   void _onFocusChangeType() {
     setState(() {
       _resetSelectedTextfield();
@@ -256,6 +282,7 @@ class _AddItemPageState extends State<AddItemPage> {
     });
   }
 
+  ///Connects the [_statusController] to the keyboard.
   void _onFocusChangeStatus() {
     setState(() {
       _resetSelectedTextfield();
@@ -263,6 +290,7 @@ class _AddItemPageState extends State<AddItemPage> {
     });
   }
 
+  ///Connects the [_descriptionController] to the keyboard.
   void _onFocusChangeDescription() {
     setState(() {
       _resetSelectedTextfield();
@@ -270,6 +298,7 @@ class _AddItemPageState extends State<AddItemPage> {
     });
   }
 
+  ///Connects the [_locationController] to the keyboard.
   void _onFocusLocation() {
     setState(() {
       _resetSelectedTextfield();
@@ -277,6 +306,7 @@ class _AddItemPageState extends State<AddItemPage> {
     });
   }
 
+  ///Connects the [_registeredCustomerIdController] to the keyboard.
   void _onFocusChangeRegisteredCustomerID() {
     setState(() {
       _resetSelectedTextfield();
@@ -284,6 +314,7 @@ class _AddItemPageState extends State<AddItemPage> {
     });
   }
 
+  ///Builds the add item page.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -297,7 +328,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      //Icon
+                      //ICON.
                       GestureDetector(
                         onTap: setRFID,
                         child: const ImageIcon(
@@ -307,7 +338,7 @@ class _AddItemPageState extends State<AddItemPage> {
                         ),
                       ),
 
-                      //Hello
+                      //INFO TEXT.
                       Text(
                         widget.doAddItem
                             ? 'TAP ICON TO SCAN RFID'
@@ -317,14 +348,17 @@ class _AddItemPageState extends State<AddItemPage> {
                             fontSize: secondFontSize),
                       ),
                       const SizedBox(height: thirdBoxHeight),
+
+                      //RFID.
                       Text(
                         'ID: ' + rfidTag,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: secondFontSize),
                       ),
-
                       const SizedBox(height: firstBoxHeight),
+
+                      //INFO TEXT
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: standardPadding),
@@ -337,7 +371,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       ),
                       const SizedBox(height: firstBoxHeight),
 
-                      //Type
+                      //TYPE
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: texfieldPadding),
@@ -365,7 +399,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       ),
                       const SizedBox(height: thirdBoxHeight),
 
-                      //Description
+                      //DESCRIPTION.
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: texfieldPadding),
@@ -393,7 +427,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       ),
                       const SizedBox(height: thirdBoxHeight),
 
-                      //STATUS
+                      //STATUS.
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: texfieldPadding),
@@ -421,7 +455,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       ),
                       const SizedBox(height: thirdBoxHeight),
 
-                      //LOCATION
+                      //LOCATION.
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: texfieldPadding),
@@ -449,7 +483,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       ),
                       const SizedBox(height: thirdBoxHeight),
 
-                      //Registered customer id
+                      //REGISTERED CUSTOMER ID.
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: texfieldPadding),
@@ -478,7 +512,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       ),
                       const SizedBox(height: thirdBoxHeight),
 
-                      //Add/Update
+                      //ADD / UPDATE
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: standardPadding),
@@ -506,7 +540,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       ),
                       const SizedBox(height: thirdBoxHeight),
 
-                      //Not a member
+                      //CANCEL
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -524,7 +558,7 @@ class _AddItemPageState extends State<AddItemPage> {
                         ],
                       ),
 
-                      //TAP TO OPEN KEYBOARD
+                      //KEYBOARD
                       SingleChildScrollView(
                         child: _isKeyboardEnabled
                             ? Column(
@@ -572,7 +606,9 @@ class _AddItemPageState extends State<AddItemPage> {
                                     type: VirtualKeyboardType.Alphanumeric,
                                   ),
                                 ],
-                              ) //TAP TO OPEN KEYBOARD
+                              )
+
+                            //TAP TO OPEN KEYBOARD
                             : GestureDetector(
                                 onTap: () {
                                   setState(() {

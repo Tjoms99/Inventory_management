@@ -5,6 +5,7 @@ import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 
+///This is a page where customers or admins can add/modify/delete [Item]s.
 class ItemsListPage extends StatefulWidget {
   final Account currentAccount;
   const ItemsListPage({required this.currentAccount});
@@ -27,6 +28,7 @@ class _ItemsListPageState extends State<ItemsListPage> {
     super.dispose();
   }
 
+  ///Builds the item list view.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +38,7 @@ class _ItemsListPageState extends State<ItemsListPage> {
   }
 }
 
+///This is a page that builds a list of [Item]s for customers and admins
 class ListBuilder extends StatefulWidget {
   final Account currentAccount;
   const ListBuilder({required this.currentAccount});
@@ -59,6 +62,7 @@ class _ListBuilderState extends State<ListBuilder> {
     super.dispose();
   }
 
+  ///Builds the [Item]s list page.
   @override
   Widget build(BuildContext context) {
     setState(() {});
@@ -92,6 +96,7 @@ class _ListBuilderState extends State<ListBuilder> {
   }
 }
 
+///This is a page that expands a list of [Item]s on request.
 class ExpandableListView extends StatefulWidget {
   String title;
   final List<Item> listToBuild;
@@ -119,30 +124,35 @@ class _ExpandableListViewState extends State<ExpandableListView> {
     initPressedModify();
   }
 
+  ///Initializes modify [Icon] state.
   void initPressedModify() {
     for (int index = 0; index < widget.listToBuild.length; index++) {
       _hasPressedModify.add(false);
     }
   }
 
+  ///Initializes delete [Icon] state.
   void initPressedDelete() {
     for (int index = 0; index < widget.listToBuild.length; index++) {
       _hasPressedDelete.add(false);
     }
   }
 
+  ///Clears modify [Icon] state.
   void clearPressedModify() {
     for (int index = 0; index < widget.listToBuild.length; index++) {
       _hasPressedModify[index] = false;
     }
   }
 
+  ///Clears delete [Icon] state.
   void clearPressedDelete() {
     for (int index = 0; index < widget.listToBuild.length; index++) {
       _hasPressedDelete[index] = false;
     }
   }
 
+  ///Returns index of [thisItem] in current [Item] list.
   int getIndex(Item thisItem) {
     final index =
         widget.listToBuild.indexWhere((element) => element.id == thisItem.id);
@@ -150,6 +160,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
     return index;
   }
 
+  ///Updates which [Icon] is pressed.
   void setSelected(Item item) {
     setState(() {
       _selectedIndex = getIndex(item);
@@ -158,8 +169,8 @@ class _ExpandableListViewState extends State<ExpandableListView> {
     });
   }
 
+  ///Goes to update [Item] page.
   void _updateItem(Item item) {
-    //Go to update user page
     if (_hasPressedModify[getIndex(item)]) {
       Navigator.push(
         context,
@@ -173,7 +184,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
       );
     }
 
-    //Update state
+    //Update state.
     setState(() {
       setSelected(item);
       if (_hasPressedModify[getIndex(item)]) {
@@ -185,6 +196,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
     });
   }
 
+  ///Goes to update [Item] page.
   void _deleteItem(Item item) {
     setState(() {
       _hasPressedModify[getIndex(item)] = false;
@@ -203,6 +215,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
     });
   }
 
+  ///Builds the [Item] page.
   @override
   Widget build(BuildContext context) {
     setState(() {});
@@ -215,6 +228,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: Row(
                     children: <Widget>[
+                      //EXPANDABLE ICON.
                       IconButton(
                         icon: Icon(
                           expandFlag ? Icons.list_outlined : Icons.list,
@@ -233,6 +247,8 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                     ],
                   ),
                 ),
+
+                //EXPANDABLE LIST.
                 ExpandableContainer(
                   expanded: expandFlag,
                   child: expandFlag
@@ -271,6 +287,8 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                                 ),
                               ),
                             ],
+
+                            //ITEMS IN EXPANDABLE LIST.
                             rows: widget.listToBuild
                                 .map(((item) => DataRow(
                                       cells: <DataCell>[
@@ -280,6 +298,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                                         DataCell(Text(item.rfid)),
                                         DataCell(Row(
                                           children: [
+                                            //UPDATE ICON.
                                             GestureDetector(
                                               onTap: () => _updateItem(item),
                                               child: _hasPressedModify[
@@ -289,6 +308,8 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                                                   : const Icon(Icons.create,
                                                       color: Colors.black),
                                             ),
+
+                                            //DELETE ICON.
                                             GestureDetector(
                                               onTap: () => _deleteItem(item),
                                               child: _hasPressedDelete[
@@ -316,6 +337,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
   }
 }
 
+///This class creates an expandable container.
 class ExpandableContainer extends StatelessWidget {
   final bool expanded;
   final double collapsedHeight;
@@ -329,6 +351,7 @@ class ExpandableContainer extends StatelessWidget {
     this.expanded = true,
   });
 
+  ///Builds an expandable container.
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

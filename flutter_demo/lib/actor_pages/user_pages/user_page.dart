@@ -4,6 +4,7 @@ import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
 
+///This is a page where a user can be borrow and return items.
 class UserPage extends StatefulWidget {
   final Account currentAccount;
   const UserPage({required this.currentAccount});
@@ -13,16 +14,18 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPage extends State<UserPage> {
+  ///Signs out [widget.currentAccount].
   Future _signOut() async {
-    //Shown in debug console
     debugPrint("Signed out " + widget.currentAccount.accountName);
     Navigator.pop(context);
   }
 
+  ///Updates current widget.
   Future _update() async {
     setState(() {});
   }
 
+  ///Builds the user page.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +40,7 @@ class _UserPage extends State<UserPage> {
           actions: [
             IconButton(
               onPressed: _update,
-              icon: const Icon(Icons.search),
+              icon: const Icon(Icons.update),
             ),
           ]),
       body: UserBodyPage(currentAccount: widget.currentAccount),

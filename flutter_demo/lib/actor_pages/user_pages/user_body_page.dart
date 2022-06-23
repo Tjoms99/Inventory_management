@@ -6,6 +6,7 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 
+///This is a page where a user can be borrow and return items.
 class UserBodyPage extends StatefulWidget {
   Account currentAccount;
   UserBodyPage({required this.currentAccount});
@@ -17,13 +18,15 @@ class UserBodyPage extends StatefulWidget {
 class _UserBodyPageState extends State<UserBodyPage> {
   String infoText = '';
   String rfidTag = "";
-  // ignore: prefer_typing_uninitialized_variables
+  // ignore: prefer_typing_uninitialized_variables.
   var info;
   List<Item> items = [];
 
-  //Should update the database when a user scans an item
+  ///Updates the current [item.status] of an item depending on its previous [item.status].
+  ///
+  ///Updates [item.location] when [item.status] changes.
   Future updateAction() async {
-    items = await getItems(); //getItemsForUser(widget.currentAccount);
+    items = await getItems();
     Item item = createDefaultItem();
 
     rfidTag = await getRFIDorNFC();
@@ -36,7 +39,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
 
     item = getItemFromRFID(items, rfidTag);
 
-    //Return if no item is  found
+    //Return if no item is found.
     if (item.rfid == "rfid") {
       setState(() {
         infoText = 'This item does not exist';
@@ -44,6 +47,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
       return;
     }
 
+    //Update item status and location.
     switch (item.status) {
       case 'borrowed':
         if (item.location != widget.currentAccount.accountName) {
@@ -73,7 +77,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
         item.status = 'borrowed';
         item.location = widget.currentAccount.accountName;
 
-        //Update current user and assign them to the customer of the item
+        //Update current user and assign them to the customer of the item.
         widget.currentAccount.registeredCustomerId = getNewRegisteredCustomerID(
             widget.currentAccount.registeredCustomerId,
             item.registeredCustomerId);
@@ -87,6 +91,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
     });
   }
 
+  ///Builds the user page.
   @override
   Widget build(BuildContext context) {
     return Scaffold(

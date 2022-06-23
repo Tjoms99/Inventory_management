@@ -22,6 +22,9 @@ class Account {
       required this.registeredCustomerId});
 }
 
+///Returns an [Account] from a list of json [accounts].
+///
+///Returns a defualt [Account] if it does not exist.
 Account createAccountFromJson(List<dynamic> accounts, int index) {
   if (accounts[index] == null) {
     return createDefaultAccount();
@@ -49,6 +52,7 @@ Account createDefaultAccount() {
       registeredCustomerId: "registeredCustomerId");
 }
 
+///Returns true if [account] has a default role.
 bool isDefualt(Account account) {
   bool _isDefault = false;
   if (account.accountRole == "accountRole") _isDefault = true;
@@ -56,6 +60,7 @@ bool isDefualt(Account account) {
   return _isDefault;
 }
 
+///Returns true if [account] has a user role.
 bool isUser(Account account) {
   bool _isDefault = false;
   if (account.accountRole == "user") _isDefault = true;
@@ -63,6 +68,7 @@ bool isUser(Account account) {
   return _isDefault;
 }
 
+///Returns true if [account] has a admin role.
 bool isAdmin(Account account) {
   bool _isAdmin = false;
 
@@ -71,6 +77,7 @@ bool isAdmin(Account account) {
   return _isAdmin;
 }
 
+///Returns true if [account] has a admin role.
 bool isCustomer(Account account) {
   bool _isCustomer = false;
   if (account.accountRole == "customer") _isCustomer = true;
@@ -78,6 +85,7 @@ bool isCustomer(Account account) {
   return _isCustomer;
 }
 
+///Returns true if [user.registeredCustomerId] is containing [customer.customerId].
 bool isUserRegisteredAtCustomer(Account user, Account customer) {
   bool isRegistered = false;
   int indexCustomerId = customer.customerId.indexOf("1");
@@ -90,6 +98,7 @@ bool isUserRegisteredAtCustomer(Account user, Account customer) {
   return isRegistered;
 }
 
+///Returns true if [email] exists in [accounts].
 bool isAccountRegistered(List<Account> accounts, String email) {
   bool isRegistered = false;
   for (int index = 0; index < accounts.length; index++) {
@@ -101,6 +110,7 @@ bool isAccountRegistered(List<Account> accounts, String email) {
   return isRegistered;
 }
 
+///Returns [Account] if [rfid] exists in [accounts].
 Account getAccountUsingRFID(List<Account> accounts, String rfid) {
   Account account = createDefaultAccount();
   for (int index = 0; index < accounts.length; index++) {
@@ -114,12 +124,15 @@ Account getAccountUsingRFID(List<Account> accounts, String rfid) {
   return account;
 }
 
+///Returns the modified [registeredCustomerID].
+///
+///Modifies the [newID] using the "1" located in [itemCustomerID].
 String getNewRegisteredCustomerID(String currentID, String itemCustomerID) {
   String newID = currentID;
   int indexCustomerId = itemCustomerID.indexOf("1");
 
   if (indexCustomerId == 0) {
-    newID = "0" + newID.substring(1, newID.length - 1);
+    newID = "1" + newID.substring(1, newID.length - 1);
   } else {
     newID = newID.substring(0, indexCustomerId) +
         "1" +
@@ -130,6 +143,7 @@ String getNewRegisteredCustomerID(String currentID, String itemCustomerID) {
   return newID;
 }
 
+///Removes the [account] from the [customer] list.
 void updateAndRemoveFromCustomerList(Account account, Account customer) {
   int indexCustomerId = customer.customerId.indexOf("1");
   String newID = account.registeredCustomerId;

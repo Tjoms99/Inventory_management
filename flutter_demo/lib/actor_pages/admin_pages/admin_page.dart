@@ -13,6 +13,7 @@ import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
 
+///This is a page where an admin can navigate between 4 action pages.
 class AdminPage extends StatefulWidget {
   Account currentAccount;
   int currentIndex = 3;
@@ -25,8 +26,8 @@ class AdminPage extends StatefulWidget {
 class _AdminPageState extends State<AdminPage> {
   List<Widget> pages = [];
 
+  ///Signs out [widget.currentAccount].
   Future _signOut() async {
-    //Shown in debug console
     debugPrint("Signed out " + widget.currentAccount.accountName);
     Navigator.push(
       context,
@@ -34,10 +35,12 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
+  ///Updates current widget.
   void _update() {
     setState(() {});
   }
 
+  ///Goes to add [Item] page.
   Future _addItem() async {
     Navigator.push(
       context,
@@ -50,6 +53,7 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
+  ///Goes to add [Account] page.
   Future _addUser() async {
     Navigator.push(
       context,
@@ -59,6 +63,9 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
+  ///Builds 4 pages.
+  ///
+  ///[Account] list, [Item] list, help [Account] and play [Account].
   @override
   Widget build(BuildContext context) {
     pages = [
@@ -72,10 +79,14 @@ class _AdminPageState extends State<AdminPage> {
       appBar: AppBar(
           backgroundColor: secondaryBackgroundColor,
           title: Text(widget.currentAccount.accountName),
+
+          //SIGN OUT.
           leading: IconButton(
             onPressed: _signOut,
             icon: const Icon(Icons.logout),
           ),
+
+          //UPDATE STATE.
           actions: [
             IconButton(
               onPressed: _update,
@@ -86,6 +97,8 @@ class _AdminPageState extends State<AdminPage> {
         index: widget.currentIndex,
         children: pages,
       ),
+
+      //NAVIGATION BAR.
       bottomNavigationBar: NavigationBar(
         selectedIndex: widget.currentIndex,
         onDestinationSelected: (int newIndex) {
@@ -116,6 +129,8 @@ class _AdminPageState extends State<AdminPage> {
           ),
         ],
       ),
+
+      //ACTION BUTTON.
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Visibility(
         visible: widget.currentIndex == 1 || widget.currentIndex == 0,

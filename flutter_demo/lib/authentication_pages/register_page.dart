@@ -8,6 +8,7 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
+///This is a page where an [Account] can be inserted or updated into the database
 class RegisterPage extends StatefulWidget {
   final bool _doRegister;
   final String _email;
@@ -23,7 +24,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPage extends State<RegisterPage> {
-  //Controllers
+  //Controllers.
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController =
@@ -33,6 +34,7 @@ class _RegisterPage extends State<RegisterPage> {
   final TextEditingController _registeredCustomerIDController =
       TextEditingController();
 
+  //Focus nodes.
   final FocusNode _focusEmail = FocusNode();
   final FocusNode _focusPassword = FocusNode();
   final FocusNode _focusPasswordConfirm = FocusNode();
@@ -40,6 +42,7 @@ class _RegisterPage extends State<RegisterPage> {
   final FocusNode _focusCustomerID = FocusNode();
   final FocusNode _focusRegisteredCustomerID = FocusNode();
 
+  //Keyboard checkers.
   bool _openKeyboardEmail = false;
   bool _openKeyboardPassword = false;
   bool _openKeyboardConfirm = false;
@@ -49,23 +52,28 @@ class _RegisterPage extends State<RegisterPage> {
 
   bool _isKeyboardEnabled = false;
 
+  //Others.
   List<Account> accounts = [];
   bool firstReload = false;
   bool _isRegistered = false;
   String rfidTag = "";
 
+  ///Returns the [String] located in the email textfield.
   String getEmail() {
     return _emailController.text.trim();
   }
 
+  ///Returns the [String] located in the password textfield.
   String getPassword() {
     return _passwordController.text.trim();
   }
 
+  ///Returns the [String] located in the confirm password textfield.
   String getConfirmPassword() {
     return _passwordConfirmController.text.trim();
   }
 
+  ///Returns the [String] located in the role textfield.
   String getRole() {
     String role = "user";
     if (isAdmin(widget.currentAccount)) {
@@ -74,16 +82,18 @@ class _RegisterPage extends State<RegisterPage> {
     return role;
   }
 
+  ///Returns the [String] of the RFID.
   String getRFID() {
     return rfidTag;
   }
 
+  ///Sets the [rfidTag] using the Totem RFID or the NFC reader.
   Future setRFID() async {
-    // ignore: prefer_typing_uninitialized_variables
     rfidTag = await getRFIDorNFC();
     setState(() {});
   }
 
+  ///Returns the [String] located in the customerID textfield.
   String getCustomerID() {
     String customerId = _customerIDController.text.trim();
     //Should be length of 200
@@ -93,6 +103,7 @@ class _RegisterPage extends State<RegisterPage> {
     return customerId;
   }
 
+  ///Returns the [String] located in the registeredCustomerID textfield.
   String getReigstedCustomerId() {
     String registeredCustomerId = _registeredCustomerIDController.text.trim();
     //Should be length of 200
@@ -101,10 +112,6 @@ class _RegisterPage extends State<RegisterPage> {
     }
 
     return registeredCustomerId;
-  }
-
-  void setTag(String rfidString) {
-    rfidTag = rfidString;
   }
 
   @override
@@ -135,6 +142,9 @@ class _RegisterPage extends State<RegisterPage> {
     super.dispose();
   }
 
+  ///Sets [_isRegistered] to true if the account to be registered exists.
+  ///
+  ///Sets the [TextEditingController]s with the information if account exists.
   void _checkAccount() {
     debugPrint("Initialize textfields if user exist");
     _isRegistered = false;
@@ -153,6 +163,7 @@ class _RegisterPage extends State<RegisterPage> {
     }
   }
 
+  ///Changes the page depending on [widget.currentAccount.accountRole].
   Future gotoPage() async {
     if (widget._isLoggedIn) {
       if (widget.currentAccount.accountRole == "admin") {
@@ -184,6 +195,9 @@ class _RegisterPage extends State<RegisterPage> {
     }
   }
 
+  ///Inserts or updates [account] in the database.
+  ///
+  ///Checks if [TextEditingController] has information before registering [Account].
   Future registerUser() async {
     String email = getEmail();
     String password = getPassword();
@@ -209,7 +223,7 @@ class _RegisterPage extends State<RegisterPage> {
       return;
     }
 
-    //Will be unable to add accounts in web
+    //Will be unable to add accounts in web.
     if (rfid.isEmpty) {
       debugPrint("No rfid tag detected");
       account.rfid = "NO RFID ASSIGNED";
@@ -220,7 +234,7 @@ class _RegisterPage extends State<RegisterPage> {
       debugPrint("No email");
       return;
     }
-
+    //Insert or update account
     if (widget._doRegister) {
       if (_isRegistered) {
         debugPrint("User already registered");
@@ -236,6 +250,7 @@ class _RegisterPage extends State<RegisterPage> {
     gotoPage();
   }
 
+  ///Resets keyboard checkers.
   void _resetSelectedTextfield() {
     _openKeyboardEmail = false;
     _openKeyboardPassword = false;
@@ -245,6 +260,7 @@ class _RegisterPage extends State<RegisterPage> {
     _openKeyboardRegisteredCustomerID = false;
   }
 
+  ///Connects the [_emailController] to the keyboard.
   void _onFocusChangeEmail() {
     setState(() {
       _resetSelectedTextfield();
@@ -252,6 +268,7 @@ class _RegisterPage extends State<RegisterPage> {
     });
   }
 
+  ///Connects the [_passwordController] to the keyboard.
   void _onFocusChangePassword() {
     setState(() {
       _resetSelectedTextfield();
@@ -259,6 +276,7 @@ class _RegisterPage extends State<RegisterPage> {
     });
   }
 
+  ///Connects the [_passwordConfirmController] to the keyboard.
   void _onFocusChangePasswordConfirm() {
     setState(() {
       _resetSelectedTextfield();
@@ -266,6 +284,7 @@ class _RegisterPage extends State<RegisterPage> {
     });
   }
 
+  ///Connects the [_accountRoleController] to the keyboard.
   void _onFocusChangeRole() {
     setState(() {
       _resetSelectedTextfield();
@@ -273,6 +292,7 @@ class _RegisterPage extends State<RegisterPage> {
     });
   }
 
+  ///Connects the [_customerIDController] to the keyboard.
   void _onFocusChangeCustomerID() {
     setState(() {
       _resetSelectedTextfield();
@@ -280,6 +300,7 @@ class _RegisterPage extends State<RegisterPage> {
     });
   }
 
+  ///Connects the [_registeredCustomerIDController] to the keyboard.
   void _onFocusChangeRegisteredCustomerID() {
     setState(() {
       _resetSelectedTextfield();
@@ -287,6 +308,7 @@ class _RegisterPage extends State<RegisterPage> {
     });
   }
 
+  ///Builds the register page.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -297,6 +319,10 @@ class _RegisterPage extends State<RegisterPage> {
             child: Column(
               children: [
                 SingleChildScrollView(
+                  ///Load [accounts] from database.
+                  ///
+                  ///Show the register page if accounts found.
+                  ///Show circular progress bar if not.
                   child: FutureBuilder<List<Account>>(
                       future: getAccounts(),
                       builder: (context, snapshot) {
@@ -311,7 +337,8 @@ class _RegisterPage extends State<RegisterPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const SizedBox(height: firstBoxHeight),
-                              //Icon
+
+                              //RFID ICON.
                               GestureDetector(
                                 onTap: setRFID,
                                 child: const ImageIcon(
@@ -321,7 +348,8 @@ class _RegisterPage extends State<RegisterPage> {
                                   size: 100,
                                 ),
                               ),
-                              //Info text
+
+                              //INFO TEXT.
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: standardPadding),
@@ -336,6 +364,8 @@ class _RegisterPage extends State<RegisterPage> {
                                 ),
                               ),
                               const SizedBox(height: thirdBoxHeight),
+
+                              //RFID ID.
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: standardPadding),
@@ -349,6 +379,7 @@ class _RegisterPage extends State<RegisterPage> {
                               ),
                               const SizedBox(height: firstBoxHeight),
 
+                              //INFO TEXT.
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: standardPadding),
@@ -361,7 +392,7 @@ class _RegisterPage extends State<RegisterPage> {
                               ),
                               const SizedBox(height: firstBoxHeight),
 
-                              //Email
+                              //EMAIL
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: texfieldPadding),
@@ -390,7 +421,7 @@ class _RegisterPage extends State<RegisterPage> {
                               ),
                               const SizedBox(height: thirdBoxHeight),
 
-                              //Password
+                              //PASSWORD
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: texfieldPadding),
@@ -421,7 +452,7 @@ class _RegisterPage extends State<RegisterPage> {
                               ),
                               const SizedBox(height: thirdBoxHeight),
 
-                              //Password confirm
+                              //PASSWORD CONFIRM
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: texfieldPadding),
@@ -450,7 +481,8 @@ class _RegisterPage extends State<RegisterPage> {
                               ),
                               const SizedBox(height: thirdBoxHeight),
 
-                              //Account role'
+                              //ACCOUNT ROLE
+                              //Show if the user is admin
                               widget.currentAccount.accountRole == "admin"
                                   ? Column(
                                       children: [
@@ -484,6 +516,8 @@ class _RegisterPage extends State<RegisterPage> {
                                             ),
                                           ),
                                         ),
+
+                                        //CUSTOMER ID
                                         const SizedBox(height: thirdBoxHeight),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
@@ -516,6 +550,8 @@ class _RegisterPage extends State<RegisterPage> {
                                           ),
                                         ),
                                         const SizedBox(height: thirdBoxHeight),
+
+                                        //REGISTERED CUSTOMER ID
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: texfieldPadding),
@@ -552,12 +588,12 @@ class _RegisterPage extends State<RegisterPage> {
                                       ],
                                     )
                                   :
-                                  //Display nothing
+                                  //display nothing if user is not admin
                                   const SizedBox(),
 
                               const SizedBox(height: thirdBoxHeight),
 
-                              //Sign-up
+                              //SIGN-UP
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: standardPadding),
@@ -586,7 +622,7 @@ class _RegisterPage extends State<RegisterPage> {
                               ),
                               const SizedBox(height: thirdBoxHeight),
 
-                              //Cancle
+                              //CANCEL
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -611,7 +647,8 @@ class _RegisterPage extends State<RegisterPage> {
                         }
                       }),
                 ),
-                //TAP TO OPEN KEYBOARD
+
+                //KEYBOARD
                 SingleChildScrollView(
                   child: _isKeyboardEnabled
                       ? Column(
@@ -660,7 +697,9 @@ class _RegisterPage extends State<RegisterPage> {
                               type: VirtualKeyboardType.Alphanumeric,
                             ),
                           ],
-                        ) //TAP TO OPEN KEYBOARD
+                        )
+
+                      //TAP TO OPEN KEYBOARD
                       : GestureDetector(
                           onTap: () {
                             setState(() {

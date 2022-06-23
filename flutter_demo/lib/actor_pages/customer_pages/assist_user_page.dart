@@ -7,6 +7,7 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
+///This is a page where a customer or admin can assist an [Account].
 class AssistUserPage extends StatefulWidget {
   final Account currentAccount;
   const AssistUserPage({required this.currentAccount});
@@ -30,6 +31,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
     super.dispose();
   }
 
+  ///Signs in [Account] using [_emailController].
   Future signInButton() async {
     accounts = await getAccounts();
     String email = _emailController.text.trim();
@@ -55,6 +57,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
     );
   }
 
+  ///Signs in [Account] using [rfidTag].
   Future signInUser() async {
     accounts = await getAccounts();
     rfidTag = await getRFIDorNFC();
@@ -73,6 +76,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
     );
   }
 
+  ///Builds the help user page.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +86,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //Icon
+                //ICON.
                 GestureDetector(
                   onTap: signInUser,
                   child: const ImageIcon(
@@ -91,14 +95,16 @@ class _AssistUserPageState extends State<AssistUserPage> {
                     size: 100,
                   ),
                 ),
-                //Hello
+
+                //INFO TEXT.
                 const Text(
                   'TAP ICON TO SCAN',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: secondFontSize),
                 ),
                 const SizedBox(height: firstBoxHeight),
-                //Email
+
+                //EMAIL.
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: texfieldPadding),
@@ -126,7 +132,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
                 ),
                 const SizedBox(height: thirdBoxHeight),
 
-                //Sign-in
+                //SIGN-IN
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: standardPadding),
@@ -152,7 +158,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
                 ),
                 const SizedBox(height: thirdBoxHeight),
 
-                //TAP TO OPEN KEYBOARD
+                //KEYBOARD
                 SingleChildScrollView(
                   child: _isKeyboardEnabled
                       ? Column(
@@ -189,7 +195,9 @@ class _AssistUserPageState extends State<AssistUserPage> {
                               type: VirtualKeyboardType.Alphanumeric,
                             ),
                           ],
-                        ) //TAP TO OPEN KEYBOARD
+                        )
+
+                      //TAP TO OPEN KEYBOARD
                       : GestureDetector(
                           onTap: () {
                             setState(() {
