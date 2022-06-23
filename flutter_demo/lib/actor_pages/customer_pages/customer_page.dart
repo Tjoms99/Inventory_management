@@ -24,10 +24,6 @@ class CustomerPage extends StatefulWidget {
 }
 
 class _CustomerPageState extends State<CustomerPage> {
-  var userInput = 0;
-  var userFeedback = '';
-  var userTask = '';
-
   List<Widget> pages = [];
 
   Future signOut() async {

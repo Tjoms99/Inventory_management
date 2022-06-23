@@ -24,10 +24,6 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  var userInput = 0;
-  var userFeedback = '';
-  var userTask = '';
-
   List<Widget> pages = [];
 
   Future signOut() async {
@@ -75,7 +71,6 @@ class _AdminPageState extends State<AdminPage> {
       AssistUserPage(currentAccount: widget.currentAccount),
       UserBodyPage(currentAccount: widget.currentAccount),
     ];
-
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
