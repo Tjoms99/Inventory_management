@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the getItemTypes function from the item library, for the Dart programming language.">
+  <title>getItemTypes function - item library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">flutter_demo</a></li>
+    <li><a href="../classes_item/classes_item-library.html">item</a></li>
+    <li class="self-crumb">getItemTypes function</li>
+  </ol>
+  <div class="self-name">getItemTypes</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-function">getItemTypes</span> function 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+ 
+</h1></div>
+
+    <section class="multi-line-signature">
+        
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>
+<span class="name ">getItemTypes</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="getItemTypes-param-items"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../classes_item/Item-class.html">Item</a></span>&gt;</span></span> <span class="parameter-name">items</span></span></li>
+</ol>)
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Returns a list of all <code>types</code> that is contained in <code>items</code>.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">List&lt;String&gt; getItemTypes(List&lt;Item&gt; items) {
+  List&lt;String&gt; types = [];
+  for (int index = 0; index &lt; items.length; index++) {
+    if (!types.contains(items[index].name)) types.add(items[index].name);
+  }
+
+  return types;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../index.html">flutter_demo</a></li>
+  <li><a href="../classes_item/classes_item-library.html">item</a></li>
+  <li class="self-crumb">getItemTypes function</li>
+</ol>
+
+
+    <h5>item library</h5>
+    <ol>
+  <li class="section-title"><a href="../classes_item/classes_item-library.html#classes">Classes</a></li>
+  <li><a href="../classes_item/Item-class.html">Item</a></li>
+
+
+
+
+
+  <li class="section-title"><a href="../classes_item/classes_item-library.html#functions">Functions</a></li>
+  <li><a href="../classes_item/createDefaultItem.html">createDefaultItem</a></li>
+  <li><a href="../classes_item/createItemFromJson.html">createItemFromJson</a></li>
+  <li><a href="../classes_item/getItemFromList.html">getItemFromList</a></li>
+  <li><a href="../classes_item/getItemFromRFID.html">getItemFromRFID</a></li>
+  <li><a href="../classes_item/getItemsForCustomer.html">getItemsForCustomer</a></li>
+  <li><a href="../classes_item/getItemsInType.html">getItemsInType</a></li>
+  <li><a href="../classes_item/getItemTypes.html">getItemTypes</a></li>
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-left-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flutter_demo
+      1.0.0+1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+

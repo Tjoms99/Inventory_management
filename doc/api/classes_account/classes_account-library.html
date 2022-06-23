@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="account library API docs, for the Dart programming language.">
+  <title>account library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">flutter_demo</a></li>
+    <li class="self-crumb">account library</li>
+  </ol>
+  <div class="self-name">account</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-library">account</span> library 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+ 
+</h1></div>
+
+    
+
+
+    <section class="summary offset-anchor" id="classes">
+      <h2>Classes</h2>
+
+      <dl>
+        <dt id="Account">
+  <span class="name "><a href="../classes_account/Account-class.html">Account</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+      </dl>
+    </section>
+
+
+
+
+
+    <section class="summary offset-anchor" id="functions">
+      <h2>Functions</h2>
+
+      <dl class="callables">
+        <dt id="createAccountFromJson" class="callable">
+  <span class="name"><a href="../classes_account/createAccountFromJson.html">createAccountFromJson</a></span><span class="signature">(<wbr><span class="parameter" id="createAccountFromJson-param-accounts"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a></span> <span class="parameter-name">accounts</span>, </span><span class="parameter" id="createAccountFromJson-param-index"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">index</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../classes_account/Account-class.html">Account</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns an <a href="../classes_account/Account-class.html">Account</a> from a list of json <code>accounts</code>.
+  
+
+</dd>
+
+        <dt id="createDefaultAccount" class="callable">
+  <span class="name"><a href="../classes_account/createDefaultAccount.html">createDefaultAccount</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../classes_account/Account-class.html">Account</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="getAccountUsingRFID" class="callable">
+  <span class="name"><a href="../classes_account/getAccountUsingRFID.html">getAccountUsingRFID</a></span><span class="signature">(<wbr><span class="parameter" id="getAccountUsingRFID-param-accounts"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../classes_account/Account-class.html">Account</a></span>&gt;</span></span> <span class="parameter-name">accounts</span>, </span><span class="parameter" id="getAccountUsingRFID-param-rfid"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">rfid</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../classes_account/Account-class.html">Account</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns <a href="../classes_account/Account-class.html">Account</a> if <code>rfid</code> exists in <code>accounts</code>.
+  
+
+</dd>
+
+        <dt id="getNewRegisteredCustomerID" class="callable">
+  <span class="name"><a href="../classes_account/getNewRegisteredCustomerID.html">getNewRegisteredCustomerID</a></span><span class="signature">(<wbr><span class="parameter" id="getNewRegisteredCustomerID-param-currentID"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">currentID</span>, </span><span class="parameter" id="getNewRegisteredCustomerID-param-itemCustomerID"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">itemCustomerID</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the modified <code>registeredCustomerID</code>.
+  
+
+</dd>
+
+        <dt id="isAccountRegistered" class="callable">
+  <span class="name"><a href="../classes_account/isAccountRegistered.html">isAccountRegistered</a></span><span class="signature">(<wbr><span class="parameter" id="isAccountRegistered-param-accounts"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../classes_account/Account-class.html">Account</a></span>&gt;</span></span> <span class="parameter-name">accounts</span>, </span><span class="parameter" id="isAccountRegistered-param-email"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">email</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns true if <code>email</code> exists in <code>accounts</code>.
+  
+
+</dd>
+
+        <dt id="isAdmin" class="callable">
+  <span class="name"><a href="../classes_account/isAdmin.html">isAdmin</a></span><span class="signature">(<wbr><span class="parameter" id="isAdmin-param-account"><span class="type-annotation"><a href="../classes_account/Account-class.html">Account</a></span> <span class="parameter-name">account</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns true if <code>account</code> has a admin role.
+  
+
+</dd>
+
+        <dt id="isCustomer" class="callable">
+  <span class="name"><a href="../classes_account/isCustomer.html">isCustomer</a></span><span class="signature">(<wbr><span class="parameter" id="isCustomer-param-account"><span class="type-annotation"><a href="../classes_account/Account-class.html">Account</a></span> <span class="parameter-name">account</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns true if <code>account</code> has a admin role.
+  
+
+</dd>
+
+        <dt id="isDefualt" class="callable">
+  <span class="name"><a href="../classes_account/isDefualt.html">isDefualt</a></span><span class="signature">(<wbr><span class="parameter" id="isDefualt-param-account"><span class="type-annotation"><a href="../classes_account/Account-class.html">Account</a></span> <span class="parameter-name">account</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns true if <code>account</code> has a default role.
+  
+
+</dd>
+
+        <dt id="isUser" class="callable">
+  <span class="name"><a href="../classes_account/isUser.html">isUser</a></span><span class="signature">(<wbr><span class="parameter" id="isUser-param-account"><span class="type-annotation"><a href="../classes_account/Account-class.html">Account</a></span> <span class="parameter-name">account</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns true if <code>account</code> has a user role.
+  
+
+</dd>
+
+        <dt id="isUserRegisteredAtCustomer" class="callable">
+  <span class="name"><a href="../classes_account/isUserRegisteredAtCustomer.html">isUserRegisteredAtCustomer</a></span><span class="signature">(<wbr><span class="parameter" id="isUserRegisteredAtCustomer-param-user"><span class="type-annotation"><a href="../classes_account/Account-class.html">Account</a></span> <span class="parameter-name">user</span>, </span><span class="parameter" id="isUserRegisteredAtCustomer-param-customer"><span class="type-annotation"><a href="../classes_account/Account-class.html">Account</a></span> <span class="parameter-name">customer</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns true if <code>user.registeredCustomerId</code> is containing <code>customer.customerId</code>.
+  
+
+</dd>
+
+        <dt id="updateAndRemoveFromCustomerList" class="callable">
+  <span class="name"><a href="../classes_account/updateAndRemoveFromCustomerList.html">updateAndRemoveFromCustomerList</a></span><span class="signature">(<wbr><span class="parameter" id="updateAndRemoveFromCustomerList-param-account"><span class="type-annotation"><a href="../classes_account/Account-class.html">Account</a></span> <span class="parameter-name">account</span>, </span><span class="parameter" id="updateAndRemoveFromCustomerList-param-customer"><span class="type-annotation"><a href="../classes_account/Account-class.html">Account</a></span> <span class="parameter-name">customer</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Removes the <code>account</code> from the <code>customer</code> list.
+  
+
+</dd>
+
+      </dl>
+    </section>
+
+
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../index.html">flutter_demo</a></li>
+  <li class="self-crumb">account library</li>
+</ol>
+
+
+    <h5><span class="package-name">flutter_demo</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="../classes_account/classes_account-library.html">account</a></li>
+      <li><a href="../Services_account_service/Services_account_service-library.html">account_service</a></li>
+      <li><a href="../services_account_service/services_account_service-library.html">account_service</a></li>
+      <li><a href="../actor_pages_customer_pages_add_item_page/actor_pages_customer_pages_add_item_page-library.html">add_item_page</a></li>
+      <li><a href="../actor_pages_admin_pages_admin_page/actor_pages_admin_pages_admin_page-library.html">admin_page</a></li>
+      <li><a href="../actor_pages_customer_pages_assist_user_page/actor_pages_customer_pages_assist_user_page-library.html">assist_user_page</a></li>
+      <li><a href="../constants/constants-library.html">constants</a></li>
+      <li><a href="../actor_pages_customer_pages_customer_page/actor_pages_customer_pages_customer_page-library.html">customer_page</a></li>
+      <li><a href="../generated_plugin_registrant/generated_plugin_registrant-library.html">generated_plugin_registrant</a></li>
+      <li><a href="../classes_item/classes_item-library.html">item</a></li>
+      <li><a href="../services_item_service/services_item_service-library.html">item_service</a></li>
+      <li><a href="../Services_item_service/Services_item_service-library.html">item_service</a></li>
+      <li><a href="../actor_pages_customer_pages_items_list_page/actor_pages_customer_pages_items_list_page-library.html">items_list_page</a></li>
+      <li><a href="../authentication_pages_login_page/authentication_pages_login_page-library.html">login_page</a></li>
+      <li><a href="../main/main-library.html">main</a></li>
+      <li><a href="../authentication_pages_register_page/authentication_pages_register_page-library.html">register_page</a></li>
+      <li><a href="../services_totem_service/services_totem_service-library.html">totem_service</a></li>
+      <li><a href="../actor_pages_user_pages_user_body_page/actor_pages_user_pages_user_body_page-library.html">user_body_page</a></li>
+      <li><a href="../actor_pages_user_pages_user_page/actor_pages_user_pages_user_page-library.html">user_page</a></li>
+      <li><a href="../actor_pages_customer_pages_users_list_page/actor_pages_customer_pages_users_list_page-library.html">users_list_page</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+    <h5>account library</h5>
+    <ol>
+  <li class="section-title"><a href="../classes_account/classes_account-library.html#classes">Classes</a></li>
+  <li><a href="../classes_account/Account-class.html">Account</a></li>
+
+
+
+
+
+  <li class="section-title"><a href="../classes_account/classes_account-library.html#functions">Functions</a></li>
+  <li><a href="../classes_account/createAccountFromJson.html">createAccountFromJson</a></li>
+  <li><a href="../classes_account/createDefaultAccount.html">createDefaultAccount</a></li>
+  <li><a href="../classes_account/getAccountUsingRFID.html">getAccountUsingRFID</a></li>
+  <li><a href="../classes_account/getNewRegisteredCustomerID.html">getNewRegisteredCustomerID</a></li>
+  <li><a href="../classes_account/isAccountRegistered.html">isAccountRegistered</a></li>
+  <li><a href="../classes_account/isAdmin.html">isAdmin</a></li>
+  <li><a href="../classes_account/isCustomer.html">isCustomer</a></li>
+  <li><a href="../classes_account/isDefualt.html">isDefualt</a></li>
+  <li><a href="../classes_account/isUser.html">isUser</a></li>
+  <li><a href="../classes_account/isUserRegisteredAtCustomer.html">isUserRegisteredAtCustomer</a></li>
+  <li><a href="../classes_account/updateAndRemoveFromCustomerList.html">updateAndRemoveFromCustomerList</a></li>
+
+
+
+</ol>
+
+  </div><!--/sidebar-offcanvas-right-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flutter_demo
+      1.0.0+1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+
