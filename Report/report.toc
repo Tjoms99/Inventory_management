@@ -1,5 +1,0 @@
-\babel@toc {english}{}\relax 
-\contentsline {chapter}{\numberline {1}ChapterName}{1}{}%
-\contentsline {section}{\numberline {1.1}Section}{1}{}%
-\contentsline {subsection}{\numberline {1.1.1}SubSection}{2}{}%
-\contentsline {section}{\numberline {1.2}Another Section}{2}{}%
