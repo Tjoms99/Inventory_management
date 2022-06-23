@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/constants.dart';
 import 'package:http/http.dart' as http;
 
 import '../classes/account.dart';
@@ -9,7 +10,7 @@ Future<List<Account>> getAccounts() async {
   try {
 //Fetch data from server
     var uri =
-        Uri.parse("http://192.168.1.201/dashboard/flutter_db/getAccounts.php");
+        Uri.parse("http://$ipAddress/dashboard/flutter_db/getAccounts.php");
     final response = await http.get(uri);
 
 //Convert from json object to a list of Account(s)
@@ -30,7 +31,7 @@ Future<Account> getAccountFromName(String name) async {
 
   try {
     var uri = Uri.parse(
-        "http://192.168.1.201/dashboard/flutter_db/getAccountFromName.php");
+        "http://$ipAddress/dashboard/flutter_db/getAccountFromName.php");
     final response = await http.post(uri, body: {
       "account_name": name,
     });
@@ -51,7 +52,7 @@ Future<Account> getAccount(Account thisAccount) async {
 
   try {
     var uri =
-        Uri.parse("http://192.168.1.201/dashboard/flutter_db/getAccount.php");
+        Uri.parse("http://$ipAddress/dashboard/flutter_db/getAccount.php");
     final response = await http.post(uri, body: {
       "account_name": thisAccount.accountName,
       "password": thisAccount.password,
@@ -70,8 +71,8 @@ Future<Account> getAccount(Account thisAccount) async {
 
 void deleteAccount(int id) {
   try {
-    var uri = Uri.parse(
-        "http://192.168.1.201/dashboard/flutter_db/deleteAccount.php");
+    var uri =
+        Uri.parse("http://$ipAddress/dashboard/flutter_db/deleteAccount.php");
     http.post(uri, body: {
       'id': jsonEncode(id),
     });
@@ -83,7 +84,7 @@ void deleteAccount(int id) {
 void addAccount(Account account) {
   try {
     var uri =
-        Uri.parse("http://192.168.1.201/dashboard/flutter_db/addAccount.php");
+        Uri.parse("http://$ipAddress/dashboard/flutter_db/addAccount.php");
 
     http.post(uri, body: {
       "account_name": account.accountName,
@@ -100,8 +101,8 @@ void addAccount(Account account) {
 
 void updateAccount(Account account) {
   try {
-    var uri = Uri.parse(
-        "http://192.168.1.201/dashboard/flutter_db/updateAccount.php");
+    var uri =
+        Uri.parse("http://$ipAddress/dashboard/flutter_db/updateAccount.php");
 
     http.post(uri, body: {
       'id': jsonEncode(account.id),
@@ -120,7 +121,7 @@ void updateAccount(Account account) {
 void updateAccountRegisteredCustomerID(Account account) {
   try {
     var uri = Uri.parse(
-        "http://192.168.1.201/dashboard/flutter_db/updateAccountRegisteredCustomerID.php");
+        "http://$ipAddress/dashboard/flutter_db/updateAccountRegisteredCustomerID.php");
 
     http.post(uri, body: {
       'id': jsonEncode(account.id),

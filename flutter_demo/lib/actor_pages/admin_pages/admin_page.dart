@@ -4,7 +4,6 @@ import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 
 import 'package:flutter_demo/constants.dart';
-import 'package:flutter_demo/search_page.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
 
 import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
@@ -26,7 +25,7 @@ class AdminPage extends StatefulWidget {
 class _AdminPageState extends State<AdminPage> {
   List<Widget> pages = [];
 
-  Future signOut() async {
+  Future _signOut() async {
     //Shown in debug console
     debugPrint("Signed out " + widget.currentAccount.accountName);
     Navigator.push(
@@ -35,11 +34,8 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
-  Future search() async {
-    showSearch(
-      context: context,
-      delegate: MySearchDelegate(),
-    );
+  void _update() {
+    setState(() {});
   }
 
   Future _addItem() async {
@@ -75,14 +71,15 @@ class _AdminPageState extends State<AdminPage> {
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
           backgroundColor: secondaryBackgroundColor,
+          title: Text(widget.currentAccount.accountName),
           leading: IconButton(
-            onPressed: signOut,
+            onPressed: _signOut,
             icon: const Icon(Icons.logout),
           ),
           actions: [
             IconButton(
-              onPressed: search,
-              icon: const Icon(Icons.search),
+              onPressed: _update,
+              icon: const Icon(Icons.update),
             ),
           ]),
       body: IndexedStack(
@@ -125,7 +122,6 @@ class _AdminPageState extends State<AdminPage> {
         child: FloatingActionButton(
           backgroundColor: Colors.orange[400],
           onPressed: widget.currentIndex == 1 ? _addItem : _addUser,
-          tooltip: 'Increment',
           child: const Icon(Icons.add),
         ),
       ),

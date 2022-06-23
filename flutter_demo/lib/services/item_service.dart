@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/classes/item.dart';
+import 'package:flutter_demo/constants.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Item>> getItems() async {
   List<Item> items = [];
   try {
 //Fetch data from server
-    var uri =
-        Uri.parse("http://192.168.1.201/dashboard/flutter_db/getItems.php");
+    var uri = Uri.parse("http://$ipAddress/dashboard/flutter_db/getItems.php");
 
     final response = await http.get(uri);
 
@@ -26,7 +26,7 @@ Future<List<Item>> getItems() async {
 void deleteItem(int id) {
   try {
     var uri =
-        Uri.parse("http://192.168.1.201/dashboard/flutter_db/deleteItem.php");
+        Uri.parse("http://$ipAddress/dashboard/flutter_db/deleteItem.php");
     http.post(uri, body: {
       'id': jsonEncode(id),
     });
@@ -37,8 +37,7 @@ void deleteItem(int id) {
 
 void addItem(Item item) {
   try {
-    var uri =
-        Uri.parse("http://192.168.1.201/dashboard/flutter_db/addItem.php");
+    var uri = Uri.parse("http://$ipAddress/dashboard/flutter_db/addItem.php");
 
     http.post(uri, body: {
       'name': item.name,
@@ -56,7 +55,7 @@ void addItem(Item item) {
 void updateItem(Item item) {
   try {
     var uri =
-        Uri.parse("http://192.168.1.201/dashboard/flutter_db/updateItem.php");
+        Uri.parse("http://$ipAddress/dashboard/flutter_db/updateItem.php");
 
     http.post(uri, body: {
       'id': jsonEncode(item.id),

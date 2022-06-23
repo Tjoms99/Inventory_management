@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/classes/account.dart';
 
 import 'package:flutter_demo/constants.dart';
-import 'package:flutter_demo/search_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
 
 class UserPage extends StatefulWidget {
@@ -14,17 +13,14 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPage extends State<UserPage> {
-  Future signOut() async {
+  Future _signOut() async {
     //Shown in debug console
     debugPrint("Signed out " + widget.currentAccount.accountName);
     Navigator.pop(context);
   }
 
-  Future search() async {
-    showSearch(
-      context: context,
-      delegate: MySearchDelegate(),
-    );
+  Future _update() async {
+    setState(() {});
   }
 
   @override
@@ -33,13 +29,14 @@ class _UserPage extends State<UserPage> {
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
           backgroundColor: secondaryBackgroundColor,
+          title: Text(widget.currentAccount.accountName),
           leading: IconButton(
-            onPressed: signOut,
+            onPressed: _signOut,
             icon: const Icon(Icons.logout),
           ),
           actions: [
             IconButton(
-              onPressed: search,
+              onPressed: _update,
               icon: const Icon(Icons.search),
             ),
           ]),
