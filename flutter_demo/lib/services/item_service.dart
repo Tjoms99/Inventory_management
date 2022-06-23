@@ -54,7 +54,7 @@ void addItem(Item item) {
   }
 }
 
-///Updates [item] in the dataves
+///Updates [item] in the database.
 void updateItem(Item item) {
   try {
     var uri =
