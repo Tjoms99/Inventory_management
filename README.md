@@ -6,7 +6,7 @@
   2. Windows
   3. Web
  
-### API documentation can be found under "docs\api". Then open "index.html"
+### API documentation can be found under "doc\api". Then open "index.html"
 
 ### Server is hosted locally using XAMPP (Apache, mySQL, FileZilla). To replicate: 
 	1. Put web (located in "apps\") in "C:\xampp\htdocs\dashboard\".
