@@ -1,5 +1,6 @@
 # Inventory_management
-## App built with dart and server files built with php.
+## App built with dart
+## Server communication built with php.
 
 ### Download the pre-built apps from the "apps" folder.
   1. Android
