@@ -1,10 +1,10 @@
 import time
 
-import requests							# http request library
+import requests					# http request library
 from getmac import get_mac_address		# library for getting device mac address
 
 from mfrc522 import SimpleMFRC522		# RFID module library
-import RPi.GPIO as GPIO					# Raspberry pi GPIO library
+import RPi.GPIO as GPIO				# Raspberry pi GPIO library
 
 api_endpoint = "http://192.168.137.15/dashboard/flutter_db/addTotem.php"
 mac = get_mac_address()
