@@ -3,12 +3,12 @@
  Server communication built with php.
 
 ### Download the pre-built apps from the "apps" folder.
-  1. Android
-  2. Windows
-  3. Web
+  - Android
+  - Windows
+  - Web
  
-### API documentation can be found under "doc\api".
-Open "index.html"
+### API documentation
+Open "doc\api\index.html" to get the documentation in your browser. 
 
 ### Server is hosted locally using XAMPP (Apache, mySQL, FileZilla). 
 1. Put web (located in "apps\") in "C:\xampp\htdocs\dashboard\".
