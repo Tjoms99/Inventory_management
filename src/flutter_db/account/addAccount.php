@@ -21,17 +21,16 @@ if (mysqli_num_rows($res) != 0) {
 //Check if rfid in accounts exists
 $sql = "SELECT * FROM `accounts` WHERE `rfid` LIKE '$rfid'";
 $res = $conn->query($sql);
-if (mysqli_num_rows($res) != 0) {
+if (mysqli_num_rows($res) != 0 && mysqli_fetch_assoc($res)['rfid']  != "NO RFID ASSIGNED") {
     return;
 }
 
 //Check if rfid in items exists
 $sql = "SELECT * FROM `items` WHERE `rfid` LIKE '$rfid'";
 $res = $conn->query($sql);
-if (mysqli_num_rows($res) != 0) {
+if (mysqli_num_rows($res) != 0 && mysqli_fetch_assoc($res)['rfid']  != "NO RFID ASSIGNED") {
     return;
 }
-
 //Insert account
 $sql = "INSERT INTO `accounts`(`account_name`, `account_role`, `password`, `rfid`, `customer_id`, `registered_customer_id`) VALUES ('$account_name','$account_role','$hashed_password','$rfid','$customer_id', '$registered_customer_id')";
 $conn->query($sql);

@@ -124,7 +124,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
                         borderRadius:
                             BorderRadius.circular(texfieldBorderRadius),
                       ),
-                      hintText: 'Email',
+                      hintText: 'Username',
                       fillColor: textfieldBackgroundColor,
                       filled: true,
                     ),

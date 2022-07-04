@@ -220,9 +220,11 @@ class _AddItemPageState extends State<AddItemPage> {
       return;
     }
     //Will only work on mobile
-    /*if (item.rfid.isEmpty) {
-      return;
-    } */
+    if (item.rfid.isEmpty) {
+      debugPrint("No rfid tag detected");
+      item.rfid = "NO RFID ASSIGNED";
+      //return;
+    }
 
     if (item.description.isEmpty) {
       return;

@@ -237,7 +237,7 @@ class _LoginPageState extends State<LoginPage> {
                                         borderRadius: BorderRadius.circular(
                                             texfieldBorderRadius),
                                       ),
-                                      hintText: 'Email',
+                                      hintText: 'Username',
                                       fillColor: textfieldBackgroundColor,
                                       filled: true,
                                     ),

@@ -412,7 +412,7 @@ class _RegisterPage extends State<RegisterPage> {
                                       borderRadius: BorderRadius.circular(
                                           texfieldBorderRadius),
                                     ),
-                                    hintText: 'Email',
+                                    hintText: 'Username',
                                     fillColor: textfieldBackgroundColor,
                                     filled: true,
                                   ),

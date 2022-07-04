@@ -13,14 +13,13 @@ $registered_customer_id = $_POST['registered_customer_id'];
 //Check if rfid in accounts exists
 $sql = "SELECT * FROM `accounts` WHERE `rfid` LIKE '$rfid'";
 $res = $conn->query($sql);
-if (mysqli_num_rows($res) != 0) {
+if (mysqli_num_rows($res) != 0 && mysqli_fetch_assoc($res)['rfid']  != "NO RFID ASSIGNED") {
     return;
 }
-
 //Check if rfid in items exists
 $sql = "SELECT * FROM `items` WHERE `rfid` LIKE '$rfid'";
 $res = $conn->query($sql);
-if (mysqli_num_rows($res) != 0) {
+if (mysqli_num_rows($res) != 0 && mysqli_fetch_assoc($res)['rfid']  != "") {
     return;
 }
 
