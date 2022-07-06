@@ -52,6 +52,9 @@ class _RegisterPage extends State<RegisterPage> {
 
   bool _isKeyboardEnabled = false;
 
+  //Error
+  String _errorText = "";
+  bool _isError = false;
   //Others.
   List<Account> accounts = [];
   bool firstReload = false;
@@ -218,9 +221,25 @@ class _RegisterPage extends State<RegisterPage> {
 
     _checkAccount();
 
-    if (confirmPassword != password && password.isEmpty) {
+    _errorText = "";
+    _isError = false;
+
+    if (email.isEmpty) {
+      debugPrint("No email");
+      _errorText = "No username entered\n";
+      _isError = true;
+    }
+
+    if (confirmPassword != password) {
       debugPrint("incorrect password");
-      return;
+      _errorText = _errorText + "Password is not matching\n";
+      _isError = true;
+    }
+
+    if (password.isEmpty) {
+      debugPrint("incorrect password");
+      _errorText = _errorText + "No password entered\n";
+      _isError = true;
     }
 
     //Will be unable to add accounts in web.
@@ -230,20 +249,23 @@ class _RegisterPage extends State<RegisterPage> {
       //return;
     }
 
-    if (email.isEmpty) {
-      debugPrint("No email");
-      return;
-    }
     //Insert or update account
     if (widget._doRegister) {
       if (_isRegistered) {
         debugPrint("User already registered");
-        return;
+        _errorText = _errorText + "Username already taken\n";
+        _isError = true;
       }
+
+      setState(() {});
+      if (_isError) return;
 
       addAccount(account);
       debugPrint("Registered user");
     } else {
+      setState(() {});
+      if (_isError) return;
+
       updateAccount(account);
       debugPrint("Updated user");
     }
@@ -311,6 +333,7 @@ class _RegisterPage extends State<RegisterPage> {
   ///Builds the register page.
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: SafeArea(
@@ -391,6 +414,21 @@ class _RegisterPage extends State<RegisterPage> {
                                 ),
                               ),
                               const SizedBox(height: firstBoxHeight),
+
+                              //ERROR TEXT.
+                              _isError
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: standardPadding),
+                                      child: Text(
+                                        _errorText,
+                                        style: const TextStyle(
+                                          fontSize: forthFontSize,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox(),
 
                               //EMAIL
                               Padding(

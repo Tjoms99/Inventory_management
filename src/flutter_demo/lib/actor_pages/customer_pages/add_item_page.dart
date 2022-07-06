@@ -330,6 +330,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      const SizedBox(height: firstBoxHeight),
                       //ICON.
                       GestureDetector(
                         onTap: setRFID,
@@ -341,11 +342,9 @@ class _AddItemPageState extends State<AddItemPage> {
                       ),
 
                       //INFO TEXT.
-                      Text(
-                        widget.doAddItem
-                            ? 'TAP ICON TO SCAN RFID'
-                            : 'TAP ICON TO SCAN AND UPDATE RFID',
-                        style: const TextStyle(
+                      const Text(
+                        'TAP ICON TO SCAN RFID',
+                        style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: secondFontSize),
                       ),

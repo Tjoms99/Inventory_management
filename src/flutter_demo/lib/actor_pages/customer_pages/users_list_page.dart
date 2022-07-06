@@ -152,6 +152,7 @@ class _ListBuilderState extends State<ListBuilder> {
   ///Builds the list page.
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     return ListView.builder(
       itemCount: widget.listOfAccounts.length,
       itemBuilder: (_, int index) {
