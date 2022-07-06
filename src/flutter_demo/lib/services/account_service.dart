@@ -62,12 +62,13 @@ Future<Account> getAccount(Account thisAccount) async {
     final response = await http.post(uri, body: {
       "account_name": thisAccount.accountName,
       "password": thisAccount.password,
-      "rfid": account.rfid,
+      "rfid": thisAccount.rfid,
     });
 
-    final json = "[" + response.body + "]";
     if (response.body.isNotEmpty) {
-      account = createAccountFromJson(jsonDecode(json) as List, 0);
+      final json = "[" + response.body + "]";
+
+      account = createAccountFromJson(jsonDecode(json) as List<dynamic>, 0);
     }
   } catch (e) {
     debugPrint("Failed to get account: $e");

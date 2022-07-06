@@ -33,30 +33,39 @@ class _LoginPageState extends State<LoginPage> {
   bool _isKeyboardEnabled = false;
 
   //Others.
-  String rfidTag = "";
   Account currentAccount = createDefaultAccount();
+  String _errorText = "";
+  bool _isError = false;
 
-  ///Signs in [currentAccount] using the [_emailController] and the [_passwordController] or just using the [rfidTag].
-  Future signIn() async {
-    setState(() {});
-    currentAccount.accountName = _emailController.text.trim();
-    currentAccount.password = _passwordController.text.trim();
+  void _setRFID() async {
     currentAccount.rfid = await getRFIDorNFC();
 
+    _signIn();
+  }
+
+  ///Signs in [currentAccount] using the [_emailController] and the [_passwordController] or just using the [currentAccount.rfid].
+  Future _signIn() async {
+    currentAccount.accountName = _emailController.text.trim();
+    currentAccount.password = _passwordController.text.trim();
     currentAccount = await getAccount(currentAccount);
-    debugPrint("The role of this account is:  ${currentAccount.accountRole}");
 
     if (isDefualt(currentAccount)) {
       debugPrint("This is a defualt account, cannot sign in");
+      _errorText =
+          "Username and password does not match\n --or--\nUnknown RFID";
+      _isError = true;
+      setState(() {});
       return;
     }
 
     debugPrint("Signed in ${currentAccount.accountName}");
-    gotoPage();
+    debugPrint("Privileges:  ${currentAccount.accountRole}");
+
+    _gotoPage();
   }
 
   ///Changes the page depending on [widget.currentAccount.accountRole].
-  void gotoPage() {
+  void _gotoPage() {
     switch (currentAccount.accountRole) {
       case "customer":
         Navigator.push(
@@ -91,8 +100,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   ///Changes current page to a register page
-  Future registerUser() async {
-    setState(() {});
+  Future _registerUser() async {
     String _email = _emailController.text.trim();
     debugPrint("Go to register page");
     Navigator.push(
@@ -139,6 +147,9 @@ class _LoginPageState extends State<LoginPage> {
   ///Builds the login page.
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      currentAccount = createDefaultAccount();
+    });
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: SafeArea(
@@ -151,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     //Icon
                     GestureDetector(
-                      onTap: signIn,
+                      onTap: _setRFID,
                       child: const ImageIcon(
                         AssetImage("assets/images/rfid_transparent.png"),
                         color: Color.fromARGB(255, 37, 174, 53),
@@ -180,6 +191,16 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: firstBoxHeight),
+//ERROR TEXT.
+                    _isError
+                        ? Text(
+                            _errorText,
+                            style: const TextStyle(
+                              fontSize: forthFontSize,
+                              color: Colors.red,
+                            ),
+                          )
+                        : const SizedBox(),
 
                     //EMAIL
                     Padding(
@@ -243,7 +264,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: standardPadding),
                       child: GestureDetector(
-                        onTap: signIn,
+                        onTap: _signIn,
                         child: Container(
                           padding: const EdgeInsets.all(buttonPadding),
                           decoration: const BoxDecoration(
@@ -276,7 +297,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: registerUser,
+                          onTap: _registerUser,
                           child: const Text(
                             ' Register now',
                             style: TextStyle(
