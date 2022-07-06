@@ -1,6 +1,11 @@
 <?php
 include '../conn.php';
 
+// Error codes:
+// 0 = OK 
+// 1 = Account exists
+// 2 = RFID exists
+$error = "0";
 
 $account_name = $_POST['account_name'];
 $account_role = $_POST['account_role'];
@@ -15,20 +20,25 @@ $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 $sql = "SELECT * FROM `accounts` WHERE `account_name` LIKE '$account_name'";
 $res = $conn->query($sql);
 if (mysqli_num_rows($res) != 0) {
-    return;
+    $error = "1";
 }
 
 //Check if rfid in accounts exists
 $sql = "SELECT * FROM `accounts` WHERE `rfid` LIKE '$rfid'";
 $res = $conn->query($sql);
 if (mysqli_num_rows($res) != 0 && mysqli_fetch_assoc($res)['rfid']  != "NO RFID ASSIGNED") {
-    return;
+    $error = "2";
 }
 
 //Check if rfid in items exists
 $sql = "SELECT * FROM `items` WHERE `rfid` LIKE '$rfid'";
 $res = $conn->query($sql);
 if (mysqli_num_rows($res) != 0 && mysqli_fetch_assoc($res)['rfid']  != "NO RFID ASSIGNED") {
+    $error = "2";
+}
+
+echo json_encode($error);
+if ($error != "0") {
     return;
 }
 //Insert account

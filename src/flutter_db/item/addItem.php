@@ -19,7 +19,7 @@ if (mysqli_num_rows($res) != 0 && mysqli_fetch_assoc($res)['rfid']  != "NO RFID 
 //Check if rfid in items exists
 $sql = "SELECT * FROM `items` WHERE `rfid` LIKE '$rfid'";
 $res = $conn->query($sql);
-if (mysqli_num_rows($res) != 0 && mysqli_fetch_assoc($res)['rfid']  != "") {
+if (mysqli_num_rows($res) != 0 && mysqli_fetch_assoc($res)['rfid']  != "NO RFID ASSIGNED") {
     return;
 }
 
