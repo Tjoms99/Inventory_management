@@ -62,6 +62,7 @@ Future<Account> getAccount(Account thisAccount) async {
     final response = await http.post(uri, body: {
       "account_name": thisAccount.accountName,
       "password": thisAccount.password,
+      "rfid": account.rfid,
     });
 
     final json = "[" + response.body + "]";

@@ -34,37 +34,16 @@ class _LoginPageState extends State<LoginPage> {
 
   //Others.
   String rfidTag = "";
-  List<Account> accounts = [];
   Account currentAccount = createDefaultAccount();
 
-  ///Signs in [currentAccount] using the [rfidTag].
-  Future signInRFID() async {
-    setState(() {});
-    accounts = await getAccounts();
-    currentAccount = createDefaultAccount();
-    rfidTag = await getRFIDorNFC();
-    currentAccount = getAccountUsingRFID(accounts, rfidTag);
-
-    //Update page.
-    setState(() {});
-
-    //Login if user exist.
-    debugPrint("Login user if it exists:" + currentAccount.accountName);
-    if (!isDefualt(currentAccount)) {
-      gotoPage();
-    }
-  }
-
-  ///Signs in [currentAccount] using the [_emailController] and the [_passwordController].
+  ///Signs in [currentAccount] using the [_emailController] and the [_passwordController] or just using the [rfidTag].
   Future signIn() async {
     setState(() {});
     currentAccount.accountName = _emailController.text.trim();
     currentAccount.password = _passwordController.text.trim();
+    currentAccount.rfid = await getRFIDorNFC();
 
-    if (isAccountRegistered(accounts, currentAccount.accountName)) {
-      currentAccount = await getAccount(currentAccount);
-    }
-
+    currentAccount = await getAccount(currentAccount);
     debugPrint("The role of this account is:  ${currentAccount.accountRole}");
 
     if (isDefualt(currentAccount)) {
@@ -73,7 +52,6 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     debugPrint("Signed in ${currentAccount.accountName}");
-
     gotoPage();
   }
 
@@ -168,169 +146,149 @@ class _LoginPageState extends State<LoginPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SingleChildScrollView(
-                  ///Load [accounts] from database.
-                  ///
-                  ///Show the register page if accounts found.
-                  ///Show circular progress bar if not.
-                  child: FutureBuilder<List<Account>>(
-                      future: getAccounts(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          debugPrint("Error loading accounts");
-                        }
-                        if (snapshot.hasData) {
-                          accounts = snapshot.data as List<Account>;
-                          return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                //Icon
-                                GestureDetector(
-                                  onTap: signInRFID,
-                                  child: const ImageIcon(
-                                    AssetImage(
-                                        "assets/images/rfid_transparent.png"),
-                                    color: Color.fromARGB(255, 37, 174, 53),
-                                    size: 100,
-                                  ),
-                                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    //Icon
+                    GestureDetector(
+                      onTap: signIn,
+                      child: const ImageIcon(
+                        AssetImage("assets/images/rfid_transparent.png"),
+                        color: Color.fromARGB(255, 37, 174, 53),
+                        size: 100,
+                      ),
+                    ),
 
-                                //INFO TEXT.
-                                const Text(
-                                  'TAP ICON TO SCAN',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: secondFontSize),
-                                ),
-                                const SizedBox(height: firstBoxHeight),
+                    //INFO TEXT.
+                    const Text(
+                      'TAP ICON TO SCAN',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: secondFontSize),
+                    ),
+                    const SizedBox(height: firstBoxHeight),
 
-                                //INFO TEXT.
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: standardPadding),
-                                  child: Text(
-                                    '---OR---',
-                                    style: TextStyle(
-                                      fontSize: forthFontSize,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: firstBoxHeight),
+                    //INFO TEXT.
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: standardPadding),
+                      child: Text(
+                        '---OR---',
+                        style: TextStyle(
+                          fontSize: forthFontSize,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: firstBoxHeight),
 
-                                //EMAIL
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: texfieldPadding),
-                                  child: TextField(
-                                    controller: _emailController,
-                                    focusNode: _focusEmail,
-                                    decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: textfieldEnabledBorderColor),
-                                        borderRadius: BorderRadius.circular(
-                                            texfieldBorderRadius),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: textfieldFocusedBorderColor),
-                                        borderRadius: BorderRadius.circular(
-                                            texfieldBorderRadius),
-                                      ),
-                                      hintText: 'Username',
-                                      fillColor: textfieldBackgroundColor,
-                                      filled: true,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: thirdBoxHeight),
+                    //EMAIL
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: texfieldPadding),
+                      child: TextField(
+                        controller: _emailController,
+                        focusNode: _focusEmail,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: textfieldEnabledBorderColor),
+                            borderRadius:
+                                BorderRadius.circular(texfieldBorderRadius),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: textfieldFocusedBorderColor),
+                            borderRadius:
+                                BorderRadius.circular(texfieldBorderRadius),
+                          ),
+                          hintText: 'Username',
+                          fillColor: textfieldBackgroundColor,
+                          filled: true,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: thirdBoxHeight),
 
-                                //PASSWORD
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: texfieldPadding),
-                                  child: TextField(
-                                    controller: _passwordController,
-                                    focusNode: _focusPassword,
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: textfieldEnabledBorderColor),
-                                        borderRadius: BorderRadius.circular(
-                                            texfieldBorderRadius),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: textfieldFocusedBorderColor),
-                                        borderRadius: BorderRadius.circular(
-                                            texfieldBorderRadius),
-                                      ),
-                                      hintText: 'Password',
-                                      fillColor: textfieldBackgroundColor,
-                                      filled: true,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: thirdBoxHeight),
+                    //PASSWORD
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: texfieldPadding),
+                      child: TextField(
+                        controller: _passwordController,
+                        focusNode: _focusPassword,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: textfieldEnabledBorderColor),
+                            borderRadius:
+                                BorderRadius.circular(texfieldBorderRadius),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: textfieldFocusedBorderColor),
+                            borderRadius:
+                                BorderRadius.circular(texfieldBorderRadius),
+                          ),
+                          hintText: 'Password',
+                          fillColor: textfieldBackgroundColor,
+                          filled: true,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: thirdBoxHeight),
 
-                                //SIGN-IN
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: standardPadding),
-                                  child: GestureDetector(
-                                    onTap: signIn,
-                                    child: Container(
-                                      padding:
-                                          const EdgeInsets.all(buttonPadding),
-                                      decoration: const BoxDecoration(
-                                        color: secondaryBackgroundColor,
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'Sign In',
-                                          style: TextStyle(
-                                            color: buttonTextColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: buttonFontSize,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: thirdBoxHeight),
+                    //SIGN-IN
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: standardPadding),
+                      child: GestureDetector(
+                        onTap: signIn,
+                        child: Container(
+                          padding: const EdgeInsets.all(buttonPadding),
+                          decoration: const BoxDecoration(
+                            color: secondaryBackgroundColor,
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Sign In',
+                              style: TextStyle(
+                                color: buttonTextColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: buttonFontSize,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: thirdBoxHeight),
 
-                                //REGISTER USER
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      'Not a member?',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: forthFontSize,
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: registerUser,
-                                      child: const Text(
-                                        ' Register now',
-                                        style: TextStyle(
-                                          color: Colors.blue,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: forthFontSize,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ]);
-                        } else {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                      }),
+                    //REGISTER USER
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Not a member?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: forthFontSize,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: registerUser,
+                          child: const Text(
+                            ' Register now',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                              fontSize: forthFontSize,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
                 ),
 
                 //KEYBOARD
