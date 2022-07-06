@@ -89,12 +89,14 @@ void deleteAccount(int id) {
 }
 
 ///Inserts [account] in the database.
-void addAccount(Account account) {
+///
+///Returns "0" if sucessfull
+Future<String> addAccount(Account account) async {
   try {
     var uri = Uri.parse(
         "http://$ipAddress/dashboard/flutter_db/account/addAccount.php");
 
-    http.post(uri, body: {
+    var response = await http.post(uri, body: {
       "account_name": account.accountName,
       "account_role": account.accountRole,
       "password": account.password,
@@ -102,18 +104,24 @@ void addAccount(Account account) {
       "customer_id": account.customerId,
       "registered_customer_id": account.registeredCustomerId,
     });
+
+    return response.body;
   } catch (e) {
     debugPrint("Failed to add account: $e");
   }
+
+  return "-1";
 }
 
 ///Updates [account] in the database.
-void updateAccount(Account account) {
+///
+///Returns "0" if sucessfull
+Future<String> updateAccount(Account account) async {
   try {
     var uri = Uri.parse(
         "http://$ipAddress/dashboard/flutter_db/account/updateAccount.php");
 
-    http.post(uri, body: {
+    var response = await http.post(uri, body: {
       'id': jsonEncode(account.id),
       "account_name": account.accountName,
       "account_role": account.accountRole,
@@ -122,9 +130,13 @@ void updateAccount(Account account) {
       "customer_id": account.customerId,
       "registered_customer_id": account.registeredCustomerId,
     });
+
+    return response.body;
   } catch (e) {
     debugPrint("Failed to update account: $e");
   }
+
+  return "-1";
 }
 
 ///Updates [account] with the new [account.registeredCustomerId] in the database.

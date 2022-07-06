@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/Services/account_service.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
@@ -57,9 +59,7 @@ class _RegisterPage extends State<RegisterPage> {
   bool _isError = false;
   //Others.
   List<Account> accounts = [];
-  bool firstReload = false;
-  bool _isRegistered = false;
-  String rfidTag = "";
+  String _rfidTag = "";
 
   ///Returns the [String] located in the email textfield.
   String getEmail() {
@@ -87,12 +87,12 @@ class _RegisterPage extends State<RegisterPage> {
 
   ///Returns the [String] of the RFID.
   String getRFID() {
-    return rfidTag;
+    return _rfidTag;
   }
 
-  ///Sets the [rfidTag] using the Totem RFID or the NFC reader.
+  ///Sets the [_rfidTag] using the Totem RFID or the NFC reader.
   Future setRFID() async {
-    rfidTag = await getRFIDorNFC();
+    _rfidTag = await getRFIDorNFC();
     setState(() {});
   }
 
@@ -129,9 +129,19 @@ class _RegisterPage extends State<RegisterPage> {
     _focusRegisteredCustomerID.addListener(_onFocusChangeRegisteredCustomerID);
   }
 
-  void initializeControllers() {
-    _emailController.text = widget._email;
-    if (isAdmin(widget.currentAccount)) {}
+  ///Populates the [TextEditingController]s with information if account exists.
+  void initializeControllers() async {
+    debugPrint("Initialize textfields");
+
+    Account account = await getAccountFromName(widget._email);
+
+    if (isDefualt(account)) return;
+
+    _emailController.text = account.accountName;
+    _accountRoleController.text = account.accountRole;
+    _customerIDController.text = account.customerId;
+    _registeredCustomerIDController.text = account.registeredCustomerId;
+    _rfidTag = account.rfid;
   }
 
   @override
@@ -143,27 +153,6 @@ class _RegisterPage extends State<RegisterPage> {
     _customerIDController.dispose();
     _registeredCustomerIDController.dispose();
     super.dispose();
-  }
-
-  ///Sets [_isRegistered] to true if the account to be registered exists.
-  ///
-  ///Sets the [TextEditingController]s with the information if account exists.
-  void _checkAccount() {
-    debugPrint("Initialize textfields if user exist");
-    _isRegistered = false;
-    for (int index = 0; index < accounts.length; index++) {
-      if (accounts[index].accountName == (getEmail())) {
-        debugPrint("User ${accounts[index].accountName}exist");
-        _isRegistered = true;
-        _accountRoleController.text = accounts[index].accountRole;
-        _customerIDController.text = accounts[index].customerId;
-        _registeredCustomerIDController.text =
-            accounts[index].registeredCustomerId;
-        rfidTag = accounts[index].rfid;
-        firstReload = true;
-        break;
-      }
-    }
   }
 
   ///Changes the page depending on [widget.currentAccount.accountRole].
@@ -210,6 +199,8 @@ class _RegisterPage extends State<RegisterPage> {
     String customerId = getCustomerID();
     String registeredCustomerId = getReigstedCustomerId();
 
+    String _errorPHP = "-1";
+
     Account account = Account(
         id: widget._index,
         accountName: email,
@@ -218,8 +209,6 @@ class _RegisterPage extends State<RegisterPage> {
         rfid: rfid,
         customerId: customerId,
         registeredCustomerId: registeredCustomerId);
-
-    _checkAccount();
 
     _errorText = "";
     _isError = false;
@@ -251,24 +240,27 @@ class _RegisterPage extends State<RegisterPage> {
 
     //Insert or update account
     if (widget._doRegister) {
-      if (_isRegistered) {
-        debugPrint("User already registered");
-        _errorText = _errorText + "Username already taken\n";
-        _isError = true;
-      }
-
-      setState(() {});
-      if (_isError) return;
-
-      addAccount(account);
-      debugPrint("Registered user");
+      debugPrint("Trying to add user");
+      _errorPHP = await addAccount(account);
     } else {
-      setState(() {});
-      if (_isError) return;
-
-      updateAccount(account);
-      debugPrint("Updated user");
+      debugPrint("Trying to update user");
+      _errorPHP = await updateAccount(account);
     }
+
+    _errorPHP = jsonDecode(_errorPHP);
+    debugPrint("Error  = $_errorPHP");
+
+    if (_errorPHP != "0") _isError = true;
+    if (_errorPHP == "-1") _errorText = _errorText + "Failed http request\n";
+    if (_errorPHP == "1") {
+      _errorText = _errorText + "Account already exists\n";
+    }
+    if (_errorPHP == "2") _errorText = _errorText + "RFID already exists\n";
+
+    setState(() {});
+    if (_isError) return;
+
+    debugPrint("Added/Updated completed");
     gotoPage();
   }
 
@@ -354,7 +346,6 @@ class _RegisterPage extends State<RegisterPage> {
                         }
                         if (snapshot.hasData) {
                           accounts = snapshot.data!;
-                          if (!firstReload) _checkAccount();
 
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -393,7 +384,7 @@ class _RegisterPage extends State<RegisterPage> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: standardPadding),
                                 child: Text(
-                                  'ID: ' + rfidTag,
+                                  'ID: ' + _rfidTag,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: secondFontSize,
@@ -417,15 +408,11 @@ class _RegisterPage extends State<RegisterPage> {
 
                               //ERROR TEXT.
                               _isError
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: standardPadding),
-                                      child: Text(
-                                        _errorText,
-                                        style: const TextStyle(
-                                          fontSize: forthFontSize,
-                                          color: Colors.red,
-                                        ),
+                                  ? Text(
+                                      _errorText,
+                                      style: const TextStyle(
+                                        fontSize: forthFontSize,
+                                        color: Colors.red,
                                       ),
                                     )
                                   : const SizedBox(),
