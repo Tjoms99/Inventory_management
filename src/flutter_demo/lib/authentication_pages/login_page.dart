@@ -33,14 +33,16 @@ class _LoginPageState extends State<LoginPage> {
   bool _openKeyboardPassword = false;
   bool _isKeyboardEnabled = false;
 
-  //Others.
-  Account currentAccount = createDefaultAccount();
+  //Error.
   String _errorText = "";
   bool _isError = false;
 
-  void _setRFID() async {
-    currentAccount.rfid = await getRFIDorNFC();
+  //Others.
+  Account currentAccount = createDefaultAccount();
 
+  ///Signs in [currentAccount] using [currentAccount.rfid].
+  void _signInRFID() async {
+    currentAccount.rfid = await getRFIDorNFC();
     _signIn();
   }
 
@@ -160,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     //Icon
                     GestureDetector(
-                      onTap: _setRFID,
+                      onTap: _signInRFID,
                       child: const ImageIcon(
                         AssetImage("assets/images/rfid_transparent.png"),
                         color: Color.fromARGB(255, 37, 174, 53),

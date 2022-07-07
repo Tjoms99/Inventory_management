@@ -51,6 +51,8 @@ class _AddItemPageState extends State<AddItemPage> {
 
   //Others.
   String rfidTag = "";
+  String _errorText = "";
+  bool _isError = false;
 
   @override
   void dispose() {
@@ -166,6 +168,40 @@ class _AddItemPageState extends State<AddItemPage> {
     return _registeredCustomerIdController.text.trim();
   }
 
+  ///Checks if the [Item] contains empty parameters
+  void errorCheck(Item item) {
+    _isError = false;
+    _errorText = "";
+
+    if (item.name.isEmpty) {
+      _errorText = "Missing item name\n";
+      _isError = true;
+    }
+    if (item.status.isEmpty) {
+      _errorText = _errorText + "Missing item status\n";
+      _isError = true;
+    }
+    if (item.rfid.isEmpty) {
+      _errorText = _errorText + "Missing item RFID\n";
+      _isError = true;
+    }
+    if (item.description.isEmpty) {
+      _errorText = _errorText + "Missing item description\n";
+      _isError = true;
+    }
+    if (item.location.isEmpty) {
+      _errorText = _errorText + "Missing item location\n";
+      _isError = true;
+    }
+    if (item.registeredCustomerId.isEmpty) {
+      _errorText = _errorText + "Missing item customer id\n";
+      _isError = true;
+    }
+
+    debugPrint(_errorText);
+    setState(() {});
+  }
+
   ///Updates [Item] in the database.
   ///
   ///Checks if [TextEditingController] has information before registering [Item].
@@ -179,24 +215,9 @@ class _AddItemPageState extends State<AddItemPage> {
         location: getLocation(),
         registeredCustomerId: getCustomerId());
 
-    if (item.name.isEmpty) {
-      return;
-    }
-    if (item.status.isEmpty) {
-      return;
-    }
-    if (item.rfid.isEmpty) {
-      return;
-    }
-    if (item.description.isEmpty) {
-      return;
-    }
-    if (item.location.isEmpty) {
-      return;
-    }
-    if (item.registeredCustomerId.isEmpty) {
-      return;
-    }
+    errorCheck(item);
+    if (_isError) return;
+
     updateItem(item);
     gotoPage();
   }
@@ -214,28 +235,14 @@ class _AddItemPageState extends State<AddItemPage> {
         location: getLocation(),
         registeredCustomerId: getCustomerId());
 
-    if (item.name.isEmpty) {
-      return;
-    }
-    if (item.status.isEmpty) {
-      return;
-    }
-    //Will only work on mobile
+    //Can add items without RFID
     if (item.rfid.isEmpty) {
-      debugPrint("No rfid tag detected");
       item.rfid = "NO RFID ASSIGNED";
-      //return;
     }
 
-    if (item.description.isEmpty) {
-      return;
-    }
-    if (item.location.isEmpty) {
-      return;
-    }
-    if (item.registeredCustomerId.isEmpty) {
-      return;
-    }
+    errorCheck(item);
+    if (_isError) return;
+
     addItem(item);
     gotoPage();
   }
@@ -370,6 +377,17 @@ class _AddItemPageState extends State<AddItemPage> {
                         ),
                       ),
                       const SizedBox(height: firstBoxHeight),
+
+                      //ERROR TEXT.
+                      _isError
+                          ? Text(
+                              _errorText,
+                              style: const TextStyle(
+                                fontSize: forthFontSize,
+                                color: Colors.red,
+                              ),
+                            )
+                          : const SizedBox(),
 
                       //TYPE
                       Padding(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/Services/account_service.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 import 'package:flutter_demo/classes/account.dart';
-import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
@@ -17,63 +17,54 @@ class AssistUserPage extends StatefulWidget {
 }
 
 class _AssistUserPageState extends State<AssistUserPage> {
+  //Controller.
   final TextEditingController _emailController = TextEditingController();
+  //Focus node.
   final FocusNode _focusEmail = FocusNode();
+  //Keyboard checker.
   bool _isKeyboardEnabled = false;
 
-  List<Item> items = [];
-  List<Account> accounts = [];
-  String infoText = "";
-  String rfidTag = "";
+  //Error.
+  String _errorText = "";
+  bool _isError = false;
+
+  //Others.
+  Account account = createDefaultAccount();
 
   @override
   void dispose() {
     super.dispose();
+    _emailController.dispose();
+  }
+
+  ///Signs in [account] using [account.rfid].
+  void _signInRFID() async {
+    account.rfid = await getRFIDorNFC();
+    _signIn();
   }
 
   ///Signs in [Account] using [_emailController].
-  Future signInButton() async {
-    String email = _emailController.text.trim();
-    Account account = await getAccountFromName(email);
-    accounts = await getAccounts();
+  Future _signIn() async {
+    String username = _emailController.text.trim();
+    account = await getAccountFromName(username);
 
-    if (!isAccountRegistered(accounts, email)) {
-      debugPrint("Account does not exist");
-      return;
-    }
+    debugPrint("Trying to log in ${account.accountName}");
 
-    debugPrint("Trying to log in ${account.accountName} with email $email");
+    _isError = false;
+    _errorText = "";
     if (isDefualt(account)) {
-      debugPrint("Account is defualt and does not exist");
-      return;
+      _errorText = "Account does not exist";
+      _isError = true;
     }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => UserPage(
-                currentAccount: account,
-              )),
-    );
-  }
+    debugPrint(_errorText);
+    setState(() {});
+    if (_isError) return;
 
-  ///Signs in [Account] using [rfidTag].
-  Future signInUser() async {
-    accounts = await getAccounts();
-    rfidTag = await getRFIDorNFC();
-
-    Account currentAccount = getAccountUsingRFID(accounts, rfidTag);
-
-    if (isDefualt(currentAccount)) {
-      return;
-    }
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => UserPage(
-                currentAccount: currentAccount,
-              )),
-    );
+    Navigator.of(context).push(PageRouter(
+      child: UserPage(currentAccount: account),
+      direction: AxisDirection.down,
+    ));
   }
 
   ///Builds the help user page.
@@ -88,7 +79,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
               children: [
                 //ICON.
                 GestureDetector(
-                  onTap: signInUser,
+                  onTap: _signInRFID,
                   child: const ImageIcon(
                     AssetImage("assets/images/rfid_transparent.png"),
                     color: Color.fromARGB(255, 37, 174, 53),
@@ -104,6 +95,16 @@ class _AssistUserPageState extends State<AssistUserPage> {
                 ),
                 const SizedBox(height: firstBoxHeight),
 
+                //ERROR TEXT.
+                _isError
+                    ? Text(
+                        _errorText,
+                        style: const TextStyle(
+                          fontSize: forthFontSize,
+                          color: Colors.red,
+                        ),
+                      )
+                    : const SizedBox(),
                 //EMAIL.
                 Padding(
                   padding:
@@ -137,7 +138,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: standardPadding),
                   child: GestureDetector(
-                    onTap: signInButton,
+                    onTap: _signIn,
                     child: Container(
                       padding: const EdgeInsets.all(buttonPadding),
                       decoration: const BoxDecoration(
