@@ -39,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //Others.
   Account currentAccount = createDefaultAccount();
+  bool _isVisible = false;
 
   ///Signs in [currentAccount] using [currentAccount.rfid].
   void _signInRFID() async {
@@ -151,230 +152,293 @@ class _LoginPageState extends State<LoginPage> {
       currentAccount = createDefaultAccount();
     });
     return Scaffold(
-      backgroundColor: primaryBackgroundColor,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
+      //backgroundColor: primaryBackgroundColor,
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(gradient: mainGradient),
+        child: SafeArea(
+          child: Center(
             child: Column(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //Icon
-                    GestureDetector(
-                      onTap: _signInRFID,
-                      child: const ImageIcon(
-                        AssetImage("assets/images/rfid_transparent.png"),
-                        color: Color.fromARGB(255, 37, 174, 53),
-                        size: 100,
-                      ),
-                    ),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(height: firstBoxHeight),
 
-                    //INFO TEXT.
-                    const Text(
-                      'TAP ICON TO SCAN',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: secondFontSize),
+                //INFO TEXT.
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: texfieldPadding),
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: firstFontSize,
+                      color: Colors.white,
                     ),
-                    const SizedBox(height: firstBoxHeight),
+                  ),
+                ),
+                const SizedBox(height: secondBoxHeight),
 
-                    //INFO TEXT.
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: standardPadding),
-                      child: Text(
-                        '---OR---',
-                        style: TextStyle(
-                          fontSize: forthFontSize,
+                //RFID.
+                GestureDetector(
+                  onTap: _signInRFID,
+                  child: Center(
+                    child: Column(
+                      children: const [
+                        SizedBox(height: thirdBoxHeight),
+                        //ICON.
+                        ImageIcon(
+                          AssetImage("assets/images/rfid_transparent.png"),
+                          color: Colors.white,
+                          size: 100,
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: firstBoxHeight),
 
-                    //ERROR TEXT.
-                    _isError
-                        ? Text(
-                            _errorText,
-                            style: const TextStyle(
-                              fontSize: forthFontSize,
-                              color: Colors.red,
-                            ),
-                          )
-                        : const SizedBox(),
-
-                    //EMAIL
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: texfieldPadding),
-                      child: TextField(
-                        controller: _emailController,
-                        focusNode: _focusEmail,
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: textfieldEnabledBorderColor),
-                            borderRadius:
-                                BorderRadius.circular(texfieldBorderRadius),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: textfieldFocusedBorderColor),
-                            borderRadius:
-                                BorderRadius.circular(texfieldBorderRadius),
-                          ),
-                          hintText: 'Username',
-                          fillColor: textfieldBackgroundColor,
-                          filled: true,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: thirdBoxHeight),
-
-                    //PASSWORD
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: texfieldPadding),
-                      child: TextField(
-                        controller: _passwordController,
-                        focusNode: _focusPassword,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: textfieldEnabledBorderColor),
-                            borderRadius:
-                                BorderRadius.circular(texfieldBorderRadius),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: textfieldFocusedBorderColor),
-                            borderRadius:
-                                BorderRadius.circular(texfieldBorderRadius),
-                          ),
-                          hintText: 'Password',
-                          fillColor: textfieldBackgroundColor,
-                          filled: true,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: thirdBoxHeight),
-
-                    //SIGN-IN
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: standardPadding),
-                      child: GestureDetector(
-                        onTap: _signIn,
-                        child: Container(
-                          padding: const EdgeInsets.all(buttonPadding),
-                          decoration: const BoxDecoration(
-                            color: secondaryBackgroundColor,
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'Sign In',
-                              style: TextStyle(
-                                color: buttonTextColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: buttonFontSize,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: thirdBoxHeight),
-
-                    //REGISTER USER
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Not a member?',
+                        //INFO TEXT.
+                        Text(
+                          'TAP HERE TO LOGIN WITH RFID',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: forthFontSize,
+                            fontSize: thirdFontSize,
+                            color: Colors.white,
                           ),
                         ),
-                        GestureDetector(
-                          onTap: _registerUser,
-                          child: const Text(
-                            ' Register now',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                              fontSize: forthFontSize,
-                            ),
-                          ),
-                        )
+                        SizedBox(height: thirdBoxHeight),
                       ],
                     ),
-                  ],
+                  ),
                 ),
 
-                //KEYBOARD
-                SingleChildScrollView(
-                  child: _isKeyboardEnabled
-                      ? Column(
+                //TEXTFIELDS & BUTTONS.
+                Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40))),
+                    child: SingleChildScrollView(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _isKeyboardEnabled = false;
-                                });
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: standardPadding, vertical: 30),
-                                child: Text(
-                                  'TAP HERE TO CLOSE KEYBOARD',
-                                  style: TextStyle(
-                                    fontSize: thirdFontSize,
+                            const SizedBox(height: firstBoxHeight),
+
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(height: secondBoxHeight),
+
+                                //ERROR TEXT.
+                                _isError
+                                    ? Text(
+                                        _errorText,
+                                        style: const TextStyle(
+                                          fontSize: forthFontSize,
+                                          color: Colors.red,
+                                        ),
+                                      )
+                                    : const SizedBox(),
+
+                                //EMAIL
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: texfieldPadding),
+                                  child: TextField(
+                                    cursorColor: textfieldFocusedBorderColor,
+                                    controller: _emailController,
+                                    focusNode: _focusEmail,
+                                    decoration: InputDecoration(
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            color: textfieldEnabledBorderColor),
+                                        borderRadius: BorderRadius.circular(
+                                            texfieldBorderRadius),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            color: textfieldFocusedBorderColor),
+                                        borderRadius: BorderRadius.circular(
+                                            texfieldBorderRadius),
+                                      ),
+                                      hintText: 'Username',
+                                      fillColor: textfieldBackgroundColor,
+                                      filled: true,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            VirtualKeyboard(
-                              height: 300,
-                              //width: 500,
-                              textColor: Colors.black,
+                                const SizedBox(height: thirdBoxHeight),
 
-                              textController: _openKeyboardEmail
-                                  ? _emailController
-                                  : _openKeyboardPassword
-                                      ? _passwordController
-                                      : TextEditingController(),
-                              //customLayoutKeys: _customLayoutKeys,
-                              defaultLayouts: const [
-                                VirtualKeyboardDefaultLayouts.English
+                                //PASSWORD
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: texfieldPadding),
+                                  child: TextField(
+                                    controller: _passwordController,
+                                    focusNode: _focusPassword,
+                                    obscureText: !_isVisible,
+                                    decoration: InputDecoration(
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            color: textfieldEnabledBorderColor),
+                                        borderRadius: BorderRadius.circular(
+                                            texfieldBorderRadius),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            color: textfieldFocusedBorderColor),
+                                        borderRadius: BorderRadius.circular(
+                                            texfieldBorderRadius),
+                                      ),
+                                      hintText: 'Password',
+                                      fillColor: textfieldBackgroundColor,
+                                      filled: true,
+                                      suffixIcon: GestureDetector(
+                                        onTap: () {
+                                          _isVisible = !_isVisible;
+                                          setState(() {});
+                                        },
+                                        child: Icon(
+                                          _isVisible
+                                              ? Icons.visibility_outlined
+                                              : Icons.visibility_off_outlined,
+                                          size: 24,
+                                          color: Colors.orange,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: thirdBoxHeight),
+
+                                //SIGN-IN
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: standardPadding),
+                                  child: GestureDetector(
+                                    onTap: _signIn,
+                                    child: Container(
+                                      padding:
+                                          const EdgeInsets.all(buttonPadding),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          gradient: mainGradient),
+                                      child: const Center(
+                                        child: Text(
+                                          'Sign In',
+                                          style: TextStyle(
+                                            color: buttonTextColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: buttonFontSize,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: thirdBoxHeight),
+
+                                //REGISTER USER
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Not a member?',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: forthFontSize,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: _registerUser,
+                                      child: const Text(
+                                        ' Register now',
+                                        style: TextStyle(
+                                          color: Colors.orange,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: forthFontSize,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ],
-
-                              //reverseLayout :true,
-                              type: VirtualKeyboardType.Alphanumeric,
                             ),
+
+                            //KEYBOARD
+                            SingleChildScrollView(
+                              child: _isKeyboardEnabled
+                                  ? Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _isKeyboardEnabled = false;
+                                            });
+                                          },
+                                          child: const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: standardPadding,
+                                                vertical: 30),
+                                            child: Text(
+                                              'TAP HERE TO CLOSE KEYBOARD',
+                                              style: TextStyle(
+                                                fontSize: thirdFontSize,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        VirtualKeyboard(
+                                          height: 300,
+                                          //width: 500,
+                                          textColor: Colors.black,
+
+                                          textController: _openKeyboardEmail
+                                              ? _emailController
+                                              : _openKeyboardPassword
+                                                  ? _passwordController
+                                                  : TextEditingController(),
+                                          //customLayoutKeys: _customLayoutKeys,
+                                          defaultLayouts: const [
+                                            VirtualKeyboardDefaultLayouts
+                                                .English
+                                          ],
+
+                                          //reverseLayout :true,
+                                          type:
+                                              VirtualKeyboardType.Alphanumeric,
+                                        ),
+                                      ],
+                                    )
+
+                                  //TAP TO OPEN KEYBOARD
+                                  : GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _isKeyboardEnabled = true;
+                                        });
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: standardPadding,
+                                            vertical: 30),
+                                        child: Text(
+                                          'TAP HERE TO OPEN KEYBOARD',
+                                          style: TextStyle(
+                                            fontSize: thirdFontSize,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                            )
                           ],
-                        )
-
-                      //TAP TO OPEN KEYBOARD
-                      : GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isKeyboardEnabled = true;
-                            });
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: standardPadding, vertical: 30),
-                            child: Text(
-                              'TAP HERE TO OPEN KEYBOARD',
-                              style: TextStyle(
-                                fontSize: thirdFontSize,
-                              ),
-                            ),
-                          ),
                         ),
-                )
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

@@ -79,14 +79,7 @@ class _AdminPageState extends State<AdminPage> {
           backgroundColor: secondaryBackgroundColor,
           title: Text(widget.currentAccount.accountName),
           flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.orange,
-                  Colors.orange[300]!,
-                ],
-              ),
-            ),
+            decoration: BoxDecoration(gradient: mainGradient),
           ),
 
           //SIGN OUT.

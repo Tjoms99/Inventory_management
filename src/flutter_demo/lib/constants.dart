@@ -15,6 +15,15 @@ const Color textfieldEnabledBorderColor = Colors.white;
 const Color textfieldFocusedBorderColor = Colors.orangeAccent;
 const Color textfieldTextColor = Color.fromARGB(225, 224, 224, 224);
 
+LinearGradient mainGradient = LinearGradient(
+  begin: Alignment.topCenter,
+  colors: [
+    Colors.orange[800]!,
+    Colors.orange[500]!,
+    Colors.orange[300]!,
+  ],
+);
+
 //Text sizes
 const double firstFontSize = 36;
 const double secondFontSize = 24;
