@@ -141,9 +141,9 @@ class _AssistUserPageState extends State<AssistUserPage> {
                     onTap: _signIn,
                     child: Container(
                       padding: const EdgeInsets.all(buttonPadding),
-                      decoration: const BoxDecoration(
-                        color: secondaryBackgroundColor,
-                      ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          gradient: mainGradient),
                       child: const Center(
                         child: Text(
                           'Sign In',
