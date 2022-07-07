@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 //Ip address of the server
 const ipAddress = "192.168.43.90";
 // Colors
-const Color primaryBackgroundColor = Color.fromARGB(225, 224, 224, 224);
+Color primaryBackgroundColor = Colors.white;
 const Color secondaryBackgroundColor = Colors.orangeAccent;
 
 const Color buttonBackgroundColor = Colors.orangeAccent;

@@ -46,14 +46,15 @@ class _AssistUserPageState extends State<AssistUserPage> {
   ///Signs in [Account] using [_emailController].
   Future _signIn() async {
     String username = _emailController.text.trim();
-    account = await getAccountFromName(username);
+    account = await getAccount(account);
 
     debugPrint("Trying to log in ${account.accountName}");
 
     _isError = false;
     _errorText = "";
+
     if (isDefualt(account)) {
-      _errorText = "Account does not exist";
+      _errorText = _errorText + "Account does not exist";
       _isError = true;
     }
 

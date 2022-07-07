@@ -32,6 +32,9 @@ class _UserPage extends State<UserPage> {
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
           backgroundColor: secondaryBackgroundColor,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(gradient: mainGradient),
+          ),
           title: Text(widget.currentAccount.accountName),
           leading: IconButton(
             onPressed: _signOut,
