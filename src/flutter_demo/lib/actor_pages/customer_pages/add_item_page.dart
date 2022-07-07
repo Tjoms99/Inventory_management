@@ -4,6 +4,7 @@ import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/item_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
@@ -247,23 +248,21 @@ class _AddItemPageState extends State<AddItemPage> {
   ///Changes the page depending on [widget.currentAccount.accountRole].
   Future gotoPage() async {
     if (widget.currentAccount.accountRole == "admin") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AdminPage(
-                  currentAccount: widget.currentAccount,
-                  currentIndex: 1,
-                )),
-      );
+      Navigator.of(context).push(PageRouter(
+        child: AdminPage(
+          currentAccount: widget.currentAccount,
+          currentIndex: 1,
+        ),
+        direction: AxisDirection.up,
+      ));
     } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CustomerPage(
-                  currentAccount: widget.currentAccount,
-                  currentIndex: 1,
-                )),
-      );
+      Navigator.of(context).push(PageRouter(
+        child: CustomerPage(
+          currentAccount: widget.currentAccount,
+          currentIndex: 1,
+        ),
+        direction: AxisDirection.up,
+      ));
     }
   }
 

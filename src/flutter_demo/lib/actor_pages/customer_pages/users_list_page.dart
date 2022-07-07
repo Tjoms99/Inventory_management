@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/Services/account_service.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:flutter_demo/classes/account.dart';
+import 'package:flutter_demo/page_route.dart';
 
 ///This is a page where customers or admins can add/modify/delete [Account]s.
 class UsersListPage extends StatefulWidget {
@@ -101,17 +102,15 @@ class _ListBuilderState extends State<ListBuilder> {
 
     //Go to update user page
     if (_hasPressedModify) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RegisterPage(
-              false,
-              _email,
-              widget.listOfAccounts[_selectedIndex].id,
-              true,
-              widget.currentAccount),
-        ),
-      );
+      Navigator.of(context).push(PageRouter(
+        child: RegisterPage(
+            false,
+            _email,
+            widget.listOfAccounts[_selectedIndex].id,
+            true,
+            widget.currentAccount),
+        direction: AxisDirection.down,
+      ));
     }
 
     //Update state

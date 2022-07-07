@@ -66,8 +66,9 @@ Future<Account> getAccount(Account thisAccount) async {
     });
 
     if (response.body.isNotEmpty) {
+      debugPrint(response.body);
       final json = "[" + response.body + "]";
-
+      debugPrint(json);
       account = createAccountFromJson(jsonDecode(json) as List<dynamic>, 0);
     }
   } catch (e) {

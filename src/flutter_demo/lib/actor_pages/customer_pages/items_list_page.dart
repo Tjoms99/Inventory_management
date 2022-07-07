@@ -4,6 +4,7 @@ import 'package:flutter_demo/Services/item_service.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
+import 'package:flutter_demo/page_route.dart';
 
 ///This is a page where customers or admins can add/modify/delete [Item]s.
 class ItemsListPage extends StatefulWidget {
@@ -172,16 +173,14 @@ class _ExpandableListViewState extends State<ExpandableListView> {
   ///Goes to update [Item] page.
   void _updateItem(Item item) {
     if (_hasPressedModify[getIndex(item)]) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AddItemPage(
-            currentAccount: widget.currentAccount,
-            doAddItem: false,
-            item: item,
-          ),
+      Navigator.of(context).push(PageRouter(
+        child: AddItemPage(
+          currentAccount: widget.currentAccount,
+          doAddItem: false,
+          item: item,
         ),
-      );
+        direction: AxisDirection.down,
+      ));
     }
 
     //Update state.

@@ -6,6 +6,7 @@ import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
@@ -159,31 +160,29 @@ class _RegisterPage extends State<RegisterPage> {
   Future gotoPage() async {
     if (widget._isLoggedIn) {
       if (widget.currentAccount.accountRole == "admin") {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AdminPage(
-                    currentAccount: widget.currentAccount,
-                    currentIndex: 0,
-                  )),
-        );
+        Navigator.of(context).push(PageRouter(
+          child: AdminPage(
+            currentAccount: widget.currentAccount,
+            currentIndex: 0,
+          ),
+          direction: AxisDirection.up,
+        ));
       } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomerPage(
-                    currentAccount: widget.currentAccount,
-                    currentIndex: 0,
-                  )),
-        );
+        Navigator.of(context).push(PageRouter(
+          child: CustomerPage(
+            currentAccount: widget.currentAccount,
+            currentIndex: 0,
+          ),
+          direction: AxisDirection.up,
+        ));
       }
     } else {
       debugPrint("Go to login page");
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
+      Navigator.of(context).push(PageRouter(
+        child: const LoginPage(),
+        direction: AxisDirection.right,
+      ));
     }
   }
 
@@ -252,9 +251,7 @@ class _RegisterPage extends State<RegisterPage> {
 
     if (_errorPHP != "0") _isError = true;
     if (_errorPHP == "-1") _errorText = _errorText + "Failed http request\n";
-    if (_errorPHP == "1") {
-      _errorText = _errorText + "Account already exists\n";
-    }
+    if (_errorPHP == "1") _errorText = _errorText + "Account already exists\n";
     if (_errorPHP == "2") _errorText = _errorText + "RFID already exists\n";
 
     setState(() {});

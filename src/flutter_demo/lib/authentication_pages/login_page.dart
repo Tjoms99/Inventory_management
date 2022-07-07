@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/Services/account_service.dart';
+import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
 
-import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
+import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
@@ -49,10 +50,13 @@ class _LoginPageState extends State<LoginPage> {
     currentAccount.password = _passwordController.text.trim();
     currentAccount = await getAccount(currentAccount);
 
+    _isError = false;
+    _errorText = "";
+
     if (isDefualt(currentAccount)) {
-      debugPrint("This is a defualt account, cannot sign in");
+      debugPrint("This is a defualt account, can not sign in");
       _errorText =
-          "Username and password does not match\n --or--\nUnknown RFID";
+          "Unkown username and password combination\n --or--\nUnknown RFID";
       _isError = true;
       setState(() {});
       return;
@@ -68,34 +72,30 @@ class _LoginPageState extends State<LoginPage> {
   void _gotoPage() {
     switch (currentAccount.accountRole) {
       case "customer":
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomerPage(
-                    currentAccount: currentAccount,
-                    currentIndex: 3,
-                  )),
-        );
-
+        Navigator.of(context).push(PageRouter(
+          child: CustomerPage(
+            currentAccount: currentAccount,
+            currentIndex: 0,
+          ),
+          direction: AxisDirection.down,
+        ));
         break;
 
       case "admin":
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AdminPage(
-                    currentAccount: currentAccount,
-                    currentIndex: 3,
-                  )),
-        );
+        Navigator.of(context).push(PageRouter(
+          child: AdminPage(
+            currentAccount: currentAccount,
+            currentIndex: 0,
+          ),
+          direction: AxisDirection.down,
+        ));
         break;
 
       default:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => UserPage(currentAccount: currentAccount)),
-        );
+        Navigator.of(context).push(PageRouter(
+          child: UserPage(currentAccount: currentAccount),
+          direction: AxisDirection.down,
+        ));
     }
   }
 
@@ -103,12 +103,10 @@ class _LoginPageState extends State<LoginPage> {
   Future _registerUser() async {
     String _email = _emailController.text.trim();
     debugPrint("Go to register page");
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) =>
-              RegisterPage(true, _email, 0, false, currentAccount)),
-    );
+    Navigator.of(context).push(PageRouter(
+      child: RegisterPage(true, _email, 0, false, currentAccount),
+      direction: AxisDirection.left,
+    ));
   }
 
   ///Connects the [_emailController] to the keyboard.
@@ -191,7 +189,8 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: firstBoxHeight),
-//ERROR TEXT.
+
+                    //ERROR TEXT.
                     _isError
                         ? Text(
                             _errorText,

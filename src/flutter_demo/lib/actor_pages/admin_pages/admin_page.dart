@@ -12,6 +12,7 @@ import 'package:flutter_demo/actor_pages/customer_pages/assist_user_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/users_list_page.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/items_list_page.dart';
+import 'package:flutter_demo/page_route.dart';
 
 ///This is a page where an admin can navigate between 4 action pages.
 class AdminPage extends StatefulWidget {
@@ -29,10 +30,11 @@ class _AdminPageState extends State<AdminPage> {
   ///Signs out [widget.currentAccount].
   Future _signOut() async {
     debugPrint("Signed out " + widget.currentAccount.accountName);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
+
+    Navigator.of(context).push(PageRouter(
+      child: const LoginPage(),
+      direction: AxisDirection.up,
+    ));
   }
 
   ///Updates current widget.
@@ -42,25 +44,22 @@ class _AdminPageState extends State<AdminPage> {
 
   ///Goes to add [Item] page.
   Future _addItem() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => AddItemPage(
-                doAddItem: true,
-                currentAccount: widget.currentAccount,
-                item: createDefaultItem(),
-              )),
-    );
+    Navigator.of(context).push(PageRouter(
+      child: AddItemPage(
+        doAddItem: true,
+        currentAccount: widget.currentAccount,
+        item: createDefaultItem(),
+      ),
+      direction: AxisDirection.down,
+    ));
   }
 
   ///Goes to add [Account] page.
   Future _addUser() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) =>
-              RegisterPage(true, "", 0, true, widget.currentAccount)),
-    );
+    Navigator.of(context).push(PageRouter(
+      child: RegisterPage(true, "", 0, true, widget.currentAccount),
+      direction: AxisDirection.down,
+    ));
   }
 
   ///Builds 4 pages.
