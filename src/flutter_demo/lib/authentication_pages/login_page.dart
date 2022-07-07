@@ -152,7 +152,6 @@ class _LoginPageState extends State<LoginPage> {
       currentAccount = createDefaultAccount();
     });
     return Scaffold(
-      //backgroundColor: primaryBackgroundColor,
       body: Container(
         width: double.infinity,
         decoration: BoxDecoration(gradient: mainGradient),
@@ -161,22 +160,6 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const SizedBox(height: firstBoxHeight),
-
-                //INFO TEXT.
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: texfieldPadding),
-                  child: Text(
-                    'Login',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: firstFontSize,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: secondBoxHeight),
-
                 //RFID.
                 GestureDetector(
                   onTap: _signInRFID,
@@ -217,9 +200,17 @@ class _LoginPageState extends State<LoginPage> {
                     child: SingleChildScrollView(
                       child: Center(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const SizedBox(height: firstBoxHeight),
+                            const SizedBox(height: secondBoxHeight),
+                            //INFO TEXT.
+                            const Text(
+                              '---OR---',
+                              style: TextStyle(
+                                fontSize: thirdFontSize,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: secondBoxHeight),
 
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
