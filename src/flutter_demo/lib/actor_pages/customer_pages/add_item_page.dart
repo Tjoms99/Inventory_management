@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
-import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
@@ -254,23 +253,13 @@ class _AddItemPageState extends State<AddItemPage> {
 
   ///Changes the page depending on [widget.currentAccount.accountRole].
   Future gotoPage() async {
-    if (widget.currentAccount.accountRole == "admin") {
-      Navigator.of(context).push(PageRouter(
-        child: AdminPage(
-          currentAccount: widget.currentAccount,
-          currentIndex: 1,
-        ),
-        direction: AxisDirection.up,
-      ));
-    } else {
-      Navigator.of(context).push(PageRouter(
-        child: CustomerPage(
-          currentAccount: widget.currentAccount,
-          currentIndex: 1,
-        ),
-        direction: AxisDirection.up,
-      ));
-    }
+    Navigator.of(context).push(PageRouter(
+      child: AdminPage(
+        currentAccount: widget.currentAccount,
+        currentIndex: 1,
+      ),
+      direction: AxisDirection.up,
+    ));
   }
 
   ///Resets keyboard checkers.

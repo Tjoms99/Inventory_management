@@ -5,6 +5,7 @@ include '../conn.php';
 // 0 = OK 
 // 1 = Account exists
 // 2 = RFID exists
+// 3 = No info
 $error = "0";
 
 $account_name = $_POST['account_name'];
@@ -16,7 +17,7 @@ $registered_customer_id = $_POST['registered_customer_id'];
 
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-//Chech if account exists
+//Check if account exists
 $sql = "SELECT * FROM `accounts` WHERE `account_name` LIKE '$account_name'";
 $res = $conn->query($sql);
 if (mysqli_num_rows($res) != 0) {
@@ -37,6 +38,9 @@ if (mysqli_num_rows($res) != 0 && mysqli_fetch_assoc($res)['rfid']  != "NO RFID 
     $error = "2";
 }
 
+if ($username == "" || $password == "") {
+    $error = "3";
+}
 echo json_encode($error);
 if ($error != "0") {
     return;

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
-import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
@@ -160,23 +159,13 @@ class _RegisterPage extends State<RegisterPage> {
   ///Changes the page depending on [widget.currentAccount.accountRole].
   Future gotoPage() async {
     if (widget._isLoggedIn) {
-      if (widget.currentAccount.accountRole == "admin") {
-        Navigator.of(context).push(PageRouter(
-          child: AdminPage(
-            currentAccount: widget.currentAccount,
-            currentIndex: 0,
-          ),
-          direction: AxisDirection.up,
-        ));
-      } else {
-        Navigator.of(context).push(PageRouter(
-          child: CustomerPage(
-            currentAccount: widget.currentAccount,
-            currentIndex: 0,
-          ),
-          direction: AxisDirection.up,
-        ));
-      }
+      Navigator.of(context).push(PageRouter(
+        child: AdminPage(
+          currentAccount: widget.currentAccount,
+          currentIndex: 0,
+        ),
+        direction: AxisDirection.up,
+      ));
     } else {
       debugPrint("Go to login page");
 

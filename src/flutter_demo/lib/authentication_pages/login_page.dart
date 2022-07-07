@@ -5,7 +5,6 @@ import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
 
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
-import 'package:flutter_demo/actor_pages/customer_pages/customer_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/totem_service.dart';
@@ -76,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
     switch (currentAccount.accountRole) {
       case "customer":
         Navigator.of(context).push(PageRouter(
-          child: CustomerPage(
+          child: AdminPage(
             currentAccount: currentAccount,
             currentIndex: 0,
           ),
