@@ -166,7 +166,7 @@ class _ListBuilderState extends State<ListBuilder> {
             style: const TextStyle(color: Colors.black, fontSize: 20),
           ),
           selected: index == _selectedIndex,
-          selectedTileColor: Colors.orange[200],
+          selectedTileColor: Colors.orange[300],
           trailing: Visibility(
             visible: _selectedIndex == index,
             child: Wrap(

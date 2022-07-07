@@ -219,7 +219,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
   Widget build(BuildContext context) {
     setState(() {});
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 1.0),
+      color: Colors.white,
       child: widget.title != ""
           ? Column(
               children: <Widget>[
@@ -231,6 +231,9 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                       IconButton(
                         icon: Icon(
                           expandFlag ? Icons.list_outlined : Icons.list,
+                          color: expandFlag
+                              ? Colors.orange[300]
+                              : Colors.orange[700],
                           size: 30.0,
                         ),
                         onPressed: () {
@@ -241,7 +244,10 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                       ),
                       Text(
                         widget.title,
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
                       )
                     ],
                   ),
@@ -261,77 +267,91 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                                 DataColumn(
                                   label: Text(
                                     'Status',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
+                                    style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'Description',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
+                                    style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'Location',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
+                                    style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'RFID',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
+                                    style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'Action',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
+                                    style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ],
 
                               //ITEMS IN EXPANDABLE LIST.
                               rows: widget.listToBuild
-                                  .map(((item) => DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(Text(item.status)),
-                                          DataCell(Text(item.description)),
-                                          DataCell(Text(item.location)),
-                                          DataCell(Text(item.rfid)),
-                                          DataCell(Row(
-                                            children: [
-                                              //UPDATE ICON.
-                                              GestureDetector(
-                                                onTap: () => _updateItem(item),
-                                                child: _hasPressedModify[
-                                                        getIndex(item)]
-                                                    ? const Icon(Icons.done,
-                                                        color: Colors.black)
-                                                    : const Icon(Icons.create,
-                                                        color: Colors.black),
-                                              ),
+                                  .map(
+                                    ((item) => DataRow(
+                                          cells: <DataCell>[
+                                            DataCell(Text(item.status)),
+                                            DataCell(Text(item.description)),
+                                            DataCell(Text(item.location)),
+                                            DataCell(Text(item.rfid)),
+                                            DataCell(Row(
+                                              children: [
+                                                //UPDATE ICON.
+                                                GestureDetector(
+                                                  onTap: () =>
+                                                      _updateItem(item),
+                                                  child: _hasPressedModify[
+                                                          getIndex(item)]
+                                                      ? const Icon(Icons.done,
+                                                          color: Colors.black)
+                                                      : const Icon(Icons.create,
+                                                          color: Colors.black),
+                                                ),
 
-                                              //DELETE ICON.
-                                              GestureDetector(
-                                                onTap: () => _deleteItem(item),
-                                                child: _hasPressedDelete[
-                                                        getIndex(item)]
-                                                    ? const Icon(Icons.done,
-                                                        color: Colors.black)
-                                                    : const Icon(Icons.delete,
-                                                        color: Colors.black),
-                                              ),
-                                            ],
-                                          ))
-                                        ],
-                                        selected:
-                                            getIndex(item) == _selectedIndex,
-                                      )))
+                                                //DELETE ICON.
+                                                GestureDetector(
+                                                  onTap: () =>
+                                                      _deleteItem(item),
+                                                  child: _hasPressedDelete[
+                                                          getIndex(item)]
+                                                      ? const Icon(Icons.done,
+                                                          color: Colors.black)
+                                                      : const Icon(Icons.delete,
+                                                          color: Colors.black),
+                                                ),
+                                              ],
+                                            ))
+                                          ],
+                                          selected:
+                                              getIndex(item) == _selectedIndex,
+                                        )),
+                                  )
                                   .toList(),
                             ),
                           ),
