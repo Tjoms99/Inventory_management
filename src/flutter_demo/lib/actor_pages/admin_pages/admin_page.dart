@@ -78,6 +78,16 @@ class _AdminPageState extends State<AdminPage> {
       appBar: AppBar(
           backgroundColor: secondaryBackgroundColor,
           title: Text(widget.currentAccount.accountName),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.orange,
+                  Colors.orange[300]!,
+                ],
+              ),
+            ),
+          ),
 
           //SIGN OUT.
           leading: IconButton(
@@ -99,6 +109,7 @@ class _AdminPageState extends State<AdminPage> {
 
       //NAVIGATION BAR.
       bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.white,
         selectedIndex: widget.currentIndex,
         onDestinationSelected: (int newIndex) {
           setState(() {
@@ -107,36 +118,61 @@ class _AdminPageState extends State<AdminPage> {
         },
         destinations: const [
           NavigationDestination(
-            selectedIcon: Icon(Icons.ballot),
-            icon: Icon(Icons.ballot_outlined),
+            selectedIcon: Icon(Icons.ballot, color: secondaryBackgroundColor),
+            icon: Icon(Icons.ballot_outlined, color: secondaryBackgroundColor),
             label: 'Accounts',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.assignment),
-            icon: Icon(Icons.assignment_outlined),
+            selectedIcon:
+                Icon(Icons.assignment, color: secondaryBackgroundColor),
+            icon: Icon(Icons.assignment_outlined,
+                color: secondaryBackgroundColor),
             label: 'Items',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.connect_without_contact),
-            icon: Icon(Icons.connect_without_contact_outlined),
+            selectedIcon: Icon(Icons.connect_without_contact,
+                color: secondaryBackgroundColor),
+            icon: Icon(Icons.connect_without_contact_outlined,
+                color: secondaryBackgroundColor),
             label: 'Help User',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.contactless),
-            icon: Icon(Icons.contactless_outlined),
+            selectedIcon:
+                Icon(Icons.contactless, color: secondaryBackgroundColor),
+            icon: Icon(Icons.contactless_outlined,
+                color: secondaryBackgroundColor),
             label: 'User',
           ),
         ],
       ),
 
       //ACTION BUTTON.
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Visibility(
         visible: widget.currentIndex == 1 || widget.currentIndex == 0,
-        child: FloatingActionButton(
-          backgroundColor: Colors.orange[400],
-          onPressed: widget.currentIndex == 1 ? _addItem : _addUser,
-          child: const Icon(Icons.add),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FloatingActionButton(
+            backgroundColor: Colors.transparent,
+            onPressed: widget.currentIndex == 1 ? _addItem : _addUser,
+            child: Container(
+              height: 70,
+              width: 70,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white, width: 4),
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  begin: const Alignment(0.7, -0.5),
+                  end: const Alignment(0.6, 0.5),
+                  colors: [
+                    Colors.orange[200]!,
+                    Colors.orange,
+                  ],
+                ),
+              ),
+              child: const Icon(Icons.add),
+            ),
+          ),
         ),
       ),
     );
