@@ -251,80 +251,89 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                 ExpandableContainer(
                   expanded: expandFlag,
                   child: expandFlag
-                      ? SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: DataTable(
-                            columns: const <DataColumn>[
-                              DataColumn(
-                                label: Text(
-                                  'Status',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
+                      ? ConstrainedBox(
+                          constraints: BoxConstraints.expand(
+                              width: MediaQuery.of(context).size.width),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                              columns: const <DataColumn>[
+                                DataColumn(
+                                  label: Text(
+                                    'Status',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Description',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                DataColumn(
+                                  label: Text(
+                                    'Description',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Location',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                DataColumn(
+                                  label: Text(
+                                    'Location',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'RFID',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                DataColumn(
+                                  label: Text(
+                                    'RFID',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Action',
-                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                DataColumn(
+                                  label: Text(
+                                    'Action',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
 
-                            //ITEMS IN EXPANDABLE LIST.
-                            rows: widget.listToBuild
-                                .map(((item) => DataRow(
-                                      cells: <DataCell>[
-                                        DataCell(Text(item.status)),
-                                        DataCell(Text(item.description)),
-                                        DataCell(Text(item.location)),
-                                        DataCell(Text(item.rfid)),
-                                        DataCell(Row(
-                                          children: [
-                                            //UPDATE ICON.
-                                            GestureDetector(
-                                              onTap: () => _updateItem(item),
-                                              child: _hasPressedModify[
-                                                      getIndex(item)]
-                                                  ? const Icon(Icons.done,
-                                                      color: Colors.black)
-                                                  : const Icon(Icons.create,
-                                                      color: Colors.black),
-                                            ),
+                              //ITEMS IN EXPANDABLE LIST.
+                              rows: widget.listToBuild
+                                  .map(((item) => DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text(item.status)),
+                                          DataCell(Text(item.description)),
+                                          DataCell(Text(item.location)),
+                                          DataCell(Text(item.rfid)),
+                                          DataCell(Row(
+                                            children: [
+                                              //UPDATE ICON.
+                                              GestureDetector(
+                                                onTap: () => _updateItem(item),
+                                                child: _hasPressedModify[
+                                                        getIndex(item)]
+                                                    ? const Icon(Icons.done,
+                                                        color: Colors.black)
+                                                    : const Icon(Icons.create,
+                                                        color: Colors.black),
+                                              ),
 
-                                            //DELETE ICON.
-                                            GestureDetector(
-                                              onTap: () => _deleteItem(item),
-                                              child: _hasPressedDelete[
-                                                      getIndex(item)]
-                                                  ? const Icon(Icons.done,
-                                                      color: Colors.black)
-                                                  : const Icon(Icons.delete,
-                                                      color: Colors.black),
-                                            ),
-                                          ],
-                                        ))
-                                      ],
-                                      selected:
-                                          getIndex(item) == _selectedIndex,
-                                    )))
-                                .toList(),
+                                              //DELETE ICON.
+                                              GestureDetector(
+                                                onTap: () => _deleteItem(item),
+                                                child: _hasPressedDelete[
+                                                        getIndex(item)]
+                                                    ? const Icon(Icons.done,
+                                                        color: Colors.black)
+                                                    : const Icon(Icons.delete,
+                                                        color: Colors.black),
+                                              ),
+                                            ],
+                                          ))
+                                        ],
+                                        selected:
+                                            getIndex(item) == _selectedIndex,
+                                      )))
+                                  .toList(),
+                            ),
                           ),
                         )
                       : const SizedBox(),
