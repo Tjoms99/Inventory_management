@@ -1,6 +1,11 @@
 <?php
 include '../conn.php';
 
+// Error codes:
+// 0 = OK 
+// 1 = RFID exists
+$error = "0";
+
 $id = $_POST['id'];
 $name = $_POST['name'];
 $status = $_POST['status'];
@@ -22,7 +27,7 @@ $res = $conn->query($sql);
 //Return if trying to update rfid to already existing rfid
 if ($currentRFID != $rfid) {
     if (mysqli_num_rows($res) != 0) {
-        return;
+        $error = "1";
     }
 }
 
@@ -33,10 +38,14 @@ $res = $conn->query($sql);
 //Return if trying to update rfid to already existing rfid
 if ($currentRFID != $rfid) {
     if (mysqli_num_rows($res) != 0) {
-        return;
+        $error = "1";
     }
 }
 
+echo json_encode($error);
+if ($error != "0") {
+    return;
+}
 
 $sql = "UPDATE `items` SET `name` = '$name', `status` = '$status', `rfid` = '$rfid', `description` = '$description', `location` = '$location', `registered_customer_id` = '$registered_customer_id' WHERE `items`.`id` = $id";
 $conn->query($sql);

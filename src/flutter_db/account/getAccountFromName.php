@@ -3,8 +3,6 @@ include '../conn.php';
 
 $account_name = $_POST['account_name'];
 
-
-
 //Try to get account using name and password
 $sql = "SELECT * FROM `accounts` WHERE `account_name` LIKE '$account_name'";
 $res = $conn->query($sql);

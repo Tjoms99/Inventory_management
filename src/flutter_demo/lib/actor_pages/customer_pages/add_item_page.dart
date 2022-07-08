@@ -221,7 +221,6 @@ class _AddItemPageState extends State<AddItemPage> {
 
     String _errorPHP = await updateItem(item);
     _errorPHP = jsonDecode(_errorPHP);
-
     errorCheck(item, _errorPHP);
 
     if (_isError) return;
@@ -245,6 +244,7 @@ class _AddItemPageState extends State<AddItemPage> {
     if (item.rfid.isEmpty) {
       item.rfid = "NO RFID ASSIGNED";
     }
+
     String _errorPHP = await addItem(item);
     _errorPHP = jsonDecode(_errorPHP);
     errorCheck(item, _errorPHP);
