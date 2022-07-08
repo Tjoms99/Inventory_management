@@ -5,6 +5,7 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 ///This is a page where a customer or admin can assist an [Account].
