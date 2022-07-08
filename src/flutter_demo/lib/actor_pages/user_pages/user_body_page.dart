@@ -94,57 +94,55 @@ class _UserBodyPageState extends State<UserBodyPage> {
   ///Builds the user page.
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: _updateAction,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      SizedBox(height: firstBoxHeight),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: _updateAction,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    SizedBox(height: firstBoxHeight),
 
-                      //ICON.
-                      Center(
-                        child: ImageIcon(
-                          AssetImage("assets/images/rfid_transparent.png"),
-                          color: Colors.orange,
-                          size: 100,
+                    //ICON.
+                    Center(
+                      child: ImageIcon(
+                        AssetImage("assets/images/rfid_transparent.png"),
+                        color: Colors.orange,
+                        size: 100,
+                      ),
+                    ),
+
+                    //INFO TEXT.
+                    Center(
+                      child: Text(
+                        'TAP HERE TO SCAN RFID',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: thirdFontSize,
+                          color: Colors.black,
                         ),
                       ),
-
-                      //INFO TEXT.
-                      Center(
-                        child: Text(
-                          'TAP HERE TO SCAN RFID',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: thirdFontSize,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: thirdBoxHeight),
-                const Text('The system knows what you want to do!'),
-                const SizedBox(height: firstBoxHeight),
-                Text(
-                  infoText,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: thirdFontSize,
-                    color: Colors.black,
-                  ),
+              ),
+              const SizedBox(height: thirdBoxHeight),
+              const Text('The system knows what you want to do!'),
+              const SizedBox(height: firstBoxHeight),
+              Text(
+                infoText,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: thirdFontSize,
+                  color: Colors.black,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
