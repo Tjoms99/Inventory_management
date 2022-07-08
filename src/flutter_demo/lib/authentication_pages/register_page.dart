@@ -315,463 +315,480 @@ class _RegisterPage extends State<RegisterPage> {
   ///Builds the register page.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(gradient: mainGradient),
-        child: SafeArea(
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                //RFID.
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: setRFID,
-                  child: Center(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: thirdBoxHeight),
-                        //ICON.
-                        const ImageIcon(
-                          AssetImage("assets/images/rfid_transparent.png"),
-                          color: Colors.white,
-                          size: 100,
-                        ),
-
-                        //INFO TEXT.
-                        Text(
-                          widget._doRegister
-                              ? 'TAP HERE TO SCAN RFID'
-                              : 'TAP HERE TO UPDATE RFID',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: thirdFontSize,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(gradient: mainGradient),
+          child: SafeArea(
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  //RFID.
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: setRFID,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: thirdBoxHeight),
+                          //ICON.
+                          const ImageIcon(
+                            AssetImage("assets/images/rfid_transparent.png"),
                             color: Colors.white,
+                            size: 100,
                           ),
-                        ),
-                        const SizedBox(height: thirdBoxHeight),
 
-                        //RFID ID.
-                        Text(
-                          'ID: ' + _rfidTag,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: thirdFontSize,
-                            color: Colors.white,
+                          //INFO TEXT.
+                          Text(
+                            widget._doRegister
+                                ? 'TAP HERE TO SCAN RFID'
+                                : 'TAP HERE TO UPDATE RFID',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: thirdFontSize,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: thirdBoxHeight),
-                      ],
+                          const SizedBox(height: thirdBoxHeight),
+
+                          //RFID ID.
+                          Text(
+                            'ID: ' + _rfidTag,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: thirdFontSize,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: thirdBoxHeight),
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
-                //TEXTFIELDS & BUTTONS.
-                Expanded(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40),
-                            topRight: Radius.circular(40))),
-                    child: SingleChildScrollView(
-                      child: Center(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: secondBoxHeight),
-                            //INFO TEXT.
-                            Text(
-                              widget._doRegister ? '---AND---' : '---OR---',
-                              style: const TextStyle(
-                                fontSize: thirdFontSize,
-                                color: Colors.black,
+                  //TEXTFIELDS & BUTTONS.
+                  Expanded(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40),
+                              topRight: Radius.circular(40))),
+                      child: SingleChildScrollView(
+                        child: Center(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: secondBoxHeight),
+                              //INFO TEXT.
+                              Text(
+                                widget._doRegister ? '---AND---' : '---OR---',
+                                style: const TextStyle(
+                                  fontSize: thirdFontSize,
+                                  color: Colors.black,
+                                ),
                               ),
-                            ),
-                            //
-                            const SizedBox(height: firstBoxHeight),
+                              //
+                              const SizedBox(height: firstBoxHeight),
 
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(height: secondBoxHeight),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(height: secondBoxHeight),
 
-                                //ERROR TEXT.
-                                _isError
-                                    ? Text(
-                                        _errorText,
-                                        style: const TextStyle(
-                                          fontSize: forthFontSize,
-                                          color: Colors.red,
+                                  //ERROR TEXT.
+                                  _isError
+                                      ? Text(
+                                          _errorText,
+                                          style: const TextStyle(
+                                            fontSize: forthFontSize,
+                                            color: Colors.red,
+                                          ),
+                                        )
+                                      : const SizedBox(),
+
+                                  //EMAIL
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: texfieldPadding),
+                                    child: TextField(
+                                      cursorColor: textfieldFocusedBorderColor,
+                                      controller: _emailController,
+                                      focusNode: _focusEmail,
+                                      decoration: InputDecoration(
+                                        hintStyle:
+                                            const TextStyle(color: Colors.grey),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldEnabledBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
                                         ),
-                                      )
-                                    : const SizedBox(),
-
-                                //EMAIL
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: texfieldPadding),
-                                  child: TextField(
-                                    cursorColor: textfieldFocusedBorderColor,
-                                    controller: _emailController,
-                                    focusNode: _focusEmail,
-                                    decoration: InputDecoration(
-                                      hintStyle:
-                                          const TextStyle(color: Colors.grey),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: textfieldEnabledBorderColor),
-                                        borderRadius: BorderRadius.circular(
-                                            texfieldBorderRadius),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: textfieldFocusedBorderColor),
-                                        borderRadius: BorderRadius.circular(
-                                            texfieldBorderRadius),
-                                      ),
-                                      hintText: 'Username',
-                                      fillColor: textfieldBackgroundColor,
-                                      filled: true,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: thirdBoxHeight),
-
-                                //PASSWORD
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: texfieldPadding),
-                                  child: TextField(
-                                    controller: _passwordController,
-                                    focusNode: _focusPassword,
-                                    obscureText: !_isVisible,
-                                    decoration: InputDecoration(
-                                      hintStyle:
-                                          const TextStyle(color: Colors.grey),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: textfieldEnabledBorderColor),
-                                        borderRadius: BorderRadius.circular(
-                                            texfieldBorderRadius),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: textfieldFocusedBorderColor),
-                                        borderRadius: BorderRadius.circular(
-                                            texfieldBorderRadius),
-                                      ),
-                                      hintText: widget._doRegister
-                                          ? 'Password'
-                                          : 'New Password',
-                                      fillColor: textfieldBackgroundColor,
-                                      filled: true,
-                                      suffixIcon: GestureDetector(
-                                        onTap: () {
-                                          _isVisible = !_isVisible;
-                                          setState(() {});
-                                        },
-                                        child: Icon(
-                                          _isVisible
-                                              ? Icons.visibility_outlined
-                                              : Icons.visibility_off_outlined,
-                                          size: 24,
-                                          color: Colors.orange,
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldFocusedBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
                                         ),
+                                        hintText: 'Username',
+                                        fillColor: textfieldBackgroundColor,
+                                        filled: true,
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: thirdBoxHeight),
+                                  const SizedBox(height: thirdBoxHeight),
 
-                                //PASSWORD CONFIRM.
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: texfieldPadding),
-                                  child: TextField(
-                                    controller: _passwordConfirmController,
-                                    focusNode: _focusPasswordConfirm,
-                                    obscureText: !_isVisible,
-                                    decoration: InputDecoration(
-                                      hintStyle:
-                                          const TextStyle(color: Colors.grey),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: textfieldEnabledBorderColor),
-                                        borderRadius: BorderRadius.circular(
-                                            texfieldBorderRadius),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: textfieldFocusedBorderColor),
-                                        borderRadius: BorderRadius.circular(
-                                            texfieldBorderRadius),
-                                      ),
-                                      hintText: 'Password Confirm',
-                                      fillColor: textfieldBackgroundColor,
-                                      filled: true,
-                                      suffixIcon: GestureDetector(
-                                        onTap: () {
-                                          _isVisible = !_isVisible;
-                                          setState(() {});
-                                        },
-                                        child: Icon(
-                                          _isVisible
-                                              ? Icons.visibility_outlined
-                                              : Icons.visibility_off_outlined,
-                                          size: 24,
-                                          color: Colors.orange,
+                                  //PASSWORD
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: texfieldPadding),
+                                    child: TextField(
+                                      controller: _passwordController,
+                                      focusNode: _focusPassword,
+                                      obscureText: !_isVisible,
+                                      decoration: InputDecoration(
+                                        hintStyle:
+                                            const TextStyle(color: Colors.grey),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldEnabledBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldFocusedBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
+                                        ),
+                                        hintText: widget._doRegister
+                                            ? 'Password'
+                                            : 'New Password',
+                                        fillColor: textfieldBackgroundColor,
+                                        filled: true,
+                                        suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            _isVisible = !_isVisible;
+                                            setState(() {});
+                                          },
+                                          child: Icon(
+                                            _isVisible
+                                                ? Icons.visibility_outlined
+                                                : Icons.visibility_off_outlined,
+                                            size: 24,
+                                            color: Colors.orange,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: thirdBoxHeight),
-                                //ACCOUNT ROLE.
-                                //Show if the user is admin.
-                                widget.currentAccount.accountRole == "admin"
+                                  const SizedBox(height: thirdBoxHeight),
+
+                                  //PASSWORD CONFIRM.
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: texfieldPadding),
+                                    child: TextField(
+                                      controller: _passwordConfirmController,
+                                      focusNode: _focusPasswordConfirm,
+                                      obscureText: !_isVisible,
+                                      decoration: InputDecoration(
+                                        hintStyle:
+                                            const TextStyle(color: Colors.grey),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldEnabledBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color:
+                                                  textfieldFocusedBorderColor),
+                                          borderRadius: BorderRadius.circular(
+                                              texfieldBorderRadius),
+                                        ),
+                                        hintText: 'Password Confirm',
+                                        fillColor: textfieldBackgroundColor,
+                                        filled: true,
+                                        suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            _isVisible = !_isVisible;
+                                            setState(() {});
+                                          },
+                                          child: Icon(
+                                            _isVisible
+                                                ? Icons.visibility_outlined
+                                                : Icons.visibility_off_outlined,
+                                            size: 24,
+                                            color: Colors.orange,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: thirdBoxHeight),
+                                  //ACCOUNT ROLE.
+                                  //Show if the user is admin.
+                                  widget.currentAccount.accountRole == "admin"
+                                      ? Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal:
+                                                          texfieldPadding),
+                                              child: TextField(
+                                                controller:
+                                                    _accountRoleController,
+                                                focusNode: _focusRole,
+                                                decoration: InputDecoration(
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: const BorderSide(
+                                                        color:
+                                                            textfieldEnabledBorderColor),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            texfieldBorderRadius),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: const BorderSide(
+                                                        color:
+                                                            textfieldFocusedBorderColor),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            texfieldBorderRadius),
+                                                  ),
+                                                  hintText: 'Account role',
+                                                  fillColor:
+                                                      textfieldBackgroundColor,
+                                                  filled: true,
+                                                ),
+                                              ),
+                                            ),
+
+                                            //CUSTOMER ID
+                                            const SizedBox(
+                                                height: thirdBoxHeight),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal:
+                                                          texfieldPadding),
+                                              child: TextField(
+                                                controller:
+                                                    _customerIDController,
+                                                focusNode: _focusCustomerID,
+                                                decoration: InputDecoration(
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: const BorderSide(
+                                                        color:
+                                                            textfieldEnabledBorderColor),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            texfieldBorderRadius),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: const BorderSide(
+                                                        color:
+                                                            textfieldFocusedBorderColor),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            texfieldBorderRadius),
+                                                  ),
+                                                  hintText: 'Customer ID',
+                                                  fillColor:
+                                                      textfieldBackgroundColor,
+                                                  filled: true,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                                height: thirdBoxHeight),
+
+                                            //REGISTERED CUSTOMER ID
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal:
+                                                          texfieldPadding),
+                                              child: TextField(
+                                                controller:
+                                                    _registeredCustomerIDController,
+                                                focusNode:
+                                                    _focusRegisteredCustomerID,
+                                                decoration: InputDecoration(
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: const BorderSide(
+                                                        color:
+                                                            textfieldEnabledBorderColor),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            texfieldBorderRadius),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: const BorderSide(
+                                                        color:
+                                                            textfieldFocusedBorderColor),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            texfieldBorderRadius),
+                                                  ),
+                                                  hintText:
+                                                      'Registered Customer ID',
+                                                  fillColor:
+                                                      textfieldBackgroundColor,
+                                                  filled: true,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      :
+                                      //display nothing if user is not admin
+                                      const SizedBox(),
+
+                                  //SIGN-UP
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: standardPadding),
+                                    child: GestureDetector(
+                                      onTap: registerUser,
+                                      child: Container(
+                                        padding:
+                                            const EdgeInsets.all(buttonPadding),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          gradient: mainGradient,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            widget._doRegister
+                                                ? 'Register'
+                                                : 'Update',
+                                            style: const TextStyle(
+                                              color: buttonTextColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: buttonFontSize,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: thirdBoxHeight),
+
+                                  //CANCEL.
+                                  GestureDetector(
+                                    onTap: gotoPage,
+                                    child: const Text(
+                                      ' Cancel',
+                                      style: TextStyle(
+                                        color: Colors.orange,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: forthFontSize,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+
+                              //KEYBOARD
+                              SingleChildScrollView(
+                                child: _isKeyboardEnabled
                                     ? Column(
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: texfieldPadding),
-                                            child: TextField(
-                                              controller:
-                                                  _accountRoleController,
-                                              focusNode: _focusRole,
-                                              decoration: InputDecoration(
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color:
-                                                          textfieldEnabledBorderColor),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          texfieldBorderRadius),
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                _isKeyboardEnabled = false;
+                                              });
+                                            },
+                                            child: const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: standardPadding,
+                                                  vertical: 30),
+                                              child: Text(
+                                                'TAP HERE TO CLOSE KEYBOARD',
+                                                style: TextStyle(
+                                                  fontSize: thirdFontSize,
                                                 ),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color:
-                                                          textfieldFocusedBorderColor),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          texfieldBorderRadius),
-                                                ),
-                                                hintText: 'Account role',
-                                                fillColor:
-                                                    textfieldBackgroundColor,
-                                                filled: true,
                                               ),
                                             ),
                                           ),
+                                          VirtualKeyboard(
+                                            height: 300,
+                                            //width: 500,
+                                            textColor: Colors.black,
 
-                                          //CUSTOMER ID
-                                          const SizedBox(
-                                              height: thirdBoxHeight),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: texfieldPadding),
-                                            child: TextField(
-                                              controller: _customerIDController,
-                                              focusNode: _focusCustomerID,
-                                              decoration: InputDecoration(
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color:
-                                                          textfieldEnabledBorderColor),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          texfieldBorderRadius),
-                                                ),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color:
-                                                          textfieldFocusedBorderColor),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          texfieldBorderRadius),
-                                                ),
-                                                hintText: 'Customer ID',
-                                                fillColor:
-                                                    textfieldBackgroundColor,
-                                                filled: true,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                              height: thirdBoxHeight),
+                                            textController: _openKeyboardEmail
+                                                ? _emailController
+                                                : _openKeyboardPassword
+                                                    ? _passwordController
+                                                    : _openKeyboardConfirm
+                                                        ? _passwordConfirmController
+                                                        : _openKeyboardRole
+                                                            ? _accountRoleController
+                                                            : _openKeyboardCustomerID
+                                                                ? _customerIDController
+                                                                : _openKeyboardRegisteredCustomerID
+                                                                    ? _registeredCustomerIDController
+                                                                    : TextEditingController(),
+                                            //customLayoutKeys: _customLayoutKeys,
+                                            defaultLayouts: const [
+                                              VirtualKeyboardDefaultLayouts
+                                                  .English
+                                            ],
 
-                                          //REGISTERED CUSTOMER ID
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: texfieldPadding),
-                                            child: TextField(
-                                              controller:
-                                                  _registeredCustomerIDController,
-                                              focusNode:
-                                                  _focusRegisteredCustomerID,
-                                              decoration: InputDecoration(
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color:
-                                                          textfieldEnabledBorderColor),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          texfieldBorderRadius),
-                                                ),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color:
-                                                          textfieldFocusedBorderColor),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          texfieldBorderRadius),
-                                                ),
-                                                hintText:
-                                                    'Registered Customer ID',
-                                                fillColor:
-                                                    textfieldBackgroundColor,
-                                                filled: true,
-                                              ),
-                                            ),
+                                            //reverseLayout :true,
+                                            type: VirtualKeyboardType
+                                                .Alphanumeric,
                                           ),
                                         ],
                                       )
-                                    :
-                                    //display nothing if user is not admin
-                                    const SizedBox(),
 
-                                //SIGN-UP
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: standardPadding),
-                                  child: GestureDetector(
-                                    onTap: registerUser,
-                                    child: Container(
-                                      padding:
-                                          const EdgeInsets.all(buttonPadding),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        gradient: mainGradient,
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          widget._doRegister
-                                              ? 'Register'
-                                              : 'Update',
-                                          style: const TextStyle(
-                                            color: buttonTextColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: buttonFontSize,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: thirdBoxHeight),
-
-                                //CANCEL.
-                                GestureDetector(
-                                  onTap: gotoPage,
-                                  child: const Text(
-                                    ' Cancel',
-                                    style: TextStyle(
-                                      color: Colors.orange,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: forthFontSize,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-
-                            //KEYBOARD
-                            SingleChildScrollView(
-                              child: _isKeyboardEnabled
-                                  ? Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              _isKeyboardEnabled = false;
-                                            });
-                                          },
-                                          child: const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: standardPadding,
-                                                vertical: 30),
-                                            child: Text(
-                                              'TAP HERE TO CLOSE KEYBOARD',
-                                              style: TextStyle(
-                                                fontSize: thirdFontSize,
-                                              ),
+                                    //TAP TO OPEN KEYBOARD
+                                    : GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _isKeyboardEnabled = true;
+                                          });
+                                        },
+                                        child: const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: standardPadding,
+                                              vertical: 30),
+                                          child: Text(
+                                            'TAP HERE TO OPEN KEYBOARD',
+                                            style: TextStyle(
+                                              fontSize: thirdFontSize,
                                             ),
                                           ),
                                         ),
-                                        VirtualKeyboard(
-                                          height: 300,
-                                          //width: 500,
-                                          textColor: Colors.black,
-
-                                          textController: _openKeyboardEmail
-                                              ? _emailController
-                                              : _openKeyboardPassword
-                                                  ? _passwordController
-                                                  : _openKeyboardConfirm
-                                                      ? _passwordConfirmController
-                                                      : _openKeyboardRole
-                                                          ? _accountRoleController
-                                                          : _openKeyboardCustomerID
-                                                              ? _customerIDController
-                                                              : _openKeyboardRegisteredCustomerID
-                                                                  ? _registeredCustomerIDController
-                                                                  : TextEditingController(),
-                                          //customLayoutKeys: _customLayoutKeys,
-                                          defaultLayouts: const [
-                                            VirtualKeyboardDefaultLayouts
-                                                .English
-                                          ],
-
-                                          //reverseLayout :true,
-                                          type:
-                                              VirtualKeyboardType.Alphanumeric,
-                                        ),
-                                      ],
-                                    )
-
-                                  //TAP TO OPEN KEYBOARD
-                                  : GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _isKeyboardEnabled = true;
-                                        });
-                                      },
-                                      child: const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: standardPadding,
-                                            vertical: 30),
-                                        child: Text(
-                                          'TAP HERE TO OPEN KEYBOARD',
-                                          style: TextStyle(
-                                            fontSize: thirdFontSize,
-                                          ),
-                                        ),
                                       ),
-                                    ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

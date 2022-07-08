@@ -28,25 +28,28 @@ class _UserPage extends State<UserPage> {
   ///Builds the user page.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: primaryBackgroundColor,
-      appBar: AppBar(
-          backgroundColor: secondaryBackgroundColor,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(gradient: mainGradient),
-          ),
-          title: Text(widget.currentAccount.accountName),
-          leading: IconButton(
-            onPressed: _signOut,
-            icon: const Icon(Icons.logout),
-          ),
-          actions: [
-            IconButton(
-              onPressed: _update,
-              icon: const Icon(Icons.update),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: primaryBackgroundColor,
+        appBar: AppBar(
+            backgroundColor: secondaryBackgroundColor,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(gradient: mainGradient),
             ),
-          ]),
-      body: UserBodyPage(currentAccount: widget.currentAccount),
+            title: Text(widget.currentAccount.accountName),
+            leading: IconButton(
+              onPressed: _signOut,
+              icon: const Icon(Icons.logout),
+            ),
+            actions: [
+              IconButton(
+                onPressed: _update,
+                icon: const Icon(Icons.update),
+              ),
+            ]),
+        body: UserBodyPage(currentAccount: widget.currentAccount),
+      ),
     );
   }
 }

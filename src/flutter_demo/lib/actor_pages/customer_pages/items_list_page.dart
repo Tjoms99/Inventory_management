@@ -93,7 +93,7 @@ class _ListBuilderState extends State<ListBuilder> {
                     index == _types.length - 1
                         ? Container(
                             color: Colors.white,
-                            height: 300,
+                            height: 600,
                             width: double.infinity,
                           )
                         : const SizedBox(),

@@ -51,23 +51,26 @@ class _UsersListPageState extends State<UsersListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Account>>(
-          future: getAccounts(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              //error
-            }
-            if (snapshot.hasData) {
-              accounts = snapshot.data as List<Account>;
-              setAccounts();
-              return ListBuilder(
-                listOfAccounts: accounts,
-                currentAccount: widget.currentAccount,
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          }),
+      body: Container(
+        color: Colors.white,
+        child: FutureBuilder<List<Account>>(
+            future: getAccounts(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                //error
+              }
+              if (snapshot.hasData) {
+                accounts = snapshot.data as List<Account>;
+                setAccounts();
+                return ListBuilder(
+                  listOfAccounts: accounts,
+                  currentAccount: widget.currentAccount,
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            }),
+      ),
     );
   }
 }

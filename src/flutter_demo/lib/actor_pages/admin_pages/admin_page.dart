@@ -73,97 +73,101 @@ class _AdminPageState extends State<AdminPage> {
       AssistUserPage(currentAccount: widget.currentAccount),
       UserBodyPage(currentAccount: widget.currentAccount),
     ];
-    return Scaffold(
-      backgroundColor: primaryBackgroundColor,
-      appBar: AppBar(
-          backgroundColor: secondaryBackgroundColor,
-          title: Text(widget.currentAccount.accountName),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(gradient: mainGradient),
-          ),
-
-          //SIGN OUT.
-          leading: IconButton(
-            onPressed: _signOut,
-            icon: const Icon(Icons.logout),
-          ),
-
-          //UPDATE STATE.
-          actions: [
-            IconButton(
-              onPressed: _update,
-              icon: const Icon(Icons.update),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: primaryBackgroundColor,
+        appBar: AppBar(
+            backgroundColor: secondaryBackgroundColor,
+            title: Text(widget.currentAccount.accountName),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(gradient: mainGradient),
             ),
-          ]),
-      body: IndexedStack(
-        index: widget.currentIndex,
-        children: pages,
-      ),
 
-      //NAVIGATION BAR.
-      bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.white,
-        selectedIndex: widget.currentIndex,
-        onDestinationSelected: (int newIndex) {
-          setState(() {
-            widget.currentIndex = newIndex;
-          });
-        },
-        destinations: const [
-          NavigationDestination(
-            selectedIcon: Icon(Icons.ballot, color: secondaryBackgroundColor),
-            icon: Icon(Icons.ballot_outlined, color: secondaryBackgroundColor),
-            label: 'Accounts',
-          ),
-          NavigationDestination(
-            selectedIcon:
-                Icon(Icons.assignment, color: secondaryBackgroundColor),
-            icon: Icon(Icons.assignment_outlined,
-                color: secondaryBackgroundColor),
-            label: 'Items',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.connect_without_contact,
-                color: secondaryBackgroundColor),
-            icon: Icon(Icons.connect_without_contact_outlined,
-                color: secondaryBackgroundColor),
-            label: 'Help User',
-          ),
-          NavigationDestination(
-            selectedIcon:
-                Icon(Icons.contactless, color: secondaryBackgroundColor),
-            icon: Icon(Icons.contactless_outlined,
-                color: secondaryBackgroundColor),
-            label: 'User',
-          ),
-        ],
-      ),
+            //SIGN OUT.
+            leading: IconButton(
+              onPressed: _signOut,
+              icon: const Icon(Icons.logout),
+            ),
 
-      //ACTION BUTTON.
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Visibility(
-        visible: widget.currentIndex == 1 || widget.currentIndex == 0,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: FloatingActionButton(
-            backgroundColor: Colors.transparent,
-            onPressed: widget.currentIndex == 1 ? _addItem : _addUser,
-            child: Container(
-              height: 70,
-              width: 70,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white, width: 4),
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  begin: const Alignment(0.7, -0.5),
-                  end: const Alignment(0.6, 0.5),
-                  colors: [
-                    Colors.orange[200]!,
-                    Colors.orange,
-                  ],
-                ),
+            //UPDATE STATE.
+            actions: [
+              IconButton(
+                onPressed: _update,
+                icon: const Icon(Icons.update),
               ),
-              child: const Icon(Icons.add),
+            ]),
+        body: IndexedStack(
+          index: widget.currentIndex,
+          children: pages,
+        ),
+
+        //NAVIGATION BAR.
+        bottomNavigationBar: NavigationBar(
+          backgroundColor: Colors.white,
+          selectedIndex: widget.currentIndex,
+          onDestinationSelected: (int newIndex) {
+            setState(() {
+              widget.currentIndex = newIndex;
+            });
+          },
+          destinations: const [
+            NavigationDestination(
+              selectedIcon: Icon(Icons.ballot, color: secondaryBackgroundColor),
+              icon:
+                  Icon(Icons.ballot_outlined, color: secondaryBackgroundColor),
+              label: 'Accounts',
+            ),
+            NavigationDestination(
+              selectedIcon:
+                  Icon(Icons.assignment, color: secondaryBackgroundColor),
+              icon: Icon(Icons.assignment_outlined,
+                  color: secondaryBackgroundColor),
+              label: 'Items',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.connect_without_contact,
+                  color: secondaryBackgroundColor),
+              icon: Icon(Icons.connect_without_contact_outlined,
+                  color: secondaryBackgroundColor),
+              label: 'Help User',
+            ),
+            NavigationDestination(
+              selectedIcon:
+                  Icon(Icons.contactless, color: secondaryBackgroundColor),
+              icon: Icon(Icons.contactless_outlined,
+                  color: secondaryBackgroundColor),
+              label: 'User',
+            ),
+          ],
+        ),
+
+        //ACTION BUTTON.
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Visibility(
+          visible: widget.currentIndex == 1 || widget.currentIndex == 0,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FloatingActionButton(
+              backgroundColor: Colors.transparent,
+              onPressed: widget.currentIndex == 1 ? _addItem : _addUser,
+              child: Container(
+                height: 70,
+                width: 70,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white, width: 4),
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    begin: const Alignment(0.7, -0.5),
+                    end: const Alignment(0.6, 0.5),
+                    colors: [
+                      Colors.orange[200]!,
+                      Colors.orange,
+                    ],
+                  ),
+                ),
+                child: const Icon(Icons.add),
+              ),
             ),
           ),
         ),

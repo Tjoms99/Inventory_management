@@ -25,7 +25,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
   ///Updates the current [item.status] of an item depending on its previous [item.status].
   ///
   ///Updates [item.location] when [item.status] changes.
-  Future updateAction() async {
+  Future _updateAction() async {
     items = await getItems();
     Item item = createDefaultItem();
 
@@ -85,54 +85,66 @@ class _UserBodyPageState extends State<UserBodyPage> {
         updateAccountRegisteredCustomerID(widget.currentAccount);
     }
 
-    setState(() {
-      infoText = 'You have ' + item.status + ' this item';
-      updateItem(item);
-    });
+    updateItem(item);
+    infoText =
+        "You have ${item.status} this item\n\n\nDescription: ${item.description}\nRFID: ${item.rfid}\n";
+    setState(() {});
   }
 
   ///Builds the user page.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              //Icon
-              GestureDetector(
-                onTap: updateAction,
-                child: const ImageIcon(
-                  AssetImage("assets/images/rfid_transparent.png"),
-                  color: Color.fromARGB(255, 37, 174, 53),
-                  size: 100,
+    return Container(
+      color: Colors.white,
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: _updateAction,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      SizedBox(height: firstBoxHeight),
+
+                      //ICON.
+                      Center(
+                        child: ImageIcon(
+                          AssetImage("assets/images/rfid_transparent.png"),
+                          color: Colors.orange,
+                          size: 100,
+                        ),
+                      ),
+
+                      //INFO TEXT.
+                      Center(
+                        child: Text(
+                          'TAP HERE TO SCAN RFID',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: thirdFontSize,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              //Hello
-              const Text(
-                'SCAN AND TAP',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: secondFontSize),
-              ),
-              const SizedBox(height: thirdBoxHeight),
-              const Text('The system knows what you want to do!'),
-
-              const SizedBox(height: firstBoxHeight * 3),
-
-              Text(
-                infoText,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: secondFontSize),
-              ),
-
-              const SizedBox(height: firstBoxHeight),
-
-              Text(
-                'ID:' + rfidTag,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: secondFontSize),
-              ),
-            ],
+                const SizedBox(height: thirdBoxHeight),
+                const Text('The system knows what you want to do!'),
+                const SizedBox(height: firstBoxHeight),
+                Text(
+                  infoText,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: thirdFontSize,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
