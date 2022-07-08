@@ -97,29 +97,25 @@ class _UserBodyPageState extends State<UserBodyPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: _updateAction,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    SizedBox(height: firstBoxHeight),
-
-                    //ICON.
-                    Center(
-                      child: ImageIcon(
+        child: Center(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: _updateAction,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      //ICON.
+                      ImageIcon(
                         AssetImage("assets/images/rfid_transparent.png"),
                         color: Colors.orange,
                         size: 100,
                       ),
-                    ),
 
-                    //INFO TEXT.
-                    Center(
-                      child: Text(
+                      //INFO TEXT.
+                      Text(
                         'TAP HERE TO SCAN RFID',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -127,22 +123,22 @@ class _UserBodyPageState extends State<UserBodyPage> {
                           color: Colors.black,
                         ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: thirdBoxHeight),
+                  const Text('The system knows what you want to do!'),
+                  const SizedBox(height: firstBoxHeight),
+                  Text(
+                    infoText,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: thirdFontSize,
+                      color: Colors.black,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(height: thirdBoxHeight),
-              const Text('The system knows what you want to do!'),
-              const SizedBox(height: firstBoxHeight),
-              Text(
-                infoText,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: thirdFontSize,
-                  color: Colors.black,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

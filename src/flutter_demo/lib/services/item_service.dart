@@ -38,12 +38,14 @@ void deleteItem(int id) {
 }
 
 ///Inserts [item] in the database.
-void addItem(Item item) {
+///
+///Returns error status
+Future<String> addItem(Item item) async {
   try {
     var uri =
         Uri.parse("http://$ipAddress/dashboard/flutter_db/item/addItem.php");
 
-    http.post(uri, body: {
+    var response = await http.post(uri, body: {
       'name': item.name,
       'status': item.status,
       'rfid': item.rfid,
@@ -51,18 +53,24 @@ void addItem(Item item) {
       'location': item.location,
       'registered_customer_id': item.registeredCustomerId,
     });
+
+    return response.body;
   } catch (e) {
     debugPrint("Failed to add item: $e");
   }
+
+  return "-1";
 }
 
 ///Updates [item] in the database.
-void updateItem(Item item) {
+///
+///Returns error status
+Future<String> updateItem(Item item) async {
   try {
     var uri =
         Uri.parse("http://$ipAddress/dashboard/flutter_db/item/updateItem.php");
 
-    http.post(uri, body: {
+    var response = await http.post(uri, body: {
       'id': jsonEncode(item.id),
       'name': item.name,
       'status': item.status,
@@ -71,7 +79,10 @@ void updateItem(Item item) {
       'location': item.location,
       'registered_customer_id': item.registeredCustomerId,
     });
+    return response.body;
   } catch (e) {
     debugPrint("Failed to update item: $e");
   }
+
+  return "-1";
 }

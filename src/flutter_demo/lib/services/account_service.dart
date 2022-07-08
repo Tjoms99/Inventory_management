@@ -93,7 +93,7 @@ void deleteAccount(int id) {
 
 ///Inserts [account] in the database.
 ///
-///Returns "0" if sucessfull
+///Returns error status
 Future<String> addAccount(Account account) async {
   try {
     var uri = Uri.parse(
@@ -118,7 +118,7 @@ Future<String> addAccount(Account account) async {
 
 ///Updates [account] in the database.
 ///
-///Returns "0" if sucessfull
+///Returns error status
 Future<String> updateAccount(Account account) async {
   try {
     var uri = Uri.parse(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/classes/account.dart';
@@ -168,7 +170,7 @@ class _AddItemPageState extends State<AddItemPage> {
   }
 
   ///Checks if the [Item] contains empty parameters
-  void errorCheck(Item item) {
+  void errorCheck(Item item, String _errorPHP) {
     _isError = false;
     _errorText = "";
 
@@ -197,6 +199,9 @@ class _AddItemPageState extends State<AddItemPage> {
       _isError = true;
     }
 
+    if (_errorPHP != "0") _isError = true;
+    if (_errorPHP == "-1") _errorText = _errorText + "Failed http request\n";
+    if (_errorPHP == "1") _errorText = _errorText + "RFID already exists\n";
     debugPrint(_errorText);
     setState(() {});
   }
@@ -214,10 +219,12 @@ class _AddItemPageState extends State<AddItemPage> {
         location: getLocation(),
         registeredCustomerId: getCustomerId());
 
-    errorCheck(item);
-    if (_isError) return;
+    String _errorPHP = await updateItem(item);
+    _errorPHP = jsonDecode(_errorPHP);
 
-    updateItem(item);
+    errorCheck(item, _errorPHP);
+
+    if (_isError) return;
     gotoPage();
   }
 
@@ -238,11 +245,11 @@ class _AddItemPageState extends State<AddItemPage> {
     if (item.rfid.isEmpty) {
       item.rfid = "NO RFID ASSIGNED";
     }
+    String _errorPHP = await addItem(item);
+    _errorPHP = jsonDecode(_errorPHP);
+    errorCheck(item, _errorPHP);
 
-    errorCheck(item);
     if (_isError) return;
-
-    addItem(item);
     gotoPage();
   }
 
