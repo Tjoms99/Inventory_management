@@ -326,6 +326,7 @@ class _RegisterPage extends State<RegisterPage> {
               children: <Widget>[
                 //RFID.
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: setRFID,
                   child: Center(
                     child: Column(

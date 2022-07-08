@@ -325,6 +325,7 @@ class _AddItemPageState extends State<AddItemPage> {
               children: <Widget>[
                 //RFID.
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: setRFID,
                   child: Center(
                     child: Column(

@@ -161,6 +161,7 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 //RFID.
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: _signInRFID,
                   child: Center(
                     child: Column(

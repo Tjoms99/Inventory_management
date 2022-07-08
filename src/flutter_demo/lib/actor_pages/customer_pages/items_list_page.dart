@@ -83,10 +83,21 @@ class _ListBuilderState extends State<ListBuilder> {
             return ListView.builder(
               itemCount: _types.length,
               itemBuilder: (_, int index) {
-                return ExpandableListView(
-                  title: _types[index],
-                  listToBuild: getItemsInType(_items, _types[index]),
-                  currentAccount: widget.currentAccount,
+                return Column(
+                  children: [
+                    ExpandableListView(
+                      title: _types[index],
+                      listToBuild: getItemsInType(_items, _types[index]),
+                      currentAccount: widget.currentAccount,
+                    ),
+                    index == _types.length - 1
+                        ? Container(
+                            color: Colors.white,
+                            height: 300,
+                            width: double.infinity,
+                          )
+                        : const SizedBox(),
+                  ],
                 );
               },
             );
@@ -113,7 +124,8 @@ class ExpandableListView extends StatefulWidget {
 }
 
 class _ExpandableListViewState extends State<ExpandableListView> {
-  bool expandFlag = false;
+  bool _expandFlag = false;
+  final bool _isVisible = false;
   final List<bool> _hasPressedDelete = [];
   final List<bool> _hasPressedModify = [];
   int _selectedIndex = -1;
@@ -198,7 +210,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
   ///Goes to update [Item] page.
   void _deleteItem(Item item) {
     setState(() {
-      _hasPressedModify[getIndex(item)] = false;
+      setSelected(item);
       if (_hasPressedDelete[getIndex(item)]) {
         deleteItem(item.id);
         widget.listToBuild.removeAt(getIndex(item));
@@ -214,6 +226,21 @@ class _ExpandableListViewState extends State<ExpandableListView> {
     });
   }
 
+  ///Returns a [Color] if a row is pressed, hovered or focused
+  Color _getDataRowColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+
+    if (states.any(interactiveStates.contains)) {
+      return Colors.orange[300]!;
+    }
+    //return Colors.green; // Use the default value.
+    return Colors.grey;
+  }
+
   ///Builds the [Item] page.
   @override
   Widget build(BuildContext context) {
@@ -225,139 +252,168 @@ class _ExpandableListViewState extends State<ExpandableListView> {
               children: <Widget>[
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Row(
-                    children: <Widget>[
-                      //EXPANDABLE ICON.
-                      IconButton(
-                        icon: Icon(
-                          expandFlag ? Icons.list_outlined : Icons.list,
-                          color: expandFlag
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => {
+                      setState(() {
+                        _expandFlag = !_expandFlag;
+                      })
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        //EXPANDABLE ICON.
+                        Icon(
+                          _expandFlag ? Icons.list_outlined : Icons.list,
+                          color: _expandFlag
                               ? Colors.orange[300]
                               : Colors.orange[700],
                           size: 30.0,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            expandFlag = !expandFlag;
-                          });
-                        },
-                      ),
-                      Text(
-                        widget.title,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      )
-                    ],
+                        Text(
+                          widget.title,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
 
                 //EXPANDABLE LIST.
-                ExpandableContainer(
-                  expanded: expandFlag,
-                  child: expandFlag
-                      ? ConstrainedBox(
-                          constraints: BoxConstraints.expand(
-                              width: MediaQuery.of(context).size.width),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: DataTable(
-                              columns: const <DataColumn>[
-                                DataColumn(
-                                  label: Text(
-                                    'Status',
-                                    style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: ExpandableContainer(
+                    expanded: _expandFlag,
+                    child: _expandFlag
+                        ? ConstrainedBox(
+                            constraints: BoxConstraints.expand(
+                                width: MediaQuery.of(context).size.width),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                dataRowColor:
+                                    MaterialStateProperty.resolveWith<Color?>(
+                                        (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.selected)) {
+                                    return Colors.orange[300];
+                                  }
+                                  return null; // Use the default value.
+                                }),
+                                columns: const <DataColumn>[
+                                  DataColumn(
+                                    label: Text(
+                                      'Status',
+                                      style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Description',
-                                    style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontWeight: FontWeight.bold,
+                                  DataColumn(
+                                    label: Text(
+                                      'Description',
+                                      style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Location',
-                                    style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontWeight: FontWeight.bold,
+                                  DataColumn(
+                                    label: Text(
+                                      'Location',
+                                      style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'RFID',
-                                    style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontWeight: FontWeight.bold,
+                                  DataColumn(
+                                    label: Text(
+                                      'RFID',
+                                      style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Action',
-                                    style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontWeight: FontWeight.bold,
+                                  DataColumn(
+                                    label: Text(
+                                      'Action',
+                                      style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
 
-                              //ITEMS IN EXPANDABLE LIST.
-                              rows: widget.listToBuild
-                                  .map(
-                                    ((item) => DataRow(
-                                          cells: <DataCell>[
-                                            DataCell(Text(item.status)),
-                                            DataCell(Text(item.description)),
-                                            DataCell(Text(item.location)),
-                                            DataCell(Text(item.rfid)),
-                                            DataCell(Row(
-                                              children: [
-                                                //UPDATE ICON.
-                                                GestureDetector(
+                                //ITEMS IN EXPANDABLE LIST.
+                                rows: widget.listToBuild
+                                    .map(
+                                      ((item) => DataRow(
+                                            cells: <DataCell>[
+                                              DataCell(GestureDetector(
                                                   onTap: () =>
-                                                      _updateItem(item),
-                                                  child: _hasPressedModify[
-                                                          getIndex(item)]
-                                                      ? const Icon(Icons.done,
-                                                          color: Colors.black)
-                                                      : const Icon(Icons.create,
-                                                          color: Colors.black),
-                                                ),
+                                                      setSelected(item),
+                                                  child: Text(item.status))),
+                                              DataCell(GestureDetector(
+                                                  onTap: () =>
+                                                      setSelected(item),
+                                                  child:
+                                                      Text(item.description))),
+                                              DataCell(GestureDetector(
+                                                  onTap: () =>
+                                                      setSelected(item),
+                                                  child: Text(item.location))),
+                                              DataCell(GestureDetector(
+                                                  onTap: () =>
+                                                      setSelected(item),
+                                                  child: Text(item.rfid))),
+                                              DataCell(Row(
+                                                children: [
+                                                  //UPDATE ICON.
+                                                  GestureDetector(
+                                                    onTap: () =>
+                                                        _updateItem(item),
+                                                    child: _hasPressedModify[
+                                                            getIndex(item)]
+                                                        ? const Icon(Icons.done,
+                                                            color: Colors.black)
+                                                        : const Icon(
+                                                            Icons.create,
+                                                            color:
+                                                                Colors.black),
+                                                  ),
 
-                                                //DELETE ICON.
-                                                GestureDetector(
-                                                  onTap: () =>
-                                                      _deleteItem(item),
-                                                  child: _hasPressedDelete[
-                                                          getIndex(item)]
-                                                      ? const Icon(Icons.done,
-                                                          color: Colors.black)
-                                                      : const Icon(Icons.delete,
-                                                          color: Colors.black),
-                                                ),
-                                              ],
-                                            ))
-                                          ],
-                                          selected:
-                                              getIndex(item) == _selectedIndex,
-                                        )),
-                                  )
-                                  .toList(),
+                                                  //DELETE ICON.
+                                                  GestureDetector(
+                                                    onTap: () =>
+                                                        _deleteItem(item),
+                                                    child: _hasPressedDelete[
+                                                            getIndex(item)]
+                                                        ? const Icon(Icons.done,
+                                                            color: Colors.black)
+                                                        : const Icon(
+                                                            Icons.delete,
+                                                            color:
+                                                                Colors.black),
+                                                  ),
+                                                ],
+                                              ))
+                                            ],
+                                            selected: getIndex(item) ==
+                                                _selectedIndex,
+                                          )),
+                                    )
+                                    .toList(),
+                              ),
                             ),
-                          ),
-                        )
-                      : const SizedBox(),
-                ),
+                          )
+                        : const SizedBox(),
+                  ),
+                )
               ],
             )
           : const SizedBox(),
@@ -384,7 +440,7 @@ class ExpandableContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 125),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
       width: screenWidth,
       height: expanded ? expandedHeight : collapsedHeight,
