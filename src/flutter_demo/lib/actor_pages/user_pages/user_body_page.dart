@@ -8,8 +8,9 @@ import 'package:flutter_demo/services/totem_service.dart';
 
 ///This is a page where a user can be borrow and return items.
 class UserBodyPage extends StatefulWidget {
-  Account currentAccount;
-  UserBodyPage({required this.currentAccount});
+  final Account currentAccount;
+  final bool isHelping;
+  const UserBodyPage({required this.currentAccount, required this.isHelping});
 
   @override
   State<UserBodyPage> createState() => _UserBodyPageState();
@@ -26,7 +27,11 @@ class _UserBodyPageState extends State<UserBodyPage> {
   ///
   ///Updates [item.location] when [item.status] changes.
   Future _updateAction() async {
-    items = await getItems();
+    //Get items belonging only to customer if customer is helping user
+    //Or get all items
+    items = widget.isHelping
+        ? await getItemsForCustomer(widget.currentAccount)
+        : await getItems();
     Item item = createDefaultItem();
 
     rfidTag = await getRFIDorNFC();

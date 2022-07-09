@@ -56,6 +56,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
   ///Signs in [Account] using [_emailController].
   Future _signIn() async {
     debugPrint("Trying to log in ${account.accountName}");
+    account.customerId = widget.currentAccount.customerId;
 
     _isError = false;
     _errorText = "";
@@ -70,7 +71,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
     if (_isError) return;
 
     Navigator.of(context).push(PageRouter(
-      child: UserPage(currentAccount: account),
+      child: UserPage(currentAccount: account, isHelping: true),
       direction: AxisDirection.down,
     ));
   }

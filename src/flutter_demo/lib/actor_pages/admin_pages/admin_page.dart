@@ -71,7 +71,10 @@ class _AdminPageState extends State<AdminPage> {
       UsersListPage(currentAccount: widget.currentAccount),
       ItemsListPage(currentAccount: widget.currentAccount),
       AssistUserPage(currentAccount: widget.currentAccount),
-      UserBodyPage(currentAccount: widget.currentAccount),
+      UserBodyPage(
+        currentAccount: widget.currentAccount,
+        isHelping: false,
+      ),
     ];
     return WillPopScope(
       onWillPop: () async => false,

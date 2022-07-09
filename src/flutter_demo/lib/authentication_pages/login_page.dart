@@ -95,7 +95,10 @@ class _LoginPageState extends State<LoginPage> {
 
       default:
         Navigator.of(context).push(PageRouter(
-          child: UserPage(currentAccount: currentAccount),
+          child: UserPage(
+            currentAccount: currentAccount,
+            isHelping: false,
+          ),
           direction: AxisDirection.down,
         ));
     }
