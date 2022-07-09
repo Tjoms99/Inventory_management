@@ -57,9 +57,8 @@ Future<String> addItem(Item item) async {
     return response.body;
   } catch (e) {
     debugPrint("Failed to add item: $e");
+    return "-1";
   }
-
-  return "-1";
 }
 
 ///Updates [item] in the database.
@@ -82,7 +81,6 @@ Future<String> updateItem(Item item) async {
     return response.body;
   } catch (e) {
     debugPrint("Failed to update item: $e");
+    return "-1";
   }
-
-  return "-1";
 }

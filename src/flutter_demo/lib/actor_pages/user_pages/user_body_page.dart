@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/Services/item_service.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/services/account_service.dart';
+import 'package:flutter_demo/services/item_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 
 ///This is a page where a user can be borrow and return items.
 class UserBodyPage extends StatefulWidget {
   final Account currentAccount;
   final bool isHelping;
-  const UserBodyPage({required this.currentAccount, required this.isHelping});
+  final bool isHelpingAdmin;
+  const UserBodyPage(
+      {required this.currentAccount,
+      required this.isHelping,
+      required this.isHelpingAdmin});
 
   @override
   State<UserBodyPage> createState() => _UserBodyPageState();
@@ -30,8 +34,11 @@ class _UserBodyPageState extends State<UserBodyPage> {
     //Get items belonging only to customer if customer is helping user
     //Or get all items
     items = widget.isHelping
-        ? await getItemsForCustomer(widget.currentAccount)
+        ? widget.isHelpingAdmin
+            ? await getItems()
+            : await getItemsForCustomer(widget.currentAccount)
         : await getItems();
+
     Item item = createDefaultItem();
 
     rfidTag = await getRFIDorNFC();

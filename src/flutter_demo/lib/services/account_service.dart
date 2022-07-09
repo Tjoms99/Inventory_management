@@ -111,9 +111,8 @@ Future<String> addAccount(Account account) async {
     return response.body;
   } catch (e) {
     debugPrint("Failed to add account: $e");
+    return "-1";
   }
-
-  return "-1";
 }
 
 ///Updates [account] in the database.
@@ -137,9 +136,8 @@ Future<String> updateAccount(Account account) async {
     return response.body;
   } catch (e) {
     debugPrint("Failed to update account: $e");
+    return "-1";
   }
-
-  return "-1";
 }
 
 ///Updates [account] with the new [account.registeredCustomerId] in the database.

@@ -98,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
           child: UserPage(
             currentAccount: currentAccount,
             isHelping: false,
+            isHelpingAdmin: false,
           ),
           direction: AxisDirection.down,
         ));

@@ -74,6 +74,7 @@ class _AdminPageState extends State<AdminPage> {
       UserBodyPage(
         currentAccount: widget.currentAccount,
         isHelping: false,
+        isHelpingAdmin: false,
       ),
     ];
     return WillPopScope(

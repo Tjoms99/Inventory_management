@@ -8,7 +8,11 @@ import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
 class UserPage extends StatefulWidget {
   final Account currentAccount;
   final bool isHelping;
-  const UserPage({required this.currentAccount, required this.isHelping});
+  final bool isHelpingAdmin;
+  const UserPage(
+      {required this.currentAccount,
+      required this.isHelping,
+      required this.isHelpingAdmin});
 
   @override
   State<UserPage> createState() => _UserPage();
@@ -50,7 +54,10 @@ class _UserPage extends State<UserPage> {
               ),
             ]),
         body: UserBodyPage(
-            currentAccount: widget.currentAccount, isHelping: widget.isHelping),
+          currentAccount: widget.currentAccount,
+          isHelping: widget.isHelping,
+          isHelpingAdmin: widget.isHelpingAdmin,
+        ),
       ),
     );
   }
