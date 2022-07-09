@@ -4,7 +4,7 @@ include '../conn.php';
 // 0 = OK 
 // 1 = Account exists
 // 2 = RFID exists
-$error = "0";
+$error = '0';
 
 
 $id = $_POST['id'];
@@ -14,7 +14,6 @@ $password = $_POST['password'];
 $rfid = $_POST['rfid'];
 $customer_id = $_POST['customer_id'];
 $registered_customer_id = $_POST['registered_customer_id'];
-
 
 $id = intval($id);
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -67,3 +66,21 @@ if ($error != "0") {
 
 $sql = "UPDATE `accounts` SET `account_name` = '$account_name', `account_role` = '$account_role' , `password` = '$hashed_password', `rfid` = '$rfid', `customer_id` = '$customer_id', `registered_customer_id` = '$registered_customer_id' WHERE `accounts`.`id` = $id";
 $conn->query($sql);
+
+
+//Update items with new location if name has changed 
+$sqlAll = $conn->query("SELECT * FROM ITEMS");
+if ($currentName != $account_name) {
+    while ($row = $sqlAll->fetch_assoc()) {
+        $location = $row['location'];
+        $id = $row['id'];
+        $id = intval($id);
+        if (hash_equals($location, $currentName)) {
+            $sql = "UPDATE `items` SET  `location` = '$account_name' WHERE `items`.`id` = $id";
+            $conn->query($sql);
+        } else if (hash_equals($location, "$currentName (returned)")) {
+            $sql = "UPDATE `items` SET  `location` = '$account_name (returned)' WHERE `items`.`id` = $id";
+            $conn->query($sql);
+        }
+    }
+}
