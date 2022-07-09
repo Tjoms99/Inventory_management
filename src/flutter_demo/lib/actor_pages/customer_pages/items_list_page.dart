@@ -4,6 +4,7 @@ import 'package:flutter_demo/Services/item_service.dart';
 import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
+import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/page_route.dart';
 
 ///This is a page where customers or admins can add/modify/delete [Item]s.
@@ -85,6 +86,9 @@ class _ListBuilderState extends State<ListBuilder> {
               itemBuilder: (_, int index) {
                 return Column(
                   children: [
+                    index == 0
+                        ? const SizedBox(height: thirdBoxHeight)
+                        : const SizedBox(),
                     ExpandableListView(
                       title: _types[index],
                       listToBuild: getItemsInType(_items, _types[index]),
@@ -251,7 +255,8 @@ class _ExpandableListViewState extends State<ExpandableListView> {
           ? Column(
               children: <Widget>[
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2),
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () => {
@@ -269,11 +274,13 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                               : Colors.orange[700],
                           size: 40.0,
                         ),
-                        Text(
-                          widget.title,
-                          style: const TextStyle(
-                            fontSize: 23,
-                            color: Colors.black,
+                        Center(
+                          child: Text(
+                            widget.title,
+                            style: const TextStyle(
+                              fontSize: 23,
+                              color: Colors.black,
+                            ),
                           ),
                         )
                       ],
@@ -283,7 +290,7 @@ class _ExpandableListViewState extends State<ExpandableListView> {
 
                 //EXPANDABLE LIST.
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ExpandableContainer(
                     expanded: _expandFlag,
                     child: _expandFlag
