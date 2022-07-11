@@ -274,13 +274,11 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                               : Colors.orange[700],
                           size: 40.0,
                         ),
-                        Center(
-                          child: Text(
-                            widget.title,
-                            style: const TextStyle(
-                              fontSize: 23,
-                              color: Colors.black,
-                            ),
+                        Text(
+                          widget.title,
+                          style: const TextStyle(
+                            fontSize: 23,
+                            color: Colors.black,
                           ),
                         )
                       ],
