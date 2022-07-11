@@ -1,30 +1,38 @@
-import time                             # Library used for waiting
-import requests					        # http request library
-from mfrc522 import SimpleMFRC522		# RFID module library
-import RPi.GPIO as GPIO				    # Raspberry pi GPIO library
+import string 
+import random
+import time
+import requests
+from mfrc522 import SimpleMFRC522
+import RPi.GPIO as GPIO
 
 api_endpoint = "http://192.168.43.90/dashboard/flutter_db/totem/addTotem.php"
-
 reader = SimpleMFRC522()
 
-# Function waits for an RFID tag and makes a request to the database-server, and repeats.
-
+def config():
+    try:
+        f = open('config.txt', 'r')
+        totem_id = f.readline()
+        f.close()
+    except:
+        characters = string.ascii_letters + string.digits
+        totem_id = ''.join(random.choice(characters) for i in range(8))
+        f = open('config.txt', 'w')
+        f.write(id)
+        f.close()
+    finally:
+        return totem_id
 
 def main():
+    totem_id = config()
     while True:
         rfid, text = reader.read()
         rfid = hex(rfid)
-        data = {'rfid': rfid}
+        data = {'totem_id': totem_id, 'rfid': rfid}
         r = requests.post(url=api_endpoint, data=data)
         time.sleep(3)
-
-
-def terminate():
-    GPIO.cleanup()
-
 
 if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
-        terminate()
+        GPIO.cleanup()
