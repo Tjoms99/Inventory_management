@@ -8,6 +8,8 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 ///This is a page where an [Account] can be inserted or updated into the database
@@ -234,6 +236,7 @@ class _RegisterPage extends State<RegisterPage> {
     if (widget._doRegister) {
       debugPrint("Trying to add user");
       _errorPHP = await addAccount(account);
+      _sendEmailVerification(account.accountName);
     } else {
       debugPrint("Trying to update user");
       _errorPHP = await updateAccount(account);
@@ -252,6 +255,32 @@ class _RegisterPage extends State<RegisterPage> {
 
     debugPrint("Added/Updated completed");
     gotoPage();
+  }
+
+  Future<void> _sendEmailVerification(String email) async {
+    String username = 'niZ0HyFc@gmail.com';
+    String password = 'niZ0HyFc';
+
+    // ignore: deprecated_member_use
+    final smtpServer = gmail(username, password);
+
+    // Create our message.
+    final message = Message()
+      ..from = "marcus.alex@live.no"
+      ..recipients.add('marcus.alex@live.no')
+      ..subject = 'Test Dart Mailer library :: 😀 :: ${DateTime.now()}'
+      ..text = 'This is the plain text.\nThis is line 2 of the text part.'
+      ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } on MailerException catch (e) {
+      print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    }
   }
 
   ///Resets keyboard checkers.

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-//Ip address of the server
+//Address
 const ipAddress = "192.168.43.90";
+String totemID = "";
 // Colors
 Color primaryBackgroundColor = Colors.white;
 const Color secondaryBackgroundColor = Colors.orangeAccent;

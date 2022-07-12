@@ -11,7 +11,9 @@ Future<String> getTotemRFID() async {
   try {
     var uri = Uri.parse(
         "http://$ipAddress/dashboard/flutter_db/totem/getTotemRFID.php");
-    final response = await http.get(uri);
+    final response = await http.post(uri, body: {
+      'totem_id': "123",
+    });
 
     rfid = jsonDecode(response.body);
   } catch (e) {
