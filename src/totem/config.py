@@ -12,7 +12,7 @@ def config():
         f.close()
     except:
         f = open('config.txt', 'w')
-        f.write(id)
+        f.write(totem_id)
         f.close()
     finally:
         return totem_id
