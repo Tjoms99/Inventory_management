@@ -2,7 +2,7 @@ import time
 import requests
 from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
-import config
+from config import *
 
 api_endpoint = "http://192.168.43.90/dashboard/flutter_db/totem/addTotem.php"
 reader = SimpleMFRC522()
