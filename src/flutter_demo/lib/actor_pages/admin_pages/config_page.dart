@@ -55,6 +55,7 @@ class _ConfigPageState extends State<ConfigPage> {
   @override
   void initState() {
     super.initState();
+    _totemIdController.text = totemID;
     _focusTotemId.addListener(_onFocusChangePassword);
   }
 
