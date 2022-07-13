@@ -140,6 +140,7 @@ class _RegisterPage extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
+    rfidColor = Colors.white;
     initializeControllers();
     _focusEmail.addListener(_onFocusChangeEmail);
     _focusPassword.addListener(_onFocusChangePassword);

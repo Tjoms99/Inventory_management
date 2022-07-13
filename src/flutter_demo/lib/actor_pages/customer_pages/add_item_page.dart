@@ -69,6 +69,7 @@ class _AddItemPageState extends State<AddItemPage> {
   @override
   void initState() {
     super.initState();
+    rfidColor = Colors.white;
     setRegisteredCustomerID();
 
     //KEYBOARD
