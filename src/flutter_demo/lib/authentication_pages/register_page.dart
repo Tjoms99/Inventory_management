@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
@@ -8,8 +9,6 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server/gmail.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 ///This is a page where an [Account] can be inserted or updated into the database
@@ -63,6 +62,13 @@ class _RegisterPage extends State<RegisterPage> {
   //Others.
   String _rfidTag = "";
   bool _isVisible = false;
+
+  final String _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  final Random _rnd = Random();
+
+  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
   ///Returns the [String] located in the email textfield.
   String getEmail() {
@@ -191,6 +197,7 @@ class _RegisterPage extends State<RegisterPage> {
     String registeredCustomerId = getReigstedCustomerId();
 
     String _errorPHP = "-1";
+    String verificationCode = getRandomString(10);
 
     Account account = Account(
         id: widget._index,
@@ -235,7 +242,7 @@ class _RegisterPage extends State<RegisterPage> {
     //Insert or update account
     if (widget._doRegister) {
       debugPrint("Trying to add user");
-      _errorPHP = await addAccount(account);
+      _errorPHP = await addAccount(account, verificationCode);
     } else {
       debugPrint("Trying to update user");
       _errorPHP = await updateAccount(account);
@@ -252,11 +259,13 @@ class _RegisterPage extends State<RegisterPage> {
     setState(() {});
     if (_isError) return;
 
-    if (widget._doRegister)
+    //Send verification email to new user
+    if (widget._doRegister) {
       sendEmail(
-          from_email: from_email,
-          verification_code: verification_code,
-          to_email: account.accountName);
+          fromEmail: fromEmail,
+          verificationCode: verificationCode,
+          toEmail: account.accountName);
+    }
 
     debugPrint("Added/Updated completed");
     gotoPage();

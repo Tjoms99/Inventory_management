@@ -94,7 +94,7 @@ void deleteAccount(int id) {
 ///Inserts [account] in the database.
 ///
 ///Returns error status
-Future<String> addAccount(Account account) async {
+Future<String> addAccount(Account account, String verificationCode) async {
   try {
     var uri = Uri.parse(
         "http://$ipAddress/dashboard/flutter_db/account/addAccount.php");
@@ -106,6 +106,7 @@ Future<String> addAccount(Account account) async {
       "rfid": account.rfid,
       "customer_id": account.customerId,
       "registered_customer_id": account.registeredCustomerId,
+      "verified": verificationCode,
     });
 
     return response.body;
@@ -155,14 +156,54 @@ void updateAccountRegisteredCustomerID(Account account) {
   }
 }
 
+///Updates [account] with the new [account.registeredCustomerId] in the database.
+Future<bool> verifyAccount(String verificationCode) async {
+  bool _verificationCompleted = false;
+  try {
+    var uri = Uri.parse(
+        "http://$ipAddress/dashboard/flutter_db/account/verifyAccount.php");
+
+    var response = await http.post(uri, body: {
+      'verificationCode': verificationCode,
+    });
+
+    if (response.body == "0") _verificationCompleted = true;
+  } catch (e) {
+    debugPrint("Failed to verify account: $e");
+  }
+
+  return _verificationCompleted;
+}
+
+///Returns [true] if account is verified
+Future<bool> isAccountVerified(Account account) async {
+  bool _isVerified = false;
+  try {
+    var uri = Uri.parse(
+        "http://$ipAddress/dashboard/flutter_db/account/isAccountVerified.php");
+
+    var response = await http.post(uri, body: {
+      'account_name': account.accountName,
+    });
+
+    debugPrint(response.body);
+    if (response.body == '"yes"') _isVerified = true;
+  } catch (e) {
+    debugPrint("Failed to verify account: $e");
+  }
+
+  return _isVerified;
+}
+
+///Sends an email to an [Account] with a verification code
 Future sendEmail({
-  required String from_email,
-  required String verification_code,
-  required String to_email,
+  required String fromEmail,
+  required String verificationCode,
+  required String toEmail,
 }) async {
-  final serviceId = 'service_b69xa24';
-  final templateId = 'template_j6s3lnn';
-  final userId = 'oTgX46OB8OyN3sYDr';
+  const serviceId = 'service_b69xa24';
+  const templateId = 'template_j6s3lnn';
+  const userId = 'oTgX46OB8OyN3sYDr';
 
   final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
   final response = await http.post(
@@ -176,9 +217,9 @@ Future sendEmail({
       'template_id': templateId,
       'user_id': userId,
       'template_params': {
-        'from_email': from_email,
-        'verification_code': verification_code,
-        'to_email': to_email,
+        'from_email': fromEmail,
+        'verification_code': verificationCode,
+        'to_email': toEmail,
       }
     }),
   );

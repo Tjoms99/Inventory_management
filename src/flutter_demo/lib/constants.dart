@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-//Address
+//Addresses
 const ipAddress = "192.168.43.90";
+const fromEmail = "inventorymanagement.verify@gmail.com";
 String totemID = "default totem ID";
+
 // Colors
 Color primaryBackgroundColor = Colors.white;
 const Color secondaryBackgroundColor = Colors.orangeAccent;

@@ -1,40 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/services/account_service.dart';
 
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 ///This is a page where an account can signed in using an account from the database.
-class ConfigPage extends StatefulWidget {
-  Account currentAccount;
-  ConfigPage({required this.currentAccount});
+class VerifyPage extends StatefulWidget {
+  const VerifyPage();
 
   @override
-  State<ConfigPage> createState() => _ConfigPageState();
+  State<VerifyPage> createState() => _VerifyPageState();
 }
 
-class _ConfigPageState extends State<ConfigPage> {
+class _VerifyPageState extends State<VerifyPage> {
   //Controllers.
-  final TextEditingController _totemIdController = TextEditingController();
+  final TextEditingController _verifyController = TextEditingController();
 
   //Focus nodes.
-  final FocusNode _focusTotemId = FocusNode();
+  final FocusNode _focusVerify = FocusNode();
 
   //Keyboard checkers.
-  bool _openKeyboardTotemId = false;
+  bool _openKeyboardVerify = false;
   bool _isKeyboardEnabled = false;
 
   //Error.
   String _errorText = "";
   bool _isError = false;
 
-  Future _update() async {
-    String id = _totemIdController.text.trim();
+  Future _verify() async {
+    String verificationCode = _verifyController.text.trim();
 
     _isError = false;
     _errorText = "";
 
-    totemID = id;
+    bool _verificationCompleted = await verifyAccount(verificationCode);
+
+    if (!_verificationCompleted) {
+      _isError = true;
+      _errorText = "Wrong verification code";
+      setState(() {});
+      return;
+    }
+
     _gotoPage();
   }
 
@@ -43,23 +50,23 @@ class _ConfigPageState extends State<ConfigPage> {
     Navigator.of(context).pop();
   }
 
-  ///Connects the [_totemIdController] to the keyboard.
+  ///Connects the [_verifyController] to the keyboard.
   void _onFocusChangePassword() {
     setState(() {
-      _openKeyboardTotemId = true;
+      _openKeyboardVerify = true;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _totemIdController.text = totemID;
-    _focusTotemId.addListener(_onFocusChangePassword);
+    _verifyController.text = "";
+    _focusVerify.addListener(_onFocusChangePassword);
   }
 
   @override
   void dispose() {
-    _totemIdController.dispose();
+    _verifyController.dispose();
     super.dispose();
   }
 
@@ -82,7 +89,7 @@ class _ConfigPageState extends State<ConfigPage> {
                   //INFO TEXT.
                   const Center(
                     child: Text(
-                      'CONFIGURATION',
+                      'ENTER VERIFICATION CODE',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: firstFontSize,
@@ -127,8 +134,8 @@ class _ConfigPageState extends State<ConfigPage> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: texfieldPadding),
                                     child: TextField(
-                                      controller: _totemIdController,
-                                      focusNode: _focusTotemId,
+                                      controller: _verifyController,
+                                      focusNode: _focusVerify,
                                       decoration: InputDecoration(
                                         hintStyle:
                                             const TextStyle(color: Colors.grey),
@@ -146,7 +153,7 @@ class _ConfigPageState extends State<ConfigPage> {
                                           borderRadius: BorderRadius.circular(
                                               texfieldBorderRadius),
                                         ),
-                                        hintText: 'TOTEM ID',
+                                        hintText: 'Verification code',
                                         fillColor: textfieldBackgroundColor,
                                         filled: true,
                                       ),
@@ -159,7 +166,7 @@ class _ConfigPageState extends State<ConfigPage> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: standardPadding),
                                     child: GestureDetector(
-                                      onTap: _update,
+                                      onTap: _verify,
                                       child: Container(
                                         padding:
                                             const EdgeInsets.all(buttonPadding),
@@ -169,7 +176,7 @@ class _ConfigPageState extends State<ConfigPage> {
                                             gradient: mainGradient),
                                         child: const Center(
                                           child: Text(
-                                            'Update',
+                                            'Verify',
                                             style: TextStyle(
                                               color: buttonTextColor,
                                               fontWeight: FontWeight.bold,
@@ -226,8 +233,8 @@ class _ConfigPageState extends State<ConfigPage> {
                                             //width: 500,
                                             textColor: Colors.black,
 
-                                            textController: _openKeyboardTotemId
-                                                ? _totemIdController
+                                            textController: _openKeyboardVerify
+                                                ? _verifyController
                                                 : TextEditingController(),
                                             //customLayoutKeys: _customLayoutKeys,
                                             defaultLayouts: const [
