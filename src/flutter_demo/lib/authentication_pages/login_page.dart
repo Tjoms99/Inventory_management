@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/Services/account_service.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
+import 'package:flutter_demo/authentication_pages/verify_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
 
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 import 'package:flutter_demo/page_route.dart';
+import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
@@ -71,7 +72,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   ///Changes the page depending on [widget.currentAccount.accountRole].
-  void _gotoPage() {
+  ///
+  ///Goes to verify page if [Account] is not verified
+  void _gotoPage() async {
+    bool _isVerified = await isAccountVerified(currentAccount);
+    if (!_isVerified) {
+      debugPrint("Need to verify account");
+      Navigator.of(context).push(PageRouter(
+        child: const VerifyPage(),
+        direction: AxisDirection.down,
+      ));
+      return;
+    }
+
     switch (currentAccount.accountRole) {
       case "customer":
         Navigator.of(context).push(PageRouter(

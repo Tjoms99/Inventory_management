@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/actor_pages/admin_pages/config_page.dart';
 import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
@@ -62,6 +63,14 @@ class _AdminPageState extends State<AdminPage> {
     ));
   }
 
+  ///Changes the page.
+  void _gotoConfig() {
+    Navigator.of(context).push(PageRouter(
+      child: ConfigPage(currentAccount: widget.currentAccount),
+      direction: AxisDirection.down,
+    ));
+  }
+
   ///Builds 4 pages.
   ///
   ///[Account] list, [Item] list, help [Account] and play [Account].
@@ -96,6 +105,10 @@ class _AdminPageState extends State<AdminPage> {
 
             //UPDATE STATE.
             actions: [
+              IconButton(
+                onPressed: _gotoConfig,
+                icon: const Icon(Icons.settings),
+              ),
               IconButton(
                 onPressed: _update,
                 icon: const Icon(Icons.update),

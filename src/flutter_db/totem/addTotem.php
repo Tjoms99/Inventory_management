@@ -2,7 +2,7 @@
 include '../conn.php';
 
 $rfid = $_POST['rfid'];
-$totem_id = $_POST['totem_id']
+$totem_id = $_POST['totem_id'];
 
 $rfid = substr($rfid, 2, -2);
 

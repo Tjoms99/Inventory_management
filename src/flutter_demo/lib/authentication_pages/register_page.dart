@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
@@ -61,6 +62,13 @@ class _RegisterPage extends State<RegisterPage> {
   //Others.
   String _rfidTag = "";
   bool _isVisible = false;
+
+  final String _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  final Random _rnd = Random();
+
+  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
   ///Returns the [String] located in the email textfield.
   String getEmail() {
@@ -189,6 +197,7 @@ class _RegisterPage extends State<RegisterPage> {
     String registeredCustomerId = getReigstedCustomerId();
 
     String _errorPHP = "-1";
+    String verificationCode = getRandomString(10);
 
     Account account = Account(
         id: widget._index,
@@ -233,7 +242,7 @@ class _RegisterPage extends State<RegisterPage> {
     //Insert or update account
     if (widget._doRegister) {
       debugPrint("Trying to add user");
-      _errorPHP = await addAccount(account);
+      _errorPHP = await addAccount(account, verificationCode);
     } else {
       debugPrint("Trying to update user");
       _errorPHP = await updateAccount(account);
@@ -249,6 +258,14 @@ class _RegisterPage extends State<RegisterPage> {
 
     setState(() {});
     if (_isError) return;
+
+    //Send verification email to new user
+    if (widget._doRegister) {
+      sendEmail(
+          fromEmail: fromEmail,
+          verificationCode: verificationCode,
+          toEmail: account.accountName);
+    }
 
     debugPrint("Added/Updated completed");
     gotoPage();

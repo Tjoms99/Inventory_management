@@ -16,7 +16,6 @@ class PageRouter extends PageRouteBuilder {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
-    // TODO: implement buildTransitions
     return SlideTransition(
       position: Tween<Offset>(
         begin: getBeginOffset(),
