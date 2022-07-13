@@ -15,7 +15,9 @@ def main():
         rfid = hex(rfid)
         data = {'totem_id': totem_id, 'rfid': rfid}
         r = requests.post(url=api_endpoint, data=data)
-        time.sleep(3)
+        time.sleep(2)
+        data = {'totem_id': totem_id, 'rfid': ''}
+        r = requests.post(url=api_endpoint, data=data)
 
 
 if __name__ == '__main__':
