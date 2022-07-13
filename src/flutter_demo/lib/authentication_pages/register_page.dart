@@ -236,7 +236,6 @@ class _RegisterPage extends State<RegisterPage> {
     if (widget._doRegister) {
       debugPrint("Trying to add user");
       _errorPHP = await addAccount(account);
-      _sendEmailVerification(account.accountName);
     } else {
       debugPrint("Trying to update user");
       _errorPHP = await updateAccount(account);
@@ -253,34 +252,14 @@ class _RegisterPage extends State<RegisterPage> {
     setState(() {});
     if (_isError) return;
 
+    if (widget._doRegister)
+      sendEmail(
+          from_email: from_email,
+          verification_code: verification_code,
+          to_email: account.accountName);
+
     debugPrint("Added/Updated completed");
     gotoPage();
-  }
-
-  Future<void> _sendEmailVerification(String email) async {
-    String username = 'niZ0HyFc@gmail.com';
-    String password = 'niZ0HyFc';
-
-    // ignore: deprecated_member_use
-    final smtpServer = gmail(username, password);
-
-    // Create our message.
-    final message = Message()
-      ..from = "marcus.alex@live.no"
-      ..recipients.add('marcus.alex@live.no')
-      ..subject = 'Test Dart Mailer library :: 😀 :: ${DateTime.now()}'
-      ..text = 'This is the plain text.\nThis is line 2 of the text part.'
-      ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
-
-    try {
-      final sendReport = await send(message, smtpServer);
-      print('Message sent: ' + sendReport.toString());
-    } on MailerException catch (e) {
-      print('Message not sent.');
-      for (var p in e.problems) {
-        print('Problem: ${p.code}: ${p.msg}');
-      }
-    }
   }
 
   ///Resets keyboard checkers.

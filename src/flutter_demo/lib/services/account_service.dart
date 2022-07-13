@@ -154,3 +154,33 @@ void updateAccountRegisteredCustomerID(Account account) {
     debugPrint("Failed to update account: $e");
   }
 }
+
+Future sendEmail({
+  required String from_email,
+  required String verification_code,
+  required String to_email,
+}) async {
+  final serviceId = 'service_b69xa24';
+  final templateId = 'template_j6s3lnn';
+  final userId = 'oTgX46OB8OyN3sYDr';
+
+  final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+  final response = await http.post(
+    url,
+    headers: {
+      'origin': 'http://localhost',
+      'Content-Type': 'application/json',
+    },
+    body: json.encode({
+      'service_id': serviceId,
+      'template_id': templateId,
+      'user_id': userId,
+      'template_params': {
+        'from_email': from_email,
+        'verification_code': verification_code,
+        'to_email': to_email,
+      }
+    }),
+  );
+  print(response.body);
+}
