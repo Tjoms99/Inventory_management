@@ -4,7 +4,7 @@ import 'package:flutter_demo/constants.dart';
 
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
-///This is a page where an account can signed in using an account from the database.
+///This is a page where an instance of the application can be mapeed to [totemID] using an already existing [totemID] from the database.
 class ConfigPage extends StatefulWidget {
   Account currentAccount;
   ConfigPage({required this.currentAccount});
@@ -28,6 +28,7 @@ class _ConfigPageState extends State<ConfigPage> {
   String _errorText = "";
   bool _isError = false;
 
+  ///Updates the [totemID].
   Future _update() async {
     String id = _totemIdController.text.trim();
 
@@ -63,7 +64,7 @@ class _ConfigPageState extends State<ConfigPage> {
     super.dispose();
   }
 
-  ///Builds the login page.
+  ///Builds the config page.
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

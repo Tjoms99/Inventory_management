@@ -10,7 +10,7 @@ import 'package:flutter_demo/services/item_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
-///This is a page where an [Item] can be inserted or updated into the database
+///This is a page where an [Item] can be inserted or updated into the database.
 class AddItemPage extends StatefulWidget {
   final bool doAddItem;
   final Account currentAccount;
@@ -51,7 +51,7 @@ class _AddItemPageState extends State<AddItemPage> {
   bool _isKeyboardEnabled = false;
 
   //Others.
-  String rfidTag = "";
+  String _rfidTag = "";
   String _errorText = "";
   bool _isError = false;
   String _rfidText = "TAP HERE TO SCAN YOUR RFID CARD";
@@ -72,7 +72,7 @@ class _AddItemPageState extends State<AddItemPage> {
     rfidColor = Colors.white;
     setRegisteredCustomerID();
 
-    //KEYBOARD
+    //KEYBOARD.
     _focusType.addListener(_onFocusChangeType);
     _focusStatus.addListener(_onFocusChangeStatus);
     _focusDescription.addListener(_onFocusChangeDescription);
@@ -83,10 +83,10 @@ class _AddItemPageState extends State<AddItemPage> {
     if (widget.item.name == "name") {
       return;
     }
-    //TextEditingController
+    //TextEditingController.
     _typeController.text = widget.item.name;
     _statusController.text = widget.item.status;
-    rfidTag = widget.item.rfid;
+    _rfidTag = widget.item.rfid;
     _descriptionController.text = widget.item.description;
     _locationController.text = widget.item.location;
     _registeredCustomerIdController.text = widget.item.registeredCustomerId;
@@ -104,7 +104,7 @@ class _AddItemPageState extends State<AddItemPage> {
       return;
     }
 
-    //Should be length of 200
+    //Should be length of 200.
     while (id.length < 200) {
       id = id + "0";
     }
@@ -146,6 +146,7 @@ class _AddItemPageState extends State<AddItemPage> {
     return _statusController.text.trim();
   }
 
+  ///Changes the [Color] of the rfid icon and the info [Text].
   void _changeStateRFID() {
     rfidColor = rfidColor == Colors.green ? Colors.white : Colors.green;
     _rfidText = _rfidText == "TAP HERE TO SCAN YOUR RFID CARD"
@@ -154,16 +155,17 @@ class _AddItemPageState extends State<AddItemPage> {
     setState(() {});
   }
 
+  ///Sets the [_rfidTag] using the Totem RFID or the NFC reader.
   Future setRFID() async {
     _changeStateRFID();
     await Future.delayed(const Duration(milliseconds: 50));
-    rfidTag = await getRFIDorNFC();
+    _rfidTag = await getRFIDorNFC();
     _changeStateRFID();
   }
 
   ///Returns the [String] of the RFID.
   String getRFID() {
-    return rfidTag;
+    return _rfidTag;
   }
 
   ///Returns the [String] located in the description textfield.
@@ -181,7 +183,7 @@ class _AddItemPageState extends State<AddItemPage> {
     return _registeredCustomerIdController.text.trim();
   }
 
-  ///Checks if the [Item] contains empty parameters
+  ///Checks if the [Item] contains empty parameters.
   void errorCheck(Item item, String _errorPHP) {
     _isError = false;
     _errorText = "";
@@ -373,7 +375,7 @@ class _AddItemPageState extends State<AddItemPage> {
 
                           //RFID ID.
                           Text(
-                            'ID: ' + rfidTag,
+                            'ID: ' + _rfidTag,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: thirdFontSize,

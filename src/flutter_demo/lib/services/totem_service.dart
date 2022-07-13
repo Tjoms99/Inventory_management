@@ -5,7 +5,7 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:http/http.dart' as http;
 
-///Returns [rfid] stored in the database.
+///Returns a [String] with the rfid that is stored in the database.
 Future<String> getTotemRFID() async {
   String rfid = "";
 
@@ -24,6 +24,7 @@ Future<String> getTotemRFID() async {
   return rfid.toUpperCase();
 }
 
+///Returns a [String] with the rfid that is scanned using [FlutterNfcKit].
 Future<String> getNFC() async {
   String rfid = "";
 
@@ -40,12 +41,11 @@ Future<String> getNFC() async {
   return rfid;
 }
 
-///Returns [rfid] recieved from a Totem or NFC reader.
+///Returns a [String] with the rfid recieved from a Totem or a NFC reader.
 ///
-///The Totem rfid is retrieved from the database ever second for five seconds.
-///The NFC reader is getting the rfid locally from the device.
+///The Totem rfid is retrieved from the database ever second for five seconds if [FlutterNfcKit.nfcAvailability] is false.
+///The NFC reader is getting the rfid locally from the device if [FlutterNfcKit.nfcAvailability] is true.
 Future<String> getRFIDorNFC() async {
-  Duration second = const Duration(milliseconds: 1000);
   String rfid = "";
 
   var availability = await FlutterNfcKit.nfcAvailability;
@@ -65,17 +65,16 @@ Future<String> getRFIDorNFC() async {
     await Future.delayed(const Duration(seconds: 1), () async {
       rfid = await getTotemRFID();
     });
-
     if (rfid.isNotEmpty) return rfid;
+
     await Future.delayed(const Duration(seconds: 1), () async {
       rfid = await getTotemRFID();
     });
-
     if (rfid.isNotEmpty) return rfid;
+
     await Future.delayed(const Duration(seconds: 1), () async {
       rfid = await getTotemRFID();
     });
-
     if (rfid.isNotEmpty) return rfid;
   } else {
     rfid = await getNFC();

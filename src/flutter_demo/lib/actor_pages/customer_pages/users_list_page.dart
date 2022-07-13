@@ -30,13 +30,13 @@ class _UsersListPageState extends State<UsersListPage> {
     }
     debugPrint("Setting  correct accounts for correct user");
     for (int index = 0; index < accounts.length; index++) {
-      //Remove all admins and customers
+      //Remove all admins and customers.
       if (isAdmin(accounts[index]) ||
           isCustomer(accounts[index]) ||
           !isUserRegisteredAtCustomer(accounts[index], widget.currentAccount)) {
         accounts.removeAt(index);
 
-        //Update index due to list length change
+        //Update index due to list length change.
         index = index - 1;
       }
     }
@@ -47,7 +47,7 @@ class _UsersListPageState extends State<UsersListPage> {
     super.dispose();
   }
 
-  ///Builds the basic page structure
+  ///Builds the basic page structure.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +73,7 @@ class _UsersListPageState extends State<UsersListPage> {
   }
 }
 
-///This is a page that shows a list of [Accounts].
+///This is a page that shows a [List] of [Account]s.
 class ListBuilder extends StatefulWidget {
   List<Account> listOfAccounts = [];
   Account currentAccount = createDefaultAccount();
@@ -101,7 +101,7 @@ class _ListBuilderState extends State<ListBuilder> {
   void _updateActionModify() {
     String _email = widget.listOfAccounts[_selectedIndex].accountName;
 
-    //Go to update user page
+    //Go to update user page.
     if (_hasPressedModify) {
       Navigator.of(context).push(PageRouter(
         child: RegisterPage(
@@ -114,7 +114,7 @@ class _ListBuilderState extends State<ListBuilder> {
       ));
     }
 
-    //Update state
+    //Update state.
     setState(() {
       if (_hasPressedModify) {
         _hasPressedModify = false;

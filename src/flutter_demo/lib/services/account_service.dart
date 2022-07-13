@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../classes/account.dart';
 
-///Returns [accounts] from the database.
+///Returns a [List] of [Account]s from the database.
 Future<List<Account>> getAccounts() async {
   List<Account> accounts = [];
   try {
@@ -26,9 +26,9 @@ Future<List<Account>> getAccounts() async {
   return accounts;
 }
 
-///Returns [account] from database using [account.accountName].
+///Returns an [Account] from database using [Account.accountName].
 ///
-///Returns a defualt account if there was no match.
+///Returns a defualt [Account] if there was no match.
 Future<Account> getAccountFromName(String name) async {
   Account account = createDefaultAccount();
 
@@ -50,9 +50,9 @@ Future<Account> getAccountFromName(String name) async {
   return account;
 }
 
-///Returns [account] from database using [account.accountName] and [account.password].
+///Returns [Account] from database using [Account.accountName] and [Account.password].
 ///
-///Returns a defualt account if there was no match.
+///Returns a defualt [Account] if there was no match.
 Future<Account> getAccount(Account thisAccount) async {
   Account account = createDefaultAccount();
 
@@ -78,7 +78,7 @@ Future<Account> getAccount(Account thisAccount) async {
   return account;
 }
 
-///Deletes account with [id] from the database.
+///Deletes [Account] with [Account.id] from the database.
 void deleteAccount(int id) {
   try {
     var uri = Uri.parse(
@@ -91,9 +91,9 @@ void deleteAccount(int id) {
   }
 }
 
-///Inserts [account] in the database.
+///Inserts [Account] in the database.
 ///
-///Returns error status
+///Returns error status.
 Future<String> addAccount(Account account, String verificationCode) async {
   try {
     var uri = Uri.parse(
@@ -116,9 +116,9 @@ Future<String> addAccount(Account account, String verificationCode) async {
   }
 }
 
-///Updates [account] in the database.
+///Updates [Account] in the database.
 ///
-///Returns error status
+///Returns error status.
 Future<String> updateAccount(Account account) async {
   try {
     var uri = Uri.parse(
@@ -141,7 +141,7 @@ Future<String> updateAccount(Account account) async {
   }
 }
 
-///Updates [account] with the new [account.registeredCustomerId] in the database.
+///Updates [Account] with the new [Account.registeredCustomerId] in the database.
 void updateAccountRegisteredCustomerID(Account account) {
   try {
     var uri = Uri.parse(
@@ -156,7 +156,7 @@ void updateAccountRegisteredCustomerID(Account account) {
   }
 }
 
-///Updates [account] with the new [account.registeredCustomerId] in the database.
+///Updates [Account] with the new [Account.registeredCustomerId] in the database.
 Future<bool> verifyAccount(String verificationCode) async {
   bool _verificationCompleted = false;
   try {
@@ -175,7 +175,7 @@ Future<bool> verifyAccount(String verificationCode) async {
   return _verificationCompleted;
 }
 
-///Returns [true] if account is verified
+///Returns [True] if [Account] is verified.
 Future<bool> isAccountVerified(Account account) async {
   bool _isVerified = false;
   try {
@@ -195,7 +195,9 @@ Future<bool> isAccountVerified(Account account) async {
   return _isVerified;
 }
 
-///Sends an email to an [Account] with a verification code
+///Sends an email to an [Account] with a verification code.
+///
+///The email is from [fromEmail].
 Future sendEmail({
   required String fromEmail,
   required String verificationCode,

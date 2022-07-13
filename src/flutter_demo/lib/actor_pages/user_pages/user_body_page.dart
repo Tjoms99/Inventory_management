@@ -27,9 +27,9 @@ class _UserBodyPageState extends State<UserBodyPage> {
   var info;
   List<Item> items = [];
 
-  ///Updates the current [item.status] of an item depending on its previous [item.status].
+  ///Updates the current [Item.status] of an item depending on its previous [Item.status].
   ///
-  ///Updates [item.location] when [item.status] changes.
+  ///Updates [Item.location] when [Item.status] changes.
   Future _updateAction() async {
     //Get items belonging only to customer if customer is helping user
     //Or get all items

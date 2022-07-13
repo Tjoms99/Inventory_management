@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/services/account_service.dart';
 
+///A class of [Account].
 class Account {
   int id;
   String accountName;
@@ -41,6 +42,7 @@ Account createAccountFromJson(List<dynamic> accounts, int index) {
           accounts[index]['registered_customer_id'] as String);
 }
 
+///Returns an [Account] with default values.
 Account createDefaultAccount() {
   return Account(
       id: 0,
@@ -52,7 +54,7 @@ Account createDefaultAccount() {
       registeredCustomerId: "registeredCustomerId");
 }
 
-///Returns true if [account] has a default role.
+///Returns true if [Account] has a default role.
 bool isDefualt(Account account) {
   bool _isDefault = false;
   if (account.accountRole == "accountRole") _isDefault = true;
@@ -60,7 +62,7 @@ bool isDefualt(Account account) {
   return _isDefault;
 }
 
-///Returns true if [account] has a user role.
+///Returns true if [Account] has a user role.
 bool isUser(Account account) {
   bool _isDefault = false;
   if (account.accountRole == "user") _isDefault = true;
@@ -68,7 +70,7 @@ bool isUser(Account account) {
   return _isDefault;
 }
 
-///Returns true if [account] has a admin role.
+///Returns true if [Account] has a admin role.
 bool isAdmin(Account account) {
   bool _isAdmin = false;
 
@@ -77,7 +79,7 @@ bool isAdmin(Account account) {
   return _isAdmin;
 }
 
-///Returns true if [account] has a admin role.
+///Returns true if [Account] has a admin role.
 bool isCustomer(Account account) {
   bool _isCustomer = false;
   if (account.accountRole == "customer") _isCustomer = true;
@@ -85,7 +87,7 @@ bool isCustomer(Account account) {
   return _isCustomer;
 }
 
-///Returns true if [user.registeredCustomerId] is containing [customer.customerId].
+///Returns true if [Account.registeredCustomerId] is containing [Account.customerId].
 bool isUserRegisteredAtCustomer(Account user, Account customer) {
   bool isRegistered = false;
   int indexCustomerId = customer.customerId.indexOf("1");
@@ -124,7 +126,7 @@ Account getAccountUsingRFID(List<Account> accounts, String rfid) {
   return account;
 }
 
-///Returns the modified [registeredCustomerID].
+///Returns the modified [Account.registeredCustomerID].
 ///
 ///Modifies the [newID] using the "1" located in [itemCustomerID].
 String getNewRegisteredCustomerID(String currentID, String itemCustomerID) {

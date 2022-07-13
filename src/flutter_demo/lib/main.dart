@@ -6,12 +6,9 @@ void main() {
   runApp(const MyApp());
 }
 
+///Creates the base app.
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
-  Future<bool> _onWillPop() async {
-    return false;
-  }
 
   /// This widget is the root of the application.
   @override
@@ -19,7 +16,9 @@ class MyApp extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
         overlays: [SystemUiOverlay.top]);
 
-    ///Disables action the back button executes.
+    ///Builds the main application.
+    ///
+    ///Disables the back button on Andriond and IOS.
     return WillPopScope(
       onWillPop: () async => false,
       child: const MaterialApp(
