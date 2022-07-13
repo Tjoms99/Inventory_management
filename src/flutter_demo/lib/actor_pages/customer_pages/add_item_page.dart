@@ -54,6 +54,7 @@ class _AddItemPageState extends State<AddItemPage> {
   String rfidTag = "";
   String _errorText = "";
   bool _isError = false;
+  String _rfidText = "TAP HERE TO SCAN YOUR RFID CARD";
 
   @override
   void dispose() {
@@ -68,6 +69,7 @@ class _AddItemPageState extends State<AddItemPage> {
   @override
   void initState() {
     super.initState();
+    rfidColor = Colors.white;
     setRegisteredCustomerID();
 
     //KEYBOARD
@@ -144,9 +146,19 @@ class _AddItemPageState extends State<AddItemPage> {
     return _statusController.text.trim();
   }
 
-  Future setRFID() async {
-    rfidTag = await getRFIDorNFC();
+  void _changeStateRFID() {
+    rfidColor = rfidColor == Colors.green ? Colors.white : Colors.green;
+    _rfidText = _rfidText == "TAP HERE TO SCAN YOUR RFID CARD"
+        ? "SCAN YOUR CARD"
+        : "TAP HERE TO SCAN YOUR RFID CARD";
     setState(() {});
+  }
+
+  Future setRFID() async {
+    _changeStateRFID();
+    await Future.delayed(const Duration(milliseconds: 50));
+    rfidTag = await getRFIDorNFC();
+    _changeStateRFID();
   }
 
   ///Returns the [String] of the RFID.
@@ -341,16 +353,17 @@ class _AddItemPageState extends State<AddItemPage> {
                         children: [
                           const SizedBox(height: thirdBoxHeight),
                           //ICON.
-                          const ImageIcon(
-                            AssetImage("assets/images/rfid_transparent.png"),
-                            color: Colors.white,
+                          ImageIcon(
+                            const AssetImage(
+                                "assets/images/rfid_transparent.png"),
+                            color: rfidColor,
                             size: 100,
                           ),
 
                           //INFO TEXT.
-                          const Text(
-                            'TAP HERE TO SCAN RFID',
-                            style: TextStyle(
+                          Text(
+                            _rfidText,
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: thirdFontSize,
                               color: Colors.white,

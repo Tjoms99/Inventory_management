@@ -26,7 +26,7 @@ LinearGradient mainGradient = LinearGradient(
     Colors.orange[300]!,
   ],
 );
-
+Color rfidColor = Colors.white;
 //Text sizes
 const double firstFontSize = 36;
 const double secondFontSize = 24;

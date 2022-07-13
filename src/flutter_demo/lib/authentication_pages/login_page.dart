@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:flutter_demo/authentication_pages/verify_page.dart';
@@ -40,10 +42,24 @@ class _LoginPageState extends State<LoginPage> {
   //Others.
   Account currentAccount = createDefaultAccount();
   bool _isVisible = false;
+  bool _isLoginPressed = false;
+  String _rfidText = "TAP HERE TO LOGIN WITH RFID";
+
+  void _changeStateRFID() {
+    rfidColor = rfidColor == Colors.green ? Colors.white : Colors.green;
+    _rfidText = _rfidText == "TAP HERE TO LOGIN WITH RFID"
+        ? "SCAN YOUR CARD"
+        : "TAP HERE TO LOGIN WITH RFID";
+    setState(() {});
+  }
 
   ///Signs in [currentAccount] using [currentAccount.rfid].
-  void _signInRFID() async {
+  Future<void> _signInRFID() async {
+    _changeStateRFID();
+    await Future.delayed(const Duration(milliseconds: 50));
     currentAccount.rfid = await getRFIDorNFC();
+    _changeStateRFID();
+
     _signIn();
   }
 
@@ -68,13 +84,15 @@ class _LoginPageState extends State<LoginPage> {
     debugPrint("Signed in ${currentAccount.accountName}");
     debugPrint("Privileges:  ${currentAccount.accountRole}");
 
-    _gotoPage();
+    if (!_isLoginPressed) _gotoPage();
   }
 
   ///Changes the page depending on [widget.currentAccount.accountRole].
   ///
   ///Goes to verify page if [Account] is not verified
   void _gotoPage() async {
+    _isLoginPressed = true;
+
     bool _isVerified = await isAccountVerified(currentAccount);
     if (!_isVerified) {
       debugPrint("Need to verify account");
@@ -150,12 +168,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    rfidColor = Colors.white;
     _focusEmail.addListener(_onFocusChangeEmail);
     _focusPassword.addListener(_onFocusChangePassword);
   }
 
   @override
-  void dispose() {
+  void despose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -184,25 +203,26 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: _signInRFID,
                     child: Center(
                       child: Column(
-                        children: const [
-                          SizedBox(height: thirdBoxHeight),
+                        children: [
+                          const SizedBox(height: thirdBoxHeight),
                           //ICON.
                           ImageIcon(
-                            AssetImage("assets/images/rfid_transparent.png"),
-                            color: Colors.white,
+                            const AssetImage(
+                                "assets/images/rfid_transparent.png"),
+                            color: rfidColor,
                             size: 100,
                           ),
 
                           //INFO TEXT.
                           Text(
-                            'TAP HERE TO LOGIN WITH RFID',
-                            style: TextStyle(
+                            _rfidText,
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: thirdFontSize,
                               color: Colors.white,
                             ),
                           ),
-                          SizedBox(height: thirdBoxHeight),
+                          const SizedBox(height: thirdBoxHeight),
                         ],
                       ),
                     ),

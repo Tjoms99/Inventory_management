@@ -62,6 +62,7 @@ class _RegisterPage extends State<RegisterPage> {
   //Others.
   String _rfidTag = "";
   bool _isVisible = false;
+  String _rfidText = "TAP HERE TO SCAN YOUR RFID CARD";
 
   final String _chars =
       'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
@@ -99,10 +100,20 @@ class _RegisterPage extends State<RegisterPage> {
     return _rfidTag;
   }
 
+  void _changeStateRFID() {
+    rfidColor = rfidColor == Colors.green ? Colors.white : Colors.green;
+    _rfidText = _rfidText == "TAP HERE TO SCAN YOUR RFID CARD"
+        ? "SCAN YOUR CARD"
+        : "TAP HERE TO SCAN YOUR RFID CARD";
+    setState(() {});
+  }
+
   ///Sets the [_rfidTag] using the Totem RFID or the NFC reader.
   Future setRFID() async {
+    _changeStateRFID();
+    await Future.delayed(const Duration(milliseconds: 50));
     _rfidTag = await getRFIDorNFC();
-    setState(() {});
+    _changeStateRFID();
   }
 
   ///Returns the [String] located in the customerID textfield.
@@ -129,6 +140,7 @@ class _RegisterPage extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
+    rfidColor = Colors.white;
     initializeControllers();
     _focusEmail.addListener(_onFocusChangeEmail);
     _focusPassword.addListener(_onFocusChangePassword);
@@ -352,17 +364,16 @@ class _RegisterPage extends State<RegisterPage> {
                         children: [
                           const SizedBox(height: thirdBoxHeight),
                           //ICON.
-                          const ImageIcon(
-                            AssetImage("assets/images/rfid_transparent.png"),
-                            color: Colors.white,
+                          ImageIcon(
+                            const AssetImage(
+                                "assets/images/rfid_transparent.png"),
+                            color: rfidColor,
                             size: 100,
                           ),
 
                           //INFO TEXT.
                           Text(
-                            widget._doRegister
-                                ? 'TAP HERE TO SCAN RFID'
-                                : 'TAP HERE TO UPDATE RFID',
+                            _rfidText,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: thirdFontSize,
