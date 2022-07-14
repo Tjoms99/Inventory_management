@@ -1,6 +1,15 @@
 <?php
 include '../conn.php';
-$sql = $conn->query("SELECT * FROM ITEMS");
+
+$account_role = $_POST['account_role'];
+$customer_id = $_POST['customer_id'];
+
+if ($account_role = 'admin'){
+    $sql = $conn->query("SELECT * FROM ITEMS");
+}
+else{
+    $sql = $conn->query("SELECT * FROM ITEMS WHERE 'customer_id' LIKE '$customer_id'");
+}
 
 $res = array();
 
