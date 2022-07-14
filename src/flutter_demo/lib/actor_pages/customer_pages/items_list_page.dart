@@ -129,7 +129,6 @@ class ExpandableListView extends StatefulWidget {
 
 class _ExpandableListViewState extends State<ExpandableListView> {
   bool _expandFlag = false;
-  final bool _isVisible = false;
   final List<bool> _hasPressedDelete = [];
   final List<bool> _hasPressedModify = [];
   int _selectedIndex = -1;

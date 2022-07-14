@@ -11,6 +11,7 @@ import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 ///This is a page where an [Account] can be signed in using an account from the database.
@@ -174,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  void despose() {
+  void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();

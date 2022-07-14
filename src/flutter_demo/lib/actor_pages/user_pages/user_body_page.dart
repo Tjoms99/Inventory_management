@@ -24,7 +24,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
   String infoText = '';
   String rfidTag = "";
   // ignore: prefer_typing_uninitialized_variables.
-  var info;
+  dynamic info;
   List<Item> items = [];
 
   ///Updates the current [Item.status] of an item depending on its previous [Item.status].

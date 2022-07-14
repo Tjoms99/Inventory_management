@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/services/account_service.dart';
 
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 ///This is a page where an account can signed in using an account from the database.
