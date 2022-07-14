@@ -38,7 +38,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
     _emailController.dispose();
   }
 
-  ///Signs in [account] using [account.rfid].
+  ///Signs in [Account] using [Account.rfid].
   void _signInRFID() async {
     account = createDefaultAccount();
     account.rfid = await getRFIDorNFC();
@@ -46,6 +46,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
     _signIn();
   }
 
+  ///Signs in [Account] using [Account.accountName].
   Future<void> _signInName() async {
     account = createDefaultAccount();
     account.accountName = _emailController.text.trim();

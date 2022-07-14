@@ -11,9 +11,10 @@ import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
-///This is a page where an account can signed in using an account from the database.
+///This is a page where an [Account] can be signed in using an account from the database.
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -75,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
     if (isDefualt(currentAccount)) {
       debugPrint("This is a defualt account, can not sign in");
       _errorText =
-          "Unkown username and password combination\n --or--\nUnknown RFID";
+          "Unkown email and password combination\n --or--\nUnknown RFID";
       _isError = true;
       setState(() {});
       return;
@@ -174,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  void despose() {
+  void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -292,7 +293,7 @@ class _LoginPageState extends State<LoginPage> {
                                           borderRadius: BorderRadius.circular(
                                               texfieldBorderRadius),
                                         ),
-                                        hintText: 'Username',
+                                        hintText: 'Email',
                                         fillColor: textfieldBackgroundColor,
                                         filled: true,
                                       ),

@@ -4,7 +4,7 @@ import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:http/http.dart' as http;
 
-///Returns [items] from the database.
+///Returns a [List] of [Item]s from the database.
 Future<List<Item>> getItems() async {
   List<Item> items = [];
   //Try to fetch data from server.
@@ -24,7 +24,7 @@ Future<List<Item>> getItems() async {
   return items;
 }
 
-///Deletes item with [id] from the database.
+///Deletes [Item] with [Item.id] from the database.
 void deleteItem(int id) {
   try {
     var uri =
@@ -37,9 +37,9 @@ void deleteItem(int id) {
   }
 }
 
-///Inserts [item] in the database.
+///Inserts [Item] in the database.
 ///
-///Returns error status
+///Returns error status.
 Future<String> addItem(Item item) async {
   try {
     var uri =
@@ -61,9 +61,9 @@ Future<String> addItem(Item item) async {
   }
 }
 
-///Updates [item] in the database.
+///Updates [Item] in the database.
 ///
-///Returns error status
+///Returns error status.
 Future<String> updateItem(Item item) async {
   try {
     var uri =

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/Services/item_service.dart';
 import 'package:flutter_demo/classes/account.dart';
 
+///A class of [Item].
 class Item {
   int id;
   String name;
@@ -23,7 +24,7 @@ class Item {
       required this.registeredCustomerId});
 }
 
-///Returns an [Item] from a list of json [items].
+///Returns an [Item] from a dynamic [List] (json) of [items].
 Item createItemFromJson(List<dynamic> items, int index) {
   return Item(
       id: jsonDecode(items[index]['id']),
@@ -64,7 +65,7 @@ Item getItemFromList(List<dynamic> items, String rfid) {
   return thisItem;
 }
 
-///Returns a list of all [types] that is contained in [items].
+///Returns a [List] of all [types] that is contained in [items].
 List<String> getItemTypes(List<Item> items) {
   List<String> types = [];
   for (int index = 0; index < items.length; index++) {
@@ -85,7 +86,7 @@ List<Item> getItemsInType(List<Item> items, String type) {
   return itemsInType;
 }
 
-///Returns all [items] that belongs to a [customer].
+///Returns all [items] that belongs to a [customer] (or Admin).
 Future<List<Item>> getItemsForCustomer(Account customer) async {
   List<Item> items = await getItems();
   List<Item> itemsForCustomer = [];
@@ -95,7 +96,7 @@ Future<List<Item>> getItemsForCustomer(Account customer) async {
       customer.accountName +
       "with id index: $indexCustomerId");
 
-  //Check item for correct customerID
+  //Add items that belong to correct customer or admin.
   for (int index = 0; index < items.length; index++) {
     if (items[index].registeredCustomerId.startsWith("1", indexCustomerId)) {
       itemsForCustomer.add(items[index]);
@@ -107,7 +108,7 @@ Future<List<Item>> getItemsForCustomer(Account customer) async {
   return itemsForCustomer;
 }
 
-///Returns [thisItem] from a list of [items] using its [rfid].
+///Returns an [Item] from a list of [items] using its [rfid].
 Item getItemFromRFID(List<Item> items, String rfid) {
   Item thisItem = createDefaultItem();
 

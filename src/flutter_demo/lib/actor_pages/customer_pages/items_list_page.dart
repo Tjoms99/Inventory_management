@@ -40,7 +40,7 @@ class _ItemsListPageState extends State<ItemsListPage> {
   }
 }
 
-///This is a page that builds a list of [Item]s for customers and admins
+///This is a page that builds a [List] of [Item]s for customers and admins.
 class ListBuilder extends StatefulWidget {
   final Account currentAccount;
   const ListBuilder({required this.currentAccount});
@@ -112,7 +112,7 @@ class _ListBuilderState extends State<ListBuilder> {
   }
 }
 
-///This is a page that expands a list of [Item]s on request.
+///This is a page that expands a [List] of [Item]s on request.
 class ExpandableListView extends StatefulWidget {
   String title;
   final List<Item> listToBuild;
@@ -129,7 +129,6 @@ class ExpandableListView extends StatefulWidget {
 
 class _ExpandableListViewState extends State<ExpandableListView> {
   bool _expandFlag = false;
-  final bool _isVisible = false;
   final List<bool> _hasPressedDelete = [];
   final List<bool> _hasPressedModify = [];
   int _selectedIndex = -1;
@@ -228,21 +227,6 @@ class _ExpandableListViewState extends State<ExpandableListView> {
         clearPressedModify();
       }
     });
-  }
-
-  ///Returns a [Color] if a row is pressed, hovered or focused
-  Color _getDataRowColor(Set<MaterialState> states) {
-    const Set<MaterialState> interactiveStates = <MaterialState>{
-      MaterialState.pressed,
-      MaterialState.hovered,
-      MaterialState.focused,
-    };
-
-    if (states.any(interactiveStates.contains)) {
-      return Colors.orange[300]!;
-    }
-    //return Colors.green; // Use the default value.
-    return Colors.grey;
   }
 
   ///Builds the [Item] page.

@@ -9,9 +9,10 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
-///This is a page where an [Account] can be inserted or updated into the database
+///This is a page where an [Account] can be inserted or updated into the database.
 class RegisterPage extends StatefulWidget {
   final bool _doRegister;
   final String _email;
@@ -100,6 +101,7 @@ class _RegisterPage extends State<RegisterPage> {
     return _rfidTag;
   }
 
+  ///Changes the [Color] of the rfid icon and the info [Text].
   void _changeStateRFID() {
     rfidColor = rfidColor == Colors.green ? Colors.white : Colors.green;
     _rfidText = _rfidText == "TAP HERE TO SCAN YOUR RFID CARD"
@@ -196,7 +198,7 @@ class _RegisterPage extends State<RegisterPage> {
     }
   }
 
-  ///Inserts or updates [account] in the database.
+  ///Inserts or updates [Account] in the database.
   ///
   ///Checks if [TextEditingController] has information before registering [Account].
   Future registerUser() async {
@@ -225,7 +227,7 @@ class _RegisterPage extends State<RegisterPage> {
 
     if (email.isEmpty) {
       debugPrint("No email");
-      _errorText = "No username entered\n";
+      _errorText = "No email entered\n";
       _isError = true;
     }
 
@@ -271,7 +273,7 @@ class _RegisterPage extends State<RegisterPage> {
     setState(() {});
     if (_isError) return;
 
-    //Send verification email to new user
+    //Send verification email to new user.
     if (widget._doRegister) {
       sendEmail(
           fromEmail: fromEmail,
@@ -462,7 +464,7 @@ class _RegisterPage extends State<RegisterPage> {
                                           borderRadius: BorderRadius.circular(
                                               texfieldBorderRadius),
                                         ),
-                                        hintText: 'Username',
+                                        hintText: 'Email',
                                         fillColor: textfieldBackgroundColor,
                                         filled: true,
                                       ),

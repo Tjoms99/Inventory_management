@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/services/account_service.dart';
 
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 ///This is a page where an account can signed in using an account from the database.
@@ -27,6 +28,7 @@ class _VerifyPageState extends State<VerifyPage> {
   String _errorText = "";
   bool _isError = false;
 
+  ///Verifies an account using the [String] from the [_verifyController].
   Future _verify() async {
     String verificationCode = _verifyController.text.trim();
 
@@ -129,7 +131,7 @@ class _VerifyPageState extends State<VerifyPage> {
                                         )
                                       : const SizedBox(),
 
-                                  //TOTEM_ID.
+                                  //VERIFY.
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: texfieldPadding),
@@ -161,7 +163,7 @@ class _VerifyPageState extends State<VerifyPage> {
                                   ),
                                   const SizedBox(height: thirdBoxHeight),
 
-                                  //SIGN-IN
+                                  //VERIFY BUTTON.
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: standardPadding),
@@ -189,8 +191,7 @@ class _VerifyPageState extends State<VerifyPage> {
                                   ),
                                   const SizedBox(height: thirdBoxHeight),
 
-                                  //REGISTER USER
-
+                                  //CANCEL.
                                   GestureDetector(
                                     onTap: _gotoPage,
                                     child: const Text(
