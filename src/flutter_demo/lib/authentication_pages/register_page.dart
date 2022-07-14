@@ -56,19 +56,23 @@ class _RegisterPage extends State<RegisterPage> {
 
   bool _isKeyboardEnabled = false;
 
-  //Error
+  //Error.
   String _errorText = "";
   bool _isError = false;
+
+  //RFID.
+  Color _rfidColor = Colors.white;
+  String _rfidText = "TAP HERE TO SCAN YOUR RFID CARD";
 
   //Others.
   String _rfidTag = "";
   bool _isVisible = false;
-  String _rfidText = "TAP HERE TO SCAN YOUR RFID CARD";
 
   final String _chars =
       'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
   final Random _rnd = Random();
 
+  ///Returns a random [String] with [_chars] used as constrained characters.
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
@@ -103,7 +107,7 @@ class _RegisterPage extends State<RegisterPage> {
 
   ///Changes the [Color] of the rfid icon and the info [Text].
   void _changeStateRFID() {
-    rfidColor = rfidColor == Colors.green ? Colors.white : Colors.green;
+    _rfidColor = _rfidColor == Colors.green ? Colors.white : Colors.green;
     _rfidText = _rfidText == "TAP HERE TO SCAN YOUR RFID CARD"
         ? "SCAN YOUR CARD"
         : "TAP HERE TO SCAN YOUR RFID CARD";
@@ -142,7 +146,7 @@ class _RegisterPage extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
-    rfidColor = Colors.white;
+    _rfidColor = Colors.white;
     initializeControllers();
     _focusEmail.addListener(_onFocusChangeEmail);
     _focusPassword.addListener(_onFocusChangePassword);
@@ -369,7 +373,7 @@ class _RegisterPage extends State<RegisterPage> {
                           ImageIcon(
                             const AssetImage(
                                 "assets/images/rfid_transparent.png"),
-                            color: rfidColor,
+                            color: _rfidColor,
                             size: 100,
                           ),
 

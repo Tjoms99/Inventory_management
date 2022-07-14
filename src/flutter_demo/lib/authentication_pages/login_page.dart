@@ -40,14 +40,18 @@ class _LoginPageState extends State<LoginPage> {
   String _errorText = "";
   bool _isError = false;
 
+  //RFID.
+  Color _rfidColor = Colors.white;
+  String _rfidText = "TAP HERE TO LOGIN WITH RFID";
+
   //Others.
   Account currentAccount = createDefaultAccount();
   bool _isVisible = false;
   bool _isLoginPressed = false;
-  String _rfidText = "TAP HERE TO LOGIN WITH RFID";
 
+  ///Changes the [Color] of the rfid icon and the info [Text].
   void _changeStateRFID() {
-    rfidColor = rfidColor == Colors.green ? Colors.white : Colors.green;
+    _rfidColor = _rfidColor == Colors.green ? Colors.white : Colors.green;
     _rfidText = _rfidText == "TAP HERE TO LOGIN WITH RFID"
         ? "SCAN YOUR CARD"
         : "TAP HERE TO LOGIN WITH RFID";
@@ -90,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
 
   ///Changes the page depending on [widget.currentAccount.accountRole].
   ///
-  ///Goes to verify page if [Account] is not verified
+  ///Goes to verify page if [Account] is not verified.
   void _gotoPage() async {
     _isLoginPressed = true;
 
@@ -168,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    rfidColor = Colors.white;
+    _rfidColor = Colors.white;
     _focusEmail.addListener(_onFocusChangeEmail);
     _focusPassword.addListener(_onFocusChangePassword);
   }
@@ -209,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                           ImageIcon(
                             const AssetImage(
                                 "assets/images/rfid_transparent.png"),
-                            color: rfidColor,
+                            color: _rfidColor,
                             size: 100,
                           ),
 

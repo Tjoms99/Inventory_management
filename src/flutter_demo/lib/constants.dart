@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //Addresses
-const ipAddress = "192.168.1.201"; //192.168.43.90"
+const ipAddress = "192.168.43.90"; //192.168.43.90"
 const fromEmail = "inventorymanagement.verify@gmail.com";
 String totemID = "default totem ID";
 
@@ -26,7 +26,6 @@ LinearGradient mainGradient = LinearGradient(
     Colors.orange[300]!,
   ],
 );
-Color rfidColor = Colors.white;
 //Text sizes
 const double firstFontSize = 36;
 const double secondFontSize = 24;

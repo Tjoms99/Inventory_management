@@ -18,8 +18,24 @@ class UserBodyPage extends StatefulWidget {
 }
 
 class _UserBodyPageState extends State<UserBodyPage> {
-  String infoText = '';
-  dynamic info;
+  String _infoText = '';
+  //RFID.
+  String _rfidText = "TAP HERE TO SCAN ITEM RFID";
+  Color _rfidColor = Colors.orange;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  ///Changes the [Color] of the rfid icon and the info [Text].
+  void _changeStateRFID() {
+    _rfidColor = _rfidColor == Colors.green ? Colors.orange : Colors.green;
+    _rfidText = _rfidText == "TAP HERE TO SCAN ITEM RFID"
+        ? "SCAN ITEM"
+        : "TAP HERE TO SCAN ITEM RFID";
+    setState(() {});
+  }
 
   ///Updates the current [Item.status] of an item depending on its previous [Item.status].
   ///
@@ -28,9 +44,13 @@ class _UserBodyPageState extends State<UserBodyPage> {
     Item item = createDefaultItem();
     String rfidTag = "";
 
+    _changeStateRFID();
+    await Future.delayed(const Duration(milliseconds: 50));
     rfidTag = await getRFIDorNFC();
+    _changeStateRFID();
+
     if (rfidTag.isEmpty) {
-      infoText = 'You have not scanned anything';
+      _infoText = 'You have not scanned anything';
 
       setState(() {});
       return;
@@ -39,9 +59,10 @@ class _UserBodyPageState extends State<UserBodyPage> {
     item = await getItemFromRFID(widget.currentAccount,
         widget.isCustomerHelping ? "customer" : "other", rfidTag);
 
+    debugPrint(item.rfid);
     //Return if no item is found.
     if (item.rfid == "rfid") {
-      infoText = 'This item does not exist';
+      _infoText = 'This item does not exist';
 
       setState(() {});
       return;
@@ -51,7 +72,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
     switch (item.status) {
       case 'borrowed':
         if (item.location != widget.currentAccount.accountName) {
-          infoText = 'This item is not yours to return';
+          _infoText = 'This item is not yours to return';
 
           setState(() {});
           return;
@@ -65,13 +86,13 @@ class _UserBodyPageState extends State<UserBodyPage> {
       case 'returned':
         if (!canUnassignItem(item, widget.currentAccount.customerId) &&
             isCustomer(widget.currentAccount)) {
-          infoText = 'You can not unnasign this item';
+          _infoText = 'You can not unnasign this item';
 
           setState(() {});
           return;
         }
         if (isUser(widget.currentAccount)) {
-          infoText =
+          _infoText =
               'You can not borrow this item \n Customer action is needed';
 
           setState(() {});
@@ -93,7 +114,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
     }
 
     updateItem(item);
-    infoText =
+    _infoText =
         "You have ${item.status} this item\n\n\nDescription: ${item.description}\nRFID: ${item.rfid}\n";
     setState(() {});
   }
@@ -113,18 +134,18 @@ class _UserBodyPageState extends State<UserBodyPage> {
                 children: [
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       //ICON.
                       ImageIcon(
-                        AssetImage("assets/images/rfid_transparent.png"),
-                        color: Colors.orange,
+                        const AssetImage("assets/images/rfid_transparent.png"),
+                        color: _rfidColor,
                         size: 100,
                       ),
 
                       //INFO TEXT.
                       Text(
-                        'TAP HERE TO SCAN RFID',
-                        style: TextStyle(
+                        _rfidText,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: thirdFontSize,
                           color: Colors.black,
@@ -136,7 +157,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
                   const Text('The system knows what you want to do!'),
                   const SizedBox(height: firstBoxHeight),
                   Text(
-                    infoText,
+                    _infoText,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: thirdFontSize,

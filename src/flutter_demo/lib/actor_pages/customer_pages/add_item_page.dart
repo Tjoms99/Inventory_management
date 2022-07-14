@@ -51,11 +51,14 @@ class _AddItemPageState extends State<AddItemPage> {
 
   bool _isKeyboardEnabled = false;
 
-  //Others.
+//RFID.
+  String _rfidText = "TAP HERE TO SCAN YOUR RFID CARD";
+  Color _rfidColor = Colors.white;
   String _rfidTag = "";
+
+  //Others.
   String _errorText = "";
   bool _isError = false;
-  String _rfidText = "TAP HERE TO SCAN YOUR RFID CARD";
 
   @override
   void dispose() {
@@ -70,7 +73,6 @@ class _AddItemPageState extends State<AddItemPage> {
   @override
   void initState() {
     super.initState();
-    rfidColor = Colors.white;
     setRegisteredCustomerID();
 
     //KEYBOARD.
@@ -149,7 +151,7 @@ class _AddItemPageState extends State<AddItemPage> {
 
   ///Changes the [Color] of the rfid icon and the info [Text].
   void _changeStateRFID() {
-    rfidColor = rfidColor == Colors.green ? Colors.white : Colors.green;
+    _rfidColor = _rfidColor == Colors.green ? Colors.white : Colors.green;
     _rfidText = _rfidText == "TAP HERE TO SCAN YOUR RFID CARD"
         ? "SCAN YOUR CARD"
         : "TAP HERE TO SCAN YOUR RFID CARD";
@@ -359,7 +361,7 @@ class _AddItemPageState extends State<AddItemPage> {
                           ImageIcon(
                             const AssetImage(
                                 "assets/images/rfid_transparent.png"),
-                            color: rfidColor,
+                            color: _rfidColor,
                             size: 100,
                           ),
 

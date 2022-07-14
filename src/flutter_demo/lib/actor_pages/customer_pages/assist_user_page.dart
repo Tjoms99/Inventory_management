@@ -29,19 +29,31 @@ class _AssistUserPageState extends State<AssistUserPage> {
   String _errorText = "";
   bool _isError = false;
 
+  //RFID
+  Color _rfidColor = Colors.orange;
+  String _rfidText = "TAP HERE TO LOGIN WITH RFID";
+
   //Others.
   Account account = createDefaultAccount();
 
-  @override
-  void dispose() {
-    super.dispose();
-    _emailController.dispose();
+  ///Changes the [Color] of the rfid icon and the info [Text].
+  void _changeStateRFID() {
+    _rfidColor = _rfidColor == Colors.green ? Colors.orange : Colors.green;
+    _rfidText = _rfidText == "TAP HERE TO LOGIN WITH RFID"
+        ? "SCAN YOUR CARD"
+        : "TAP HERE TO LOGIN WITH RFID";
+    setState(() {});
   }
 
   ///Signs in [Account] using [Account.rfid].
   void _signInRFID() async {
     account = createDefaultAccount();
+
+    _changeStateRFID();
+    await Future.delayed(const Duration(milliseconds: 50));
     account.rfid = await getRFIDorNFC();
+    _changeStateRFID();
+
     account = await getAccount(account);
     _signIn();
   }
@@ -80,6 +92,17 @@ class _AssistUserPageState extends State<AssistUserPage> {
     ));
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   ///Builds the help user page.
   @override
   Widget build(BuildContext context) {
@@ -95,18 +118,18 @@ class _AssistUserPageState extends State<AssistUserPage> {
                   behavior: HitTestBehavior.opaque,
                   onTap: _signInRFID,
                   child: Column(
-                    children: const [
+                    children: [
                       //ICON.
                       ImageIcon(
-                        AssetImage("assets/images/rfid_transparent.png"),
-                        color: Colors.orange,
+                        const AssetImage("assets/images/rfid_transparent.png"),
+                        color: _rfidColor,
                         size: 100,
                       ),
 
                       //INFO TEXT.
                       Text(
-                        'TAP HERE TO SCAN RFID',
-                        style: TextStyle(
+                        _rfidText,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: thirdFontSize,
                           color: Colors.black,

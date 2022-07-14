@@ -70,6 +70,8 @@ bool canUnassignItem(Item item, String customerId) {
   bool canUnnasign = false;
   int indexCustomerId = customerId.indexOf("1");
 
+  if (indexCustomerId == -1) return false;
+
   if (item.registeredCustomerId.startsWith("1", indexCustomerId)) {
     canUnnasign = true;
   }
