@@ -82,8 +82,7 @@ class _AdminPageState extends State<AdminPage> {
       AssistUserPage(currentAccount: widget.currentAccount),
       UserBodyPage(
         currentAccount: widget.currentAccount,
-        isHelping: false,
-        isHelpingAdmin: false,
+        isCustomerHelping: false,
       ),
     ];
     return WillPopScope(

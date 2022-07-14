@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:http/http.dart' as http;
-
-import '../classes/account.dart';
 
 ///Returns a [List] of [Account]s from the database.
 Future<List<Account>> getAccounts(Account account) async {

@@ -74,8 +74,7 @@ class _AssistUserPageState extends State<AssistUserPage> {
     Navigator.of(context).push(PageRouter(
       child: UserPage(
         currentAccount: account,
-        isHelping: true,
-        isHelpingAdmin: isAdmin(widget.currentAccount),
+        isCustomer: isCustomer(widget.currentAccount),
       ),
       direction: AxisDirection.down,
     ));

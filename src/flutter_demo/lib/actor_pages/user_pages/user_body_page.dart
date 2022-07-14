@@ -9,12 +9,9 @@ import 'package:flutter_demo/services/totem_service.dart';
 ///This is a page where a user can be borrow and return items.
 class UserBodyPage extends StatefulWidget {
   final Account currentAccount;
-  final bool isHelping;
-  final bool isHelpingAdmin;
+  final bool isCustomerHelping;
   const UserBodyPage(
-      {required this.currentAccount,
-      required this.isHelping,
-      required this.isHelpingAdmin});
+      {required this.currentAccount, required this.isCustomerHelping});
 
   @override
   State<UserBodyPage> createState() => _UserBodyPageState();
@@ -22,40 +19,31 @@ class UserBodyPage extends StatefulWidget {
 
 class _UserBodyPageState extends State<UserBodyPage> {
   String infoText = '';
-  String rfidTag = "";
-  // ignore: prefer_typing_uninitialized_variables.
   dynamic info;
-  List<Item> items = [];
 
   ///Updates the current [Item.status] of an item depending on its previous [Item.status].
   ///
   ///Updates [Item.location] when [Item.status] changes.
   Future _updateAction() async {
-    //Get items belonging only to customer if customer is helping user
-    //Or get all items
-    items = widget.isHelping
-        ? widget.isHelpingAdmin
-            ? await getItems(widget.currentAccount)
-            : await getItemsForCustomer(widget.currentAccount)
-        : await getItems(widget.currentAccount);
-
     Item item = createDefaultItem();
+    String rfidTag = "";
 
     rfidTag = await getRFIDorNFC();
     if (rfidTag.isEmpty) {
-      setState(() {
-        infoText = 'You have not scanned anything';
-      });
+      infoText = 'You have not scanned anything';
+
+      setState(() {});
       return;
     }
 
-    item = getItemFromRFID(items, rfidTag);
+    item = await getItemFromRFID(widget.currentAccount,
+        widget.isCustomerHelping ? "customer" : "other", rfidTag);
 
     //Return if no item is found.
     if (item.rfid == "rfid") {
-      setState(() {
-        infoText = 'This item does not exist';
-      });
+      infoText = 'This item does not exist';
+
+      setState(() {});
       return;
     }
 
@@ -63,9 +51,9 @@ class _UserBodyPageState extends State<UserBodyPage> {
     switch (item.status) {
       case 'borrowed':
         if (item.location != widget.currentAccount.accountName) {
-          setState(() {
-            infoText = 'This item is not yours to return';
-          });
+          infoText = 'This item is not yours to return';
+
+          setState(() {});
           return;
         }
 
@@ -75,11 +63,18 @@ class _UserBodyPageState extends State<UserBodyPage> {
         break;
 
       case 'returned':
+        if (!canUnassignItem(item, widget.currentAccount.customerId) &&
+            isCustomer(widget.currentAccount)) {
+          infoText = 'You can not unnasign this item';
+
+          setState(() {});
+          return;
+        }
         if (isUser(widget.currentAccount)) {
-          setState(() {
-            infoText =
-                'You can not borrow this item \n Customer action is needed';
-          });
+          infoText =
+              'You can not borrow this item \n Customer action is needed';
+
+          setState(() {});
           return;
         }
         item.status = 'unassigned';

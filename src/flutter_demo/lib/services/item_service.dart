@@ -88,3 +88,27 @@ Future<String> updateItem(Item item) async {
     return "-1";
   }
 }
+
+///Returns an [Item] that matches [rfid] from the database.
+Future<Item> getItemFromRFID(Account account, String role, String rfid) async {
+  Item item = createDefaultItem();
+  try {
+    var uri = Uri.parse(
+        "http://$ipAddress/dashboard/flutter_db/item/getItemFromRFID.php");
+
+    var response = await http.post(uri, body: {
+      'customer_id': account.customerId,
+      'account_role': role,
+      'rfid': rfid,
+    });
+
+    final json = "[" + response.body + "]";
+    if (response.body.isNotEmpty) {
+      item = createItemFromJson(jsonDecode(json) as List, 0);
+    }
+  } catch (e) {
+    debugPrint("Failed to get item: $e");
+  }
+
+  return item;
+}

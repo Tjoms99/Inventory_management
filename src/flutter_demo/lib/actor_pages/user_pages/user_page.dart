@@ -7,12 +7,8 @@ import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
 ///This is a page where a user can be borrow and return items.
 class UserPage extends StatefulWidget {
   final Account currentAccount;
-  final bool isHelping;
-  final bool isHelpingAdmin;
-  const UserPage(
-      {required this.currentAccount,
-      required this.isHelping,
-      required this.isHelpingAdmin});
+  final bool isCustomer;
+  const UserPage({required this.currentAccount, required this.isCustomer});
 
   @override
   State<UserPage> createState() => _UserPage();
@@ -55,8 +51,7 @@ class _UserPage extends State<UserPage> {
             ]),
         body: UserBodyPage(
           currentAccount: widget.currentAccount,
-          isHelping: widget.isHelping,
-          isHelpingAdmin: widget.isHelpingAdmin,
+          isCustomerHelping: widget.isCustomer,
         ),
       ),
     );
