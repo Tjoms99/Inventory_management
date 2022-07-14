@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/Services/account_service.dart';
+import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/page_route.dart';
@@ -21,27 +21,6 @@ class _UsersListPageState extends State<UsersListPage> {
     super.initState();
   }
 
-  ///Removes admin and customer accounts for [widget.currentAccount].
-  ///
-  ///This does not apply for admin accounts.
-  void setAccounts() {
-    if (isAdmin(widget.currentAccount)) {
-      return;
-    }
-    debugPrint("Setting  correct accounts for correct user");
-    for (int index = 0; index < accounts.length; index++) {
-      //Remove all admins and customers.
-      if (isAdmin(accounts[index]) ||
-          isCustomer(accounts[index]) ||
-          !isUserRegisteredAtCustomer(accounts[index], widget.currentAccount)) {
-        accounts.removeAt(index);
-
-        //Update index due to list length change.
-        index = index - 1;
-      }
-    }
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -53,14 +32,13 @@ class _UsersListPageState extends State<UsersListPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: FutureBuilder<List<Account>>(
-          future: getAccounts(),
+          future: getAccounts(widget.currentAccount),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               //error
             }
             if (snapshot.hasData) {
               accounts = snapshot.data as List<Account>;
-              setAccounts();
               return ListBuilder(
                 listOfAccounts: accounts,
                 currentAccount: widget.currentAccount,

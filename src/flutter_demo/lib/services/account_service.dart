@@ -6,12 +6,15 @@ import 'package:http/http.dart' as http;
 import '../classes/account.dart';
 
 ///Returns a [List] of [Account]s from the database.
-Future<List<Account>> getAccounts() async {
+Future<List<Account>> getAccounts(Account account) async {
   List<Account> accounts = [];
   try {
     var uri = Uri.parse(
         "http://$ipAddress/dashboard/flutter_db/account/getAccounts.php");
-    final response = await http.get(uri);
+    final response = await http.post(uri, body: {
+      'customer_id': account.customerId,
+      'account_role': account.accountRole,
+    });
 
 //Convert from json object to a list of Account(s).
     for (int index = 0; index < jsonDecode(response.body).length; index++) {
