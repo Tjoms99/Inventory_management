@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/Services/item_service.dart';
+import 'package:flutter_demo/services/item_service.dart';
 import 'package:flutter_demo/classes/account.dart';
 
 ///A class of [Item].
@@ -88,7 +88,7 @@ List<Item> getItemsInType(List<Item> items, String type) {
 
 ///Returns all [items] that belongs to a [customer] (or Admin).
 Future<List<Item>> getItemsForCustomer(Account customer) async {
-  List<Item> items = await getItems();
+  List<Item> items = await getItems(customer);
   List<Item> itemsForCustomer = [];
   int indexCustomerId = customer.customerId.indexOf("1");
 

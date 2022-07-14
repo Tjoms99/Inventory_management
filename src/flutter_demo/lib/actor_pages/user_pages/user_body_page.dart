@@ -35,9 +35,9 @@ class _UserBodyPageState extends State<UserBodyPage> {
     //Or get all items
     items = widget.isHelping
         ? widget.isHelpingAdmin
-            ? await getItems()
+            ? await getItems(widget.currentAccount)
             : await getItemsForCustomer(widget.currentAccount)
-        : await getItems();
+        : await getItems(widget.currentAccount);
 
     Item item = createDefaultItem();
 

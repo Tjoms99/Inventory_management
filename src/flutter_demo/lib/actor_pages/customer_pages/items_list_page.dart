@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/Services/item_service.dart';
+import 'package:flutter_demo/services/item_service.dart';
 
 import 'package:flutter_demo/actor_pages/customer_pages/add_item_page.dart';
 import 'package:flutter_demo/classes/account.dart';
@@ -69,9 +69,7 @@ class _ListBuilderState extends State<ListBuilder> {
   Widget build(BuildContext context) {
     setState(() {});
     return FutureBuilder<List<Item>>(
-        future: isAdmin(widget.currentAccount)
-            ? getItems()
-            : getItemsForCustomer(widget.currentAccount),
+        future: getItems(widget.currentAccount),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             //error

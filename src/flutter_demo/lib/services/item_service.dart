@@ -1,17 +1,21 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:http/http.dart' as http;
 
 ///Returns a [List] of [Item]s from the database.
-Future<List<Item>> getItems() async {
+Future<List<Item>> getItems(Account account) async {
   List<Item> items = [];
   //Try to fetch data from server.
   try {
     var uri =
         Uri.parse("http://$ipAddress/dashboard/flutter_db/item/getItems.php");
-    final response = await http.get(uri);
+    final response = await http.post(uri, body: {
+      'account_role': account.accountRole,
+      'customer_id': account.customerId,
+    });
 
 //Convert from json object to a list of items.
     for (int index = 0; index < jsonDecode(response.body).length; index++) {

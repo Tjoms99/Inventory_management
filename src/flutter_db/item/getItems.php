@@ -4,7 +4,6 @@ include '../conn.php';
 $account_role = $_POST['account_role'];
 $customer_id = $_POST['customer_id'];
 $res = array();
-
 $pos = strpos($customer_id, '1');
 
 $sql = "SELECT * FROM ITEMS";
