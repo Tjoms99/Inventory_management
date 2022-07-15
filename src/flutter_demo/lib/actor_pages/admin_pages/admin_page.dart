@@ -66,7 +66,10 @@ class _AdminPageState extends State<AdminPage> {
   ///Changes the page.
   void _gotoConfig() {
     Navigator.of(context).push(PageRouter(
-      child: ConfigPage(currentAccount: widget.currentAccount),
+      child: ConfigPage(
+        currentAccount: widget.currentAccount,
+        pageIndex: widget.currentIndex,
+      ),
       direction: AxisDirection.down,
     ));
   }
