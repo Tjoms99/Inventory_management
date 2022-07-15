@@ -1,15 +1,18 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/page_route.dart';
 
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 ///This is a page where an instance of the application can be mapeed to [totemID] using an already existing [totemID] from the database.
 class ConfigPage extends StatefulWidget {
   Account currentAccount;
-  ConfigPage({required this.currentAccount});
+  int pageIndex = 3;
+  ConfigPage({required this.currentAccount, required this.pageIndex});
 
   @override
   State<ConfigPage> createState() => _ConfigPageState();
@@ -43,7 +46,13 @@ class _ConfigPageState extends State<ConfigPage> {
 
   ///Changes the page.
   void _gotoPage() {
-    Navigator.of(context).pop();
+    Navigator.of(context).push(PageRouter(
+      child: AdminPage(
+        currentAccount: widget.currentAccount,
+        currentIndex: widget.pageIndex,
+      ),
+      direction: AxisDirection.down,
+    ));
   }
 
   ///Connects the [_totemIdController] to the keyboard.
@@ -157,7 +166,42 @@ class _ConfigPageState extends State<ConfigPage> {
                                   ),
                                   const SizedBox(height: thirdBoxHeight),
 
-                                  //SIGN-IN
+                                  //ACTIVATE KEYBOARD
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: standardPadding),
+                                    child: GestureDetector(
+                                      onTap: () => setState(() {
+                                        isKeyboardActivated =
+                                            !isKeyboardActivated;
+                                      }),
+                                      child: Container(
+                                        padding:
+                                            const EdgeInsets.all(buttonPadding),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            gradient: isKeyboardActivated
+                                                ? activatedGradient
+                                                : disabledGradient),
+                                        child: Center(
+                                          child: Text(
+                                            isKeyboardActivated
+                                                ? 'Keyboard Enabled'
+                                                : 'Keyboard Disabled',
+                                            style: const TextStyle(
+                                              color: buttonTextColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: buttonFontSize,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: thirdBoxHeight),
+
+                                  //UPDATE
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: standardPadding),
@@ -185,8 +229,7 @@ class _ConfigPageState extends State<ConfigPage> {
                                   ),
                                   const SizedBox(height: thirdBoxHeight),
 
-                                  //REGISTER USER
-
+                                  //Cancel.
                                   GestureDetector(
                                     onTap: _gotoPage,
                                     child: const Text(
@@ -202,69 +245,75 @@ class _ConfigPageState extends State<ConfigPage> {
                               ),
 
                               //KEYBOARD
-                              SingleChildScrollView(
-                                child: _isKeyboardEnabled
-                                    ? Column(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                _isKeyboardEnabled = false;
-                                              });
-                                            },
-                                            child: const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: standardPadding,
-                                                  vertical: 30),
-                                              child: Text(
-                                                'TAP HERE TO CLOSE KEYBOARD',
-                                                style: TextStyle(
-                                                  fontSize: thirdFontSize,
+                              isKeyboardActivated
+                                  ? SingleChildScrollView(
+                                      child: _isKeyboardEnabled
+                                          ? Column(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _isKeyboardEnabled =
+                                                          false;
+                                                    });
+                                                  },
+                                                  child: const Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal:
+                                                                standardPadding,
+                                                            vertical: 30),
+                                                    child: Text(
+                                                      'TAP HERE TO CLOSE KEYBOARD',
+                                                      style: TextStyle(
+                                                        fontSize: thirdFontSize,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                VirtualKeyboard(
+                                                  height: 300,
+                                                  //width: 500,
+                                                  textColor: Colors.black,
+
+                                                  textController:
+                                                      _openKeyboardTotemId
+                                                          ? _totemIdController
+                                                          : TextEditingController(),
+                                                  //customLayoutKeys: _customLayoutKeys,
+                                                  defaultLayouts: const [
+                                                    VirtualKeyboardDefaultLayouts
+                                                        .English
+                                                  ],
+
+                                                  //reverseLayout :true,
+                                                  type: VirtualKeyboardType
+                                                      .Alphanumeric,
+                                                ),
+                                              ],
+                                            )
+
+                                          //TAP TO OPEN KEYBOARD
+                                          : GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  _isKeyboardEnabled = true;
+                                                });
+                                              },
+                                              child: const Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: standardPadding,
+                                                    vertical: 30),
+                                                child: Text(
+                                                  'TAP HERE TO OPEN KEYBOARD',
+                                                  style: TextStyle(
+                                                    fontSize: thirdFontSize,
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          VirtualKeyboard(
-                                            height: 300,
-                                            //width: 500,
-                                            textColor: Colors.black,
-
-                                            textController: _openKeyboardTotemId
-                                                ? _totemIdController
-                                                : TextEditingController(),
-                                            //customLayoutKeys: _customLayoutKeys,
-                                            defaultLayouts: const [
-                                              VirtualKeyboardDefaultLayouts
-                                                  .English
-                                            ],
-
-                                            //reverseLayout :true,
-                                            type: VirtualKeyboardType
-                                                .Alphanumeric,
-                                          ),
-                                        ],
-                                      )
-
-                                    //TAP TO OPEN KEYBOARD
-                                    : GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _isKeyboardEnabled = true;
-                                          });
-                                        },
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: standardPadding,
-                                              vertical: 30),
-                                          child: Text(
-                                            'TAP HERE TO OPEN KEYBOARD',
-                                            style: TextStyle(
-                                              fontSize: thirdFontSize,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                              )
+                                    )
+                                  : const SizedBox(),
                             ],
                           ),
                         ),
