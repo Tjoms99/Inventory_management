@@ -13,10 +13,10 @@ def config():
         totem_id = f.readline()
         f.close()
     except:
-        f = open('config.txt', 'w')
         totem_id, text = reader.read()
         totem_id = hex(totem_id)
         totem_id = totem_id[2:-2]
+        f = open('config.txt', 'w')
         f.write(totem_id)
         f.close()
         
