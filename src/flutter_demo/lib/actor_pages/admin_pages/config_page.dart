@@ -5,6 +5,7 @@ import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/page_route.dart';
+import 'package:flutter_demo/services/totem_service.dart';
 
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
@@ -33,6 +34,29 @@ class _ConfigPageState extends State<ConfigPage> {
   //Error.
   String _errorText = "";
   bool _isError = false;
+
+  //RFID.
+  Color _rfidColor = Colors.white;
+  String _rfidText = "TAP HERE TO SCAN TOTEM RFID";
+  String _rfidTag = "";
+
+  ///Changes the [Color] of the rfid icon and the info [Text].
+  void _changeStateRFID() {
+    _rfidColor = _rfidColor == Colors.green ? Colors.white : Colors.green;
+    _rfidText = _rfidText == "TAP HERE TO SCAN TOTEM RFID"
+        ? "SCAN TOTEM CARD"
+        : "TAP HERE TO SCAN TOTEM RFID";
+    setState(() {});
+  }
+
+  ///Sets the [_rfidTag] using the Totem RFID or the NFC reader.
+  Future setRFID() async {
+    _changeStateRFID();
+    await Future.delayed(const Duration(milliseconds: 50));
+    _rfidTag = await getRFIDorNFC();
+    _totemIdController.text = _rfidTag;
+    _changeStateRFID();
+  }
 
   ///Updates the [totemID].
   Future _update() async {
@@ -104,6 +128,38 @@ class _ConfigPageState extends State<ConfigPage> {
                       ),
                     ),
                   ),
+
+                  //RFID.
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: setRFID,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: thirdBoxHeight),
+                          //ICON.
+                          ImageIcon(
+                            const AssetImage(
+                                "assets/images/rfid_transparent.png"),
+                            color: _rfidColor,
+                            size: 100,
+                          ),
+
+                          //INFO TEXT.
+                          Text(
+                            _rfidText,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: thirdFontSize,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: thirdBoxHeight),
+                        ],
+                      ),
+                    ),
+                  ),
+
                   const SizedBox(height: firstBoxHeight),
 
                   //TEXTFIELDS & BUTTONS.
