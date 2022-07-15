@@ -47,6 +47,8 @@ class _AssistUserPageState extends State<AssistUserPage> {
 
   ///Signs in [Account] using [Account.rfid].
   void _signInRFID() async {
+    if (_rfidColor == Colors.green) return;
+
     account = createDefaultAccount();
 
     _changeStateRFID();

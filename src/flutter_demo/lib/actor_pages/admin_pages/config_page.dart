@@ -37,20 +37,22 @@ class _ConfigPageState extends State<ConfigPage> {
 
   //RFID.
   Color _rfidColor = Colors.white;
-  String _rfidText = "TAP HERE TO SCAN TOTEM RFID";
+  String _rfidText = "TAP HERE TO SCAN TOTEM ID";
   String _rfidTag = "";
 
   ///Changes the [Color] of the rfid icon and the info [Text].
   void _changeStateRFID() {
     _rfidColor = _rfidColor == Colors.green ? Colors.white : Colors.green;
-    _rfidText = _rfidText == "TAP HERE TO SCAN TOTEM RFID"
-        ? "SCAN TOTEM CARD"
-        : "TAP HERE TO SCAN TOTEM RFID";
+    _rfidText = _rfidText == "TAP HERE TO SCAN TOTEM ID"
+        ? "SCAN TOTEM RFID"
+        : "TAP HERE TO SCAN TOTEM ID";
     setState(() {});
   }
 
   ///Sets the [_rfidTag] using the Totem RFID or the NFC reader.
   Future setRFID() async {
+    if (_rfidColor == Colors.green) return;
+
     _changeStateRFID();
     await Future.delayed(const Duration(milliseconds: 50));
     _rfidTag = await getRFIDorNFC();

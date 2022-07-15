@@ -60,6 +60,8 @@ class _LoginPageState extends State<LoginPage> {
 
   ///Signs in [currentAccount] using [currentAccount.rfid].
   Future<void> _signInRFID() async {
+    if (_rfidColor == Colors.green) return;
+
     _changeStateRFID();
     await Future.delayed(const Duration(milliseconds: 50));
     currentAccount.rfid = await getRFIDorNFC();

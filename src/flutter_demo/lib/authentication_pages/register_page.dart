@@ -63,9 +63,9 @@ class _RegisterPage extends State<RegisterPage> {
   //RFID.
   Color _rfidColor = Colors.white;
   String _rfidText = "TAP HERE TO SCAN YOUR RFID CARD";
+  String _rfidTag = "";
 
   //Others.
-  String _rfidTag = "";
   bool _isVisible = false;
 
   final String _chars =
@@ -116,6 +116,8 @@ class _RegisterPage extends State<RegisterPage> {
 
   ///Sets the [_rfidTag] using the Totem RFID or the NFC reader.
   Future setRFID() async {
+    if (_rfidColor == Colors.green) return;
+
     _changeStateRFID();
     await Future.delayed(const Duration(milliseconds: 50));
     _rfidTag = await getRFIDorNFC();

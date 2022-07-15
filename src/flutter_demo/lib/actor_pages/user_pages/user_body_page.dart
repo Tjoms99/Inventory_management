@@ -41,6 +41,8 @@ class _UserBodyPageState extends State<UserBodyPage> {
   ///
   ///Updates [Item.location] when [Item.status] changes.
   Future _updateAction() async {
+    if (_rfidColor == Colors.green) return;
+
     Item item = createDefaultItem();
     String rfidTag = "";
 

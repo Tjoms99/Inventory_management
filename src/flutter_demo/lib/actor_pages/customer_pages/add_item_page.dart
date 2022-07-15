@@ -160,6 +160,8 @@ class _AddItemPageState extends State<AddItemPage> {
 
   ///Sets the [_rfidTag] using the Totem RFID or the NFC reader.
   Future setRFID() async {
+    if (_rfidColor == Colors.green) return;
+
     _changeStateRFID();
     await Future.delayed(const Duration(milliseconds: 50));
     _rfidTag = await getRFIDorNFC();
