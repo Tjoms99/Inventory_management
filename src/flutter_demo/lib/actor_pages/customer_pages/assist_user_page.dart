@@ -29,23 +29,38 @@ class _AssistUserPageState extends State<AssistUserPage> {
   String _errorText = "";
   bool _isError = false;
 
+  //RFID
+  Color _rfidColor = Colors.orange;
+  String _rfidText = "TAP HERE TO LOGIN WITH RFID";
+
   //Others.
   Account account = createDefaultAccount();
 
-  @override
-  void dispose() {
-    super.dispose();
-    _emailController.dispose();
+  ///Changes the [Color] of the rfid icon and the info [Text].
+  void _changeStateRFID() {
+    _rfidColor = _rfidColor == Colors.green ? Colors.orange : Colors.green;
+    _rfidText = _rfidText == "TAP HERE TO LOGIN WITH RFID"
+        ? "SCAN YOUR CARD"
+        : "TAP HERE TO LOGIN WITH RFID";
+    setState(() {});
   }
 
-  ///Signs in [account] using [account.rfid].
+  ///Signs in [Account] using [Account.rfid].
   void _signInRFID() async {
+    if (_rfidColor == Colors.green) return;
+
     account = createDefaultAccount();
+
+    _changeStateRFID();
+    await Future.delayed(const Duration(milliseconds: 50));
     account.rfid = await getRFIDorNFC();
+    _changeStateRFID();
+
     account = await getAccount(account);
     _signIn();
   }
 
+  ///Signs in [Account] using [Account.accountName].
   Future<void> _signInName() async {
     account = createDefaultAccount();
     account.accountName = _emailController.text.trim();
@@ -73,11 +88,21 @@ class _AssistUserPageState extends State<AssistUserPage> {
     Navigator.of(context).push(PageRouter(
       child: UserPage(
         currentAccount: account,
-        isHelping: true,
-        isHelpingAdmin: isAdmin(widget.currentAccount),
+        isCustomer: isCustomer(widget.currentAccount),
       ),
       direction: AxisDirection.down,
     ));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   ///Builds the help user page.
@@ -95,18 +120,18 @@ class _AssistUserPageState extends State<AssistUserPage> {
                   behavior: HitTestBehavior.opaque,
                   onTap: _signInRFID,
                   child: Column(
-                    children: const [
+                    children: [
                       //ICON.
                       ImageIcon(
-                        AssetImage("assets/images/rfid_transparent.png"),
-                        color: Colors.orange,
+                        const AssetImage("assets/images/rfid_transparent.png"),
+                        color: _rfidColor,
                         size: 100,
                       ),
 
                       //INFO TEXT.
                       Text(
-                        'TAP HERE TO SCAN RFID',
-                        style: TextStyle(
+                        _rfidText,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: thirdFontSize,
                           color: Colors.black,
@@ -185,63 +210,69 @@ class _AssistUserPageState extends State<AssistUserPage> {
                 const SizedBox(height: thirdBoxHeight),
 
                 //KEYBOARD
-                SingleChildScrollView(
-                  child: _isKeyboardEnabled
-                      ? Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _isKeyboardEnabled = false;
-                                });
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: standardPadding, vertical: 30),
-                                child: Text(
-                                  'TAP HERE TO CLOSE KEYBOARD',
-                                  style: TextStyle(
-                                    fontSize: thirdFontSize,
+                isKeyboardActivated
+                    ? SingleChildScrollView(
+                        child: Container(
+                          color: Colors.white,
+                          child: _isKeyboardEnabled
+                              ? Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _isKeyboardEnabled = false;
+                                        });
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: standardPadding,
+                                            vertical: 10),
+                                        child: Text(
+                                          'TAP HERE TO CLOSE KEYBOARD',
+                                          style: TextStyle(
+                                            fontSize: thirdFontSize,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    VirtualKeyboard(
+                                      height: 300,
+                                      //width: 500,
+                                      textColor: Colors.black,
+                                      textController: _emailController,
+                                      //customLayoutKeys: _customLayoutKeys,
+                                      defaultLayouts: const [
+                                        VirtualKeyboardDefaultLayouts.English
+                                      ],
+
+                                      //reverseLayout :true,
+                                      type: VirtualKeyboardType.Alphanumeric,
+                                    ),
+                                  ],
+                                )
+
+                              //TAP TO OPEN KEYBOARD
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _isKeyboardEnabled = true;
+                                    });
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: standardPadding,
+                                        vertical: 10),
+                                    child: Text(
+                                      'TAP HERE TO OPEN KEYBOARD',
+                                      style: TextStyle(
+                                        fontSize: thirdFontSize,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            VirtualKeyboard(
-                              height: 300,
-                              //width: 500,
-                              textColor: Colors.black,
-
-                              textController: _emailController,
-                              //customLayoutKeys: _customLayoutKeys,
-                              defaultLayouts: const [
-                                VirtualKeyboardDefaultLayouts.English
-                              ],
-
-                              //reverseLayout :true,
-                              type: VirtualKeyboardType.Alphanumeric,
-                            ),
-                          ],
-                        )
-
-                      //TAP TO OPEN KEYBOARD
-                      : GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isKeyboardEnabled = true;
-                            });
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: standardPadding, vertical: 30),
-                            child: Text(
-                              'TAP HERE TO OPEN KEYBOARD',
-                              style: TextStyle(
-                                fontSize: thirdFontSize,
-                              ),
-                            ),
-                          ),
                         ),
-                )
+                      )
+                    : const SizedBox(),
               ],
             ),
           ),

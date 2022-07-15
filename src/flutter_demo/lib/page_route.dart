@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/authentication_pages/register_page.dart';
-import 'package:flutter_demo/classes/account.dart';
 
+///Creates a transition when transfering between two pages using [PageRouteBuilder].
 class PageRouter extends PageRouteBuilder {
   final Widget child;
   final AxisDirection direction;
@@ -13,6 +12,7 @@ class PageRouter extends PageRouteBuilder {
           pageBuilder: (context, animation, secondaryAnimation) => child,
         );
 
+  ///Builds the [SlideTransition].
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
@@ -25,6 +25,9 @@ class PageRouter extends PageRouteBuilder {
     );
   }
 
+  ///Returns the [Offset] from where the page should start the transition.
+  ///
+  ///Four transitions is used [AxisDirection.up], [AxisDirection.down], [AxisDirection.left], [AxisDirection.right].
   Offset getBeginOffset() {
     switch (direction) {
       case AxisDirection.up:
@@ -36,29 +39,5 @@ class PageRouter extends PageRouteBuilder {
       case AxisDirection.right:
         return const Offset(-1, 0);
     }
-  }
-
-  static Route createRouteRegister() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          RegisterPage(true, "", 0, false, createDefaultAccount()),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0, 1.0);
-        const end = Offset.zero;
-        const curve = Curves.easeOut;
-
-        var tween = Tween(begin: begin, end: end);
-
-        final curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve,
-        );
-
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
-        );
-      },
-    );
   }
 }

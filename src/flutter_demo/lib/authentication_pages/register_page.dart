@@ -9,9 +9,10 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
-///This is a page where an [Account] can be inserted or updated into the database
+///This is a page where an [Account] can be inserted or updated into the database.
 class RegisterPage extends StatefulWidget {
   final bool _doRegister;
   final String _email;
@@ -55,18 +56,23 @@ class _RegisterPage extends State<RegisterPage> {
 
   bool _isKeyboardEnabled = false;
 
-  //Error
+  //Error.
   String _errorText = "";
   bool _isError = false;
 
-  //Others.
+  //RFID.
+  Color _rfidColor = Colors.white;
+  String _rfidText = "TAP HERE TO SCAN YOUR RFID CARD";
   String _rfidTag = "";
+
+  //Others.
   bool _isVisible = false;
 
   final String _chars =
       'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
   final Random _rnd = Random();
 
+  ///Returns a random [String] with [_chars] used as constrained characters.
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
@@ -99,10 +105,23 @@ class _RegisterPage extends State<RegisterPage> {
     return _rfidTag;
   }
 
+  ///Changes the [Color] of the rfid icon and the info [Text].
+  void _changeStateRFID() {
+    _rfidColor = _rfidColor == Colors.green ? Colors.white : Colors.green;
+    _rfidText = _rfidText == "TAP HERE TO SCAN YOUR RFID CARD"
+        ? "SCAN YOUR CARD"
+        : "TAP HERE TO SCAN YOUR RFID CARD";
+    setState(() {});
+  }
+
   ///Sets the [_rfidTag] using the Totem RFID or the NFC reader.
   Future setRFID() async {
+    if (_rfidColor == Colors.green) return;
+
+    _changeStateRFID();
+    await Future.delayed(const Duration(milliseconds: 50));
     _rfidTag = await getRFIDorNFC();
-    setState(() {});
+    _changeStateRFID();
   }
 
   ///Returns the [String] located in the customerID textfield.
@@ -129,6 +148,7 @@ class _RegisterPage extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
+    _rfidColor = Colors.white;
     initializeControllers();
     _focusEmail.addListener(_onFocusChangeEmail);
     _focusPassword.addListener(_onFocusChangePassword);
@@ -184,7 +204,7 @@ class _RegisterPage extends State<RegisterPage> {
     }
   }
 
-  ///Inserts or updates [account] in the database.
+  ///Inserts or updates [Account] in the database.
   ///
   ///Checks if [TextEditingController] has information before registering [Account].
   Future registerUser() async {
@@ -213,7 +233,7 @@ class _RegisterPage extends State<RegisterPage> {
 
     if (email.isEmpty) {
       debugPrint("No email");
-      _errorText = "No username entered\n";
+      _errorText = "No email entered\n";
       _isError = true;
     }
 
@@ -259,7 +279,7 @@ class _RegisterPage extends State<RegisterPage> {
     setState(() {});
     if (_isError) return;
 
-    //Send verification email to new user
+    //Send verification email to new user.
     if (widget._doRegister) {
       sendEmail(
           fromEmail: fromEmail,
@@ -352,17 +372,16 @@ class _RegisterPage extends State<RegisterPage> {
                         children: [
                           const SizedBox(height: thirdBoxHeight),
                           //ICON.
-                          const ImageIcon(
-                            AssetImage("assets/images/rfid_transparent.png"),
-                            color: Colors.white,
+                          ImageIcon(
+                            const AssetImage(
+                                "assets/images/rfid_transparent.png"),
+                            color: _rfidColor,
                             size: 100,
                           ),
 
                           //INFO TEXT.
                           Text(
-                            widget._doRegister
-                                ? 'TAP HERE TO SCAN RFID'
-                                : 'TAP HERE TO UPDATE RFID',
+                            _rfidText,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: thirdFontSize,
@@ -451,7 +470,7 @@ class _RegisterPage extends State<RegisterPage> {
                                           borderRadius: BorderRadius.circular(
                                               texfieldBorderRadius),
                                         ),
-                                        hintText: 'Username',
+                                        hintText: 'Email',
                                         fillColor: textfieldBackgroundColor,
                                         filled: true,
                                       ),

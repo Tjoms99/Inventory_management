@@ -1,13 +1,23 @@
 <?php
 include '../conn.php';
-$sql = $conn->query("SELECT * FROM ACCOUNTS");
 
-//$sql_1 = "SELECT * FROM `accounts` WHERE `account_name` LIKE 'marcus.alex@live.no' AND `password` LIKE '123'";
-
+$customer_id = $_POST['customer_id'];
+$account_role = $_POST['account_role'];
 $res = array();
 
+$pos = strpos($customer_id, '1');
+
+
+$sql = "SELECT * FROM ACCOUNTS";
+$sql = $conn->query($sql);
+
+//Add accounts depending on role and registered customer id.
 while ($row = $sql->fetch_assoc()) {
-    $res[] = $row;
+    if ($account_role == "admin") {
+        $res[] = $row;
+    } elseif (substr($row['registered_customer_id'], $pos, 1) == "1" && $pos !== false) {
+        $res[] = $row;
+    }
 }
 
 echo json_encode($res);

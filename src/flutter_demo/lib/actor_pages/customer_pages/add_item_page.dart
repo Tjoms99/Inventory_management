@@ -8,9 +8,10 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/item_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
-///This is a page where an [Item] can be inserted or updated into the database
+///This is a page where an [Item] can be inserted or updated into the database.
 class AddItemPage extends StatefulWidget {
   final bool doAddItem;
   final Account currentAccount;
@@ -50,8 +51,12 @@ class _AddItemPageState extends State<AddItemPage> {
 
   bool _isKeyboardEnabled = false;
 
+//RFID.
+  String _rfidText = "TAP HERE TO SCAN YOUR RFID CARD";
+  Color _rfidColor = Colors.white;
+  String _rfidTag = "";
+
   //Others.
-  String rfidTag = "";
   String _errorText = "";
   bool _isError = false;
 
@@ -70,7 +75,7 @@ class _AddItemPageState extends State<AddItemPage> {
     super.initState();
     setRegisteredCustomerID();
 
-    //KEYBOARD
+    //KEYBOARD.
     _focusType.addListener(_onFocusChangeType);
     _focusStatus.addListener(_onFocusChangeStatus);
     _focusDescription.addListener(_onFocusChangeDescription);
@@ -81,10 +86,10 @@ class _AddItemPageState extends State<AddItemPage> {
     if (widget.item.name == "name") {
       return;
     }
-    //TextEditingController
+    //TextEditingController.
     _typeController.text = widget.item.name;
     _statusController.text = widget.item.status;
-    rfidTag = widget.item.rfid;
+    _rfidTag = widget.item.rfid;
     _descriptionController.text = widget.item.description;
     _locationController.text = widget.item.location;
     _registeredCustomerIdController.text = widget.item.registeredCustomerId;
@@ -102,7 +107,7 @@ class _AddItemPageState extends State<AddItemPage> {
       return;
     }
 
-    //Should be length of 200
+    //Should be length of 200.
     while (id.length < 200) {
       id = id + "0";
     }
@@ -144,14 +149,28 @@ class _AddItemPageState extends State<AddItemPage> {
     return _statusController.text.trim();
   }
 
-  Future setRFID() async {
-    rfidTag = await getRFIDorNFC();
+  ///Changes the [Color] of the rfid icon and the info [Text].
+  void _changeStateRFID() {
+    _rfidColor = _rfidColor == Colors.green ? Colors.white : Colors.green;
+    _rfidText = _rfidText == "TAP HERE TO SCAN YOUR RFID CARD"
+        ? "SCAN YOUR CARD"
+        : "TAP HERE TO SCAN YOUR RFID CARD";
     setState(() {});
+  }
+
+  ///Sets the [_rfidTag] using the Totem RFID or the NFC reader.
+  Future setRFID() async {
+    if (_rfidColor == Colors.green) return;
+
+    _changeStateRFID();
+    await Future.delayed(const Duration(milliseconds: 50));
+    _rfidTag = await getRFIDorNFC();
+    _changeStateRFID();
   }
 
   ///Returns the [String] of the RFID.
   String getRFID() {
-    return rfidTag;
+    return _rfidTag;
   }
 
   ///Returns the [String] located in the description textfield.
@@ -169,8 +188,8 @@ class _AddItemPageState extends State<AddItemPage> {
     return _registeredCustomerIdController.text.trim();
   }
 
-  ///Checks if the [Item] contains empty parameters
-  void errorCheck(Item item, String _errorPHP) {
+  ///Checks if the [Item] contains empty parameters.
+  void errorCheck(Item item) {
     _isError = false;
     _errorText = "";
 
@@ -199,9 +218,6 @@ class _AddItemPageState extends State<AddItemPage> {
       _isError = true;
     }
 
-    if (_errorPHP != "0") _isError = true;
-    if (_errorPHP == "-1") _errorText = _errorText + "Failed http request\n";
-    if (_errorPHP == "1") _errorText = _errorText + "RFID already exists\n";
     debugPrint(_errorText);
     setState(() {});
   }
@@ -219,10 +235,15 @@ class _AddItemPageState extends State<AddItemPage> {
         location: getLocation(),
         registeredCustomerId: getCustomerId());
 
+    errorCheck(item);
+    if (_isError) return;
+
     String _errorPHP = await updateItem(item);
     _errorPHP = jsonDecode(_errorPHP);
-    errorCheck(item, _errorPHP);
 
+    if (_errorPHP != "0") _isError = true;
+    if (_errorPHP == "-1") _errorText = _errorText + "Failed http request\n";
+    if (_errorPHP == "1") _errorText = _errorText + "RFID already exists\n";
     if (_isError) return;
     gotoPage();
   }
@@ -244,11 +265,15 @@ class _AddItemPageState extends State<AddItemPage> {
     if (item.rfid.isEmpty) {
       item.rfid = "NO RFID ASSIGNED";
     }
+    errorCheck(item);
+    if (_isError) return;
 
     String _errorPHP = await addItem(item);
     _errorPHP = jsonDecode(_errorPHP);
-    errorCheck(item, _errorPHP);
 
+    if (_errorPHP != "0") _isError = true;
+    if (_errorPHP == "-1") _errorText = _errorText + "Failed http request\n";
+    if (_errorPHP == "1") _errorText = _errorText + "RFID already exists\n";
     if (_isError) return;
     gotoPage();
   }
@@ -341,16 +366,17 @@ class _AddItemPageState extends State<AddItemPage> {
                         children: [
                           const SizedBox(height: thirdBoxHeight),
                           //ICON.
-                          const ImageIcon(
-                            AssetImage("assets/images/rfid_transparent.png"),
-                            color: Colors.white,
+                          ImageIcon(
+                            const AssetImage(
+                                "assets/images/rfid_transparent.png"),
+                            color: _rfidColor,
                             size: 100,
                           ),
 
                           //INFO TEXT.
-                          const Text(
-                            'TAP HERE TO SCAN RFID',
-                            style: TextStyle(
+                          Text(
+                            _rfidText,
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: thirdFontSize,
                               color: Colors.white,
@@ -360,7 +386,7 @@ class _AddItemPageState extends State<AddItemPage> {
 
                           //RFID ID.
                           Text(
-                            'ID: ' + rfidTag,
+                            'ID: ' + _rfidTag,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: thirdFontSize,

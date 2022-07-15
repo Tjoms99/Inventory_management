@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/Services/item_service.dart';
-import 'package:flutter_demo/classes/account.dart';
 
+///A class of [Item].
 class Item {
   int id;
   String name;
@@ -23,7 +22,7 @@ class Item {
       required this.registeredCustomerId});
 }
 
-///Returns an [Item] from a list of json [items].
+///Returns an [Item] from a dynamic [List] (json) of [items].
 Item createItemFromJson(List<dynamic> items, int index) {
   return Item(
       id: jsonDecode(items[index]['id']),
@@ -47,30 +46,13 @@ Item createDefaultItem() {
       registeredCustomerId: "registered_customer_id");
 }
 
-///Returns [Item] if it exists in [items] checking for matching [rfid].
-Item getItemFromList(List<dynamic> items, String rfid) {
-  Item thisItem = createDefaultItem();
-
-  for (int index = 0; index < items.length; index++) {
-    Item item = createItemFromJson(items, index);
-
-    if (item.rfid == rfid) {
-      thisItem = item;
-      break;
-    }
-  }
-
-  debugPrint("Got this item from items list: $thisItem");
-  return thisItem;
-}
-
-///Returns a list of all [types] that is contained in [items].
+///Returns a [List] of all [types] that is contained in [items].
 List<String> getItemTypes(List<Item> items) {
   List<String> types = [];
   for (int index = 0; index < items.length; index++) {
     if (!types.contains(items[index].name)) types.add(items[index].name);
   }
-
+  debugPrint("${types.length}");
   return types;
 }
 
@@ -85,41 +67,15 @@ List<Item> getItemsInType(List<Item> items, String type) {
   return itemsInType;
 }
 
-///Returns all [items] that belongs to a [customer].
-Future<List<Item>> getItemsForCustomer(Account customer) async {
-  List<Item> items = await getItems();
-  List<Item> itemsForCustomer = [];
-  int indexCustomerId = customer.customerId.indexOf("1");
+///Returns [True] if item can be unassigned.
+bool canUnassignItem(Item item, String customerId) {
+  bool canUnnasign = false;
+  int indexCustomerId = customerId.indexOf("1");
 
-  debugPrint("Getting items for customer: " +
-      customer.accountName +
-      "with id index: $indexCustomerId");
+  if (indexCustomerId == -1) return false;
 
-  //Check item for correct customerID
-  for (int index = 0; index < items.length; index++) {
-    if (items[index].registeredCustomerId.startsWith("1", indexCustomerId)) {
-      itemsForCustomer.add(items[index]);
-      debugPrint("Added item with id: ${items[index].rfid}");
-    }
+  if (item.registeredCustomerId.startsWith("1", indexCustomerId)) {
+    canUnnasign = true;
   }
-
-  debugPrint("Item list length: ${items.length}");
-  return itemsForCustomer;
-}
-
-///Returns [thisItem] from a list of [items] using its [rfid].
-Item getItemFromRFID(List<Item> items, String rfid) {
-  Item thisItem = createDefaultItem();
-
-  for (int index = 0; index < items.length; index++) {
-    debugPrint("Checking item with rfid: " + items[index].rfid);
-
-    if (items[index].rfid == rfid) {
-      thisItem = items[index];
-      debugPrint("Found item with rfid: " + thisItem.rfid);
-      break;
-    }
-  }
-
-  return thisItem;
+  return canUnnasign;
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:flutter_demo/authentication_pages/verify_page.dart';
@@ -9,9 +11,10 @@ import 'package:flutter_demo/actor_pages/user_pages/user_page.dart';
 import 'package:flutter_demo/page_route.dart';
 import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/services/totem_service.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
-///This is a page where an account can signed in using an account from the database.
+///This is a page where an [Account] can be signed in using an account from the database.
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -37,13 +40,33 @@ class _LoginPageState extends State<LoginPage> {
   String _errorText = "";
   bool _isError = false;
 
+  //RFID.
+  Color _rfidColor = Colors.white;
+  String _rfidText = "TAP HERE TO LOGIN WITH RFID";
+
   //Others.
   Account currentAccount = createDefaultAccount();
   bool _isVisible = false;
+  bool _isLoginPressed = false;
+
+  ///Changes the [Color] of the rfid icon and the info [Text].
+  void _changeStateRFID() {
+    _rfidColor = _rfidColor == Colors.green ? Colors.white : Colors.green;
+    _rfidText = _rfidText == "TAP HERE TO LOGIN WITH RFID"
+        ? "SCAN YOUR CARD"
+        : "TAP HERE TO LOGIN WITH RFID";
+    setState(() {});
+  }
 
   ///Signs in [currentAccount] using [currentAccount.rfid].
-  void _signInRFID() async {
+  Future<void> _signInRFID() async {
+    if (_rfidColor == Colors.green) return;
+
+    _changeStateRFID();
+    await Future.delayed(const Duration(milliseconds: 50));
     currentAccount.rfid = await getRFIDorNFC();
+    _changeStateRFID();
+
     _signIn();
   }
 
@@ -59,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
     if (isDefualt(currentAccount)) {
       debugPrint("This is a defualt account, can not sign in");
       _errorText =
-          "Unkown username and password combination\n --or--\nUnknown RFID";
+          "Unkown email and password combination\n --or--\nUnknown RFID";
       _isError = true;
       setState(() {});
       return;
@@ -68,13 +91,15 @@ class _LoginPageState extends State<LoginPage> {
     debugPrint("Signed in ${currentAccount.accountName}");
     debugPrint("Privileges:  ${currentAccount.accountRole}");
 
-    _gotoPage();
+    if (!_isLoginPressed) _gotoPage();
   }
 
   ///Changes the page depending on [widget.currentAccount.accountRole].
   ///
-  ///Goes to verify page if [Account] is not verified
+  ///Goes to verify page if [Account] is not verified.
   void _gotoPage() async {
+    _isLoginPressed = true;
+
     bool _isVerified = await isAccountVerified(currentAccount);
     if (!_isVerified) {
       debugPrint("Need to verify account");
@@ -110,8 +135,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context).push(PageRouter(
           child: UserPage(
             currentAccount: currentAccount,
-            isHelping: false,
-            isHelpingAdmin: false,
+            isCustomer: false,
           ),
           direction: AxisDirection.down,
         ));
@@ -150,6 +174,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    _rfidColor = Colors.white;
     _focusEmail.addListener(_onFocusChangeEmail);
     _focusPassword.addListener(_onFocusChangePassword);
   }
@@ -184,25 +209,26 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: _signInRFID,
                     child: Center(
                       child: Column(
-                        children: const [
-                          SizedBox(height: thirdBoxHeight),
+                        children: [
+                          const SizedBox(height: thirdBoxHeight),
                           //ICON.
                           ImageIcon(
-                            AssetImage("assets/images/rfid_transparent.png"),
-                            color: Colors.white,
+                            const AssetImage(
+                                "assets/images/rfid_transparent.png"),
+                            color: _rfidColor,
                             size: 100,
                           ),
 
                           //INFO TEXT.
                           Text(
-                            'TAP HERE TO LOGIN WITH RFID',
-                            style: TextStyle(
+                            _rfidText,
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: thirdFontSize,
                               color: Colors.white,
                             ),
                           ),
-                          SizedBox(height: thirdBoxHeight),
+                          const SizedBox(height: thirdBoxHeight),
                         ],
                       ),
                     ),
@@ -272,7 +298,7 @@ class _LoginPageState extends State<LoginPage> {
                                           borderRadius: BorderRadius.circular(
                                               texfieldBorderRadius),
                                         ),
-                                        hintText: 'Username',
+                                        hintText: 'Email',
                                         fillColor: textfieldBackgroundColor,
                                         filled: true,
                                       ),

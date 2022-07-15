@@ -1,17 +1,21 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:http/http.dart' as http;
 
-///Returns [items] from the database.
-Future<List<Item>> getItems() async {
+///Returns a [List] of [Item]s from the database.
+Future<List<Item>> getItems(Account account) async {
   List<Item> items = [];
   //Try to fetch data from server.
   try {
     var uri =
         Uri.parse("http://$ipAddress/dashboard/flutter_db/item/getItems.php");
-    final response = await http.get(uri);
+    final response = await http.post(uri, body: {
+      'account_role': account.accountRole,
+      'customer_id': account.customerId,
+    });
 
 //Convert from json object to a list of items.
     for (int index = 0; index < jsonDecode(response.body).length; index++) {
@@ -24,7 +28,7 @@ Future<List<Item>> getItems() async {
   return items;
 }
 
-///Deletes item with [id] from the database.
+///Deletes [Item] with [Item.id] from the database.
 void deleteItem(int id) {
   try {
     var uri =
@@ -37,9 +41,9 @@ void deleteItem(int id) {
   }
 }
 
-///Inserts [item] in the database.
+///Inserts [Item] in the database.
 ///
-///Returns error status
+///Returns error status.
 Future<String> addItem(Item item) async {
   try {
     var uri =
@@ -61,9 +65,9 @@ Future<String> addItem(Item item) async {
   }
 }
 
-///Updates [item] in the database.
+///Updates [Item] in the database.
 ///
-///Returns error status
+///Returns error status.
 Future<String> updateItem(Item item) async {
   try {
     var uri =
@@ -83,4 +87,28 @@ Future<String> updateItem(Item item) async {
     debugPrint("Failed to update item: $e");
     return "-1";
   }
+}
+
+///Returns an [Item] that matches [rfid] from the database.
+Future<Item> getItemFromRFID(Account account, String role, String rfid) async {
+  Item item = createDefaultItem();
+  try {
+    var uri = Uri.parse(
+        "http://$ipAddress/dashboard/flutter_db/item/getItemFromRFID.php");
+
+    var response = await http.post(uri, body: {
+      'customer_id': account.customerId,
+      'account_role': role,
+      'rfid': rfid,
+    });
+
+    final json = "[" + response.body + "]";
+    if (response.body.isNotEmpty) {
+      item = createItemFromJson(jsonDecode(json) as List, 0);
+    }
+  } catch (e) {
+    debugPrint("Failed to get item: $e");
+  }
+
+  return item;
 }

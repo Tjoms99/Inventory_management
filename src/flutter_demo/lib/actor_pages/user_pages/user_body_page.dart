@@ -9,53 +9,64 @@ import 'package:flutter_demo/services/totem_service.dart';
 ///This is a page where a user can be borrow and return items.
 class UserBodyPage extends StatefulWidget {
   final Account currentAccount;
-  final bool isHelping;
-  final bool isHelpingAdmin;
+  final bool isCustomerHelping;
   const UserBodyPage(
-      {required this.currentAccount,
-      required this.isHelping,
-      required this.isHelpingAdmin});
+      {required this.currentAccount, required this.isCustomerHelping});
 
   @override
   State<UserBodyPage> createState() => _UserBodyPageState();
 }
 
 class _UserBodyPageState extends State<UserBodyPage> {
-  String infoText = '';
-  String rfidTag = "";
-  // ignore: prefer_typing_uninitialized_variables.
-  var info;
-  List<Item> items = [];
+  String _infoText = '';
+  //RFID.
+  String _rfidText = "TAP HERE TO SCAN ITEM RFID";
+  Color _rfidColor = Colors.orange;
 
-  ///Updates the current [item.status] of an item depending on its previous [item.status].
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  ///Changes the [Color] of the rfid icon and the info [Text].
+  void _changeStateRFID() {
+    _rfidColor = _rfidColor == Colors.green ? Colors.orange : Colors.green;
+    _rfidText = _rfidText == "TAP HERE TO SCAN ITEM RFID"
+        ? "SCAN ITEM"
+        : "TAP HERE TO SCAN ITEM RFID";
+    setState(() {});
+  }
+
+  ///Updates the current [Item.status] of an item depending on its previous [Item.status].
   ///
-  ///Updates [item.location] when [item.status] changes.
+  ///Updates [Item.location] when [Item.status] changes.
   Future _updateAction() async {
-    //Get items belonging only to customer if customer is helping user
-    //Or get all items
-    items = widget.isHelping
-        ? widget.isHelpingAdmin
-            ? await getItems()
-            : await getItemsForCustomer(widget.currentAccount)
-        : await getItems();
+    if (_rfidColor == Colors.green) return;
 
     Item item = createDefaultItem();
+    String rfidTag = "";
 
+    _changeStateRFID();
+    await Future.delayed(const Duration(milliseconds: 50));
     rfidTag = await getRFIDorNFC();
+    _changeStateRFID();
+
     if (rfidTag.isEmpty) {
-      setState(() {
-        infoText = 'You have not scanned anything';
-      });
+      _infoText = 'You have not scanned anything';
+
+      setState(() {});
       return;
     }
 
-    item = getItemFromRFID(items, rfidTag);
+    item = await getItemFromRFID(widget.currentAccount,
+        widget.isCustomerHelping ? "customer" : "other", rfidTag);
 
+    debugPrint(item.rfid);
     //Return if no item is found.
     if (item.rfid == "rfid") {
-      setState(() {
-        infoText = 'This item does not exist';
-      });
+      _infoText = 'This item does not exist';
+
+      setState(() {});
       return;
     }
 
@@ -63,9 +74,9 @@ class _UserBodyPageState extends State<UserBodyPage> {
     switch (item.status) {
       case 'borrowed':
         if (item.location != widget.currentAccount.accountName) {
-          setState(() {
-            infoText = 'This item is not yours to return';
-          });
+          _infoText = 'This item is not yours to return';
+
+          setState(() {});
           return;
         }
 
@@ -75,11 +86,18 @@ class _UserBodyPageState extends State<UserBodyPage> {
         break;
 
       case 'returned':
+        if (!canUnassignItem(item, widget.currentAccount.customerId) &&
+            isCustomer(widget.currentAccount)) {
+          _infoText = 'You can not unnasign this item';
+
+          setState(() {});
+          return;
+        }
         if (isUser(widget.currentAccount)) {
-          setState(() {
-            infoText =
-                'You can not borrow this item \n Customer action is needed';
-          });
+          _infoText =
+              'You can not borrow this item \n Customer action is needed';
+
+          setState(() {});
           return;
         }
         item.status = 'unassigned';
@@ -98,7 +116,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
     }
 
     updateItem(item);
-    infoText =
+    _infoText =
         "You have ${item.status} this item\n\n\nDescription: ${item.description}\nRFID: ${item.rfid}\n";
     setState(() {});
   }
@@ -118,18 +136,18 @@ class _UserBodyPageState extends State<UserBodyPage> {
                 children: [
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       //ICON.
                       ImageIcon(
-                        AssetImage("assets/images/rfid_transparent.png"),
-                        color: Colors.orange,
+                        const AssetImage("assets/images/rfid_transparent.png"),
+                        color: _rfidColor,
                         size: 100,
                       ),
 
                       //INFO TEXT.
                       Text(
-                        'TAP HERE TO SCAN RFID',
-                        style: TextStyle(
+                        _rfidText,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: thirdFontSize,
                           color: Colors.black,
@@ -141,7 +159,7 @@ class _UserBodyPageState extends State<UserBodyPage> {
                   const Text('The system knows what you want to do!'),
                   const SizedBox(height: firstBoxHeight),
                   Text(
-                    infoText,
+                    _infoText,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: thirdFontSize,

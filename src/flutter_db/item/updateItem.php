@@ -14,8 +14,9 @@ $description = $_POST['description'];
 $location = $_POST['location'];
 $registered_customer_id = $_POST['registered_customer_id'];
 
+$id = intval($id);
 
-$sql = "SELECT * FROM `items` WHERE `id` LIKE '$id'";
+$sql = "SELECT * FROM `items` WHERE `id` LIKE $id";
 $res = $conn->query($sql);
 $currentRFID = mysqli_fetch_assoc($res)['rfid'];
 
@@ -47,5 +48,5 @@ if ($error != "0") {
     return;
 }
 
-$sql = "UPDATE `items` SET `name` = '$name', `status` = '$status', `rfid` = '$rfid', `description` = '$description', `location` = '$location', `registered_customer_id` = '$registered_customer_id' WHERE `items`.`id` = $id";
+$sql = "UPDATE items SET `name` = '$name', `status` = '$status', `rfid` = '$rfid', `description` = '$description', `location` = '$location', `registered_customer_id` = '$registered_customer_id' WHERE `items`.`id` = $id";
 $conn->query($sql);

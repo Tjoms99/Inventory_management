@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 //Addresses
-const ipAddress = "192.168.43.90";
+const ipAddress = "192.168.1.201"; //192.168.43.90"
 const fromEmail = "inventorymanagement.verify@gmail.com";
 String totemID = "default totem ID";
 
+//Keyboard
+bool isKeyboardActivated = false;
 // Colors
 Color primaryBackgroundColor = Colors.white;
 const Color secondaryBackgroundColor = Colors.orangeAccent;
@@ -27,6 +29,23 @@ LinearGradient mainGradient = LinearGradient(
   ],
 );
 
+LinearGradient disabledGradient = LinearGradient(
+  begin: Alignment.topCenter,
+  colors: [
+    Colors.grey[800]!,
+    Colors.grey[500]!,
+    Colors.grey[300]!,
+  ],
+);
+
+LinearGradient activatedGradient = LinearGradient(
+  begin: Alignment.topCenter,
+  colors: [
+    Colors.green[800]!,
+    Colors.green[500]!,
+    Colors.green[300]!,
+  ],
+);
 //Text sizes
 const double firstFontSize = 36;
 const double secondFontSize = 24;

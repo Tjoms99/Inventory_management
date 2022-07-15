@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/Services/account_service.dart';
+import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/services/account_service.dart';
 import 'package:flutter_demo/authentication_pages/register_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/page_route.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 ///This is a page where customers or admins can add/modify/delete [Account]s.
 class UsersListPage extends StatefulWidget {
@@ -16,64 +19,169 @@ class UsersListPage extends StatefulWidget {
 
 class _UsersListPageState extends State<UsersListPage> {
   List<Account> accounts = [];
+  List<Account> allAccounts = [];
+  //Controller
+  final TextEditingController _searchController = TextEditingController();
+  //Focus node.
+  final FocusNode _focusSearch = FocusNode();
+  //Keyboard checker.
+  bool _isKeyboardEnabled = false;
+  bool _isFirstLoad = true;
+
+  ///Updates [accounts] with content that is contained in [_searchController].
+  Future _searchAccounts() async {
+    var suggestons = allAccounts.where((account) {
+      final accountName = account.accountName.toLowerCase();
+      final input = _searchController.text.toLowerCase().trim();
+
+      return accountName.contains(input);
+    }).toList();
+
+    suggestons.sort((a, b) {
+      return a.accountName.toLowerCase().compareTo(b.accountName.toLowerCase());
+    });
+
+    setState(() {
+      accounts = suggestons;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-  }
-
-  ///Removes admin and customer accounts for [widget.currentAccount].
-  ///
-  ///This does not apply for admin accounts.
-  void setAccounts() {
-    if (isAdmin(widget.currentAccount)) {
-      return;
-    }
-    debugPrint("Setting  correct accounts for correct user");
-    for (int index = 0; index < accounts.length; index++) {
-      //Remove all admins and customers
-      if (isAdmin(accounts[index]) ||
-          isCustomer(accounts[index]) ||
-          !isUserRegisteredAtCustomer(accounts[index], widget.currentAccount)) {
-        accounts.removeAt(index);
-
-        //Update index due to list length change
-        index = index - 1;
-      }
-    }
+    _searchController.addListener(_searchAccounts);
   }
 
   @override
   void dispose() {
     super.dispose();
+    _searchController.dispose();
   }
 
-  ///Builds the basic page structure
+  ///Builds the user list page.
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     return Scaffold(
       backgroundColor: Colors.white,
-      body: FutureBuilder<List<Account>>(
-          future: getAccounts(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              //error
-            }
-            if (snapshot.hasData) {
-              accounts = snapshot.data as List<Account>;
-              setAccounts();
-              return ListBuilder(
-                listOfAccounts: accounts,
-                currentAccount: widget.currentAccount,
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          }),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextField(
+              cursorColor: textfieldFocusedBorderColor,
+              controller: _searchController,
+              focusNode: _focusSearch,
+              decoration: const InputDecoration(
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Colors.orange,
+                ),
+                hintStyle: TextStyle(color: Colors.orange),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: textfieldEnabledBorderColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: textfieldEnabledBorderColor),
+                ),
+                hintText: 'Search',
+                fillColor: Colors.white,
+                filled: true,
+              ),
+            ),
+
+            //KEYBOARD
+            isKeyboardActivated
+                ? SingleChildScrollView(
+                    child: Container(
+                      color: Colors.white,
+                      child: _isKeyboardEnabled
+                          ? Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _isKeyboardEnabled = false;
+                                    });
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: standardPadding,
+                                        vertical: 10),
+                                    child: Text(
+                                      'TAP HERE TO CLOSE KEYBOARD',
+                                      style: TextStyle(
+                                        fontSize: thirdFontSize,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                VirtualKeyboard(
+                                  height: 300,
+                                  //width: 500,
+                                  textColor: Colors.black,
+                                  textController: _searchController,
+                                  //customLayoutKeys: _customLayoutKeys,
+                                  defaultLayouts: const [
+                                    VirtualKeyboardDefaultLayouts.English
+                                  ],
+
+                                  //reverseLayout :true,
+                                  type: VirtualKeyboardType.Alphanumeric,
+                                ),
+                              ],
+                            )
+
+                          //TAP TO OPEN KEYBOARD
+                          : GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isKeyboardEnabled = true;
+                                });
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: standardPadding, vertical: 10),
+                                child: Text(
+                                  'TAP HERE TO OPEN KEYBOARD',
+                                  style: TextStyle(
+                                    fontSize: thirdFontSize,
+                                  ),
+                                ),
+                              ),
+                            ),
+                    ),
+                  )
+                : const SizedBox(),
+
+            FutureBuilder<List<Account>>(
+                future: getAccounts(widget.currentAccount),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    //error
+                  }
+                  if (snapshot.hasData) {
+                    allAccounts = snapshot.data as List<Account>;
+                    _isFirstLoad
+                        ? _searchAccounts()
+                        : debugPrint("Not first load");
+                    _isFirstLoad = false;
+
+                    return ListBuilder(
+                      listOfAccounts: accounts,
+                      currentAccount: widget.currentAccount,
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                }),
+          ],
+        ),
+      ),
     );
   }
 }
 
-///This is a page that shows a list of [Accounts].
+///This is a page that shows a [List] of [Account]s.
 class ListBuilder extends StatefulWidget {
   List<Account> listOfAccounts = [];
   Account currentAccount = createDefaultAccount();
@@ -101,7 +209,7 @@ class _ListBuilderState extends State<ListBuilder> {
   void _updateActionModify() {
     String _email = widget.listOfAccounts[_selectedIndex].accountName;
 
-    //Go to update user page
+    //Go to update user page.
     if (_hasPressedModify) {
       Navigator.of(context).push(PageRouter(
         child: RegisterPage(
@@ -114,7 +222,7 @@ class _ListBuilderState extends State<ListBuilder> {
       ));
     }
 
-    //Update state
+    //Update state.
     setState(() {
       if (_hasPressedModify) {
         _hasPressedModify = false;
@@ -154,6 +262,8 @@ class _ListBuilderState extends State<ListBuilder> {
   Widget build(BuildContext context) {
     setState(() {});
     return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: widget.listOfAccounts.length,
       itemBuilder: (_, int index) {
         return ListTile(
