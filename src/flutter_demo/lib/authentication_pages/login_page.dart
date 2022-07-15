@@ -47,7 +47,6 @@ class _LoginPageState extends State<LoginPage> {
   //Others.
   Account currentAccount = createDefaultAccount();
   bool _isVisible = false;
-  bool _isLoginPressed = false;
 
   ///Changes the [Color] of the rfid icon and the info [Text].
   void _changeStateRFID() {
@@ -72,8 +71,12 @@ class _LoginPageState extends State<LoginPage> {
 
   ///Signs in [currentAccount] using the [_emailController] and the [_passwordController] or just using the [currentAccount.rfid].
   Future _signIn() async {
+    if (!isDefualt(currentAccount)) return;
     currentAccount.accountName = _emailController.text.trim();
     currentAccount.password = _passwordController.text.trim();
+    _emailController.text = "";
+    _passwordController.text = "";
+
     currentAccount = await getAccount(currentAccount);
 
     _isError = false;
@@ -91,15 +94,13 @@ class _LoginPageState extends State<LoginPage> {
     debugPrint("Signed in ${currentAccount.accountName}");
     debugPrint("Privileges:  ${currentAccount.accountRole}");
 
-    if (!_isLoginPressed) _gotoPage();
+    _gotoPage();
   }
 
   ///Changes the page depending on [widget.currentAccount.accountRole].
   ///
   ///Goes to verify page if [Account] is not verified.
   void _gotoPage() async {
-    _isLoginPressed = true;
-
     bool _isVerified = await isAccountVerified(currentAccount);
     if (!_isVerified) {
       debugPrint("Need to verify account");
@@ -107,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
         child: const VerifyPage(),
         direction: AxisDirection.down,
       ));
+
       return;
     }
 
@@ -140,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
           direction: AxisDirection.down,
         ));
     }
+    currentAccount = createDefaultAccount();
   }
 
   ///Changes current page to a register page
@@ -177,6 +180,8 @@ class _LoginPageState extends State<LoginPage> {
     _rfidColor = Colors.white;
     _focusEmail.addListener(_onFocusChangeEmail);
     _focusPassword.addListener(_onFocusChangePassword);
+    _emailController.text = "";
+    _passwordController.text = "";
   }
 
   @override
@@ -189,9 +194,6 @@ class _LoginPageState extends State<LoginPage> {
   ///Builds the login page.
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      currentAccount = createDefaultAccount();
-    });
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(

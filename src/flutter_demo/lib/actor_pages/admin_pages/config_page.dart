@@ -79,7 +79,7 @@ class _ConfigPageState extends State<ConfigPage> {
         currentAccount: widget.currentAccount,
         currentIndex: widget.pageIndex,
       ),
-      direction: AxisDirection.down,
+      direction: AxisDirection.up,
     ));
   }
 

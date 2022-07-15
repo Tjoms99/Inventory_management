@@ -642,78 +642,88 @@ class _AddItemPageState extends State<AddItemPage> {
                                   ),
 
                                   //KEYBOARD
-                                  SingleChildScrollView(
-                                    child: _isKeyboardEnabled
-                                        ? Column(
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    _isKeyboardEnabled = false;
-                                                  });
-                                                },
-                                                child: const Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                          standardPadding,
-                                                      vertical: 30),
-                                                  child: Text(
-                                                    'TAP HERE TO CLOSE KEYBOARD',
-                                                    style: TextStyle(
-                                                      fontSize: thirdFontSize,
+                                  isKeyboardActivated ||
+                                          (!isAdmin(widget.currentAccount) &&
+                                              !isCustomer(
+                                                  widget.currentAccount))
+                                      ? SingleChildScrollView(
+                                          child: _isKeyboardEnabled
+                                              ? Column(
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _isKeyboardEnabled =
+                                                              false;
+                                                        });
+                                                      },
+                                                      child: const Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    standardPadding,
+                                                                vertical: 30),
+                                                        child: Text(
+                                                          'TAP HERE TO CLOSE KEYBOARD',
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                thirdFontSize,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    VirtualKeyboard(
+                                                      height: 300,
+                                                      //width: 500,
+                                                      textColor: Colors.black,
+
+                                                      textController: _openKeyboardType
+                                                          ? _typeController
+                                                          : _openKeyboardStatus
+                                                              ? _statusController
+                                                              : _openKeyboardDescription
+                                                                  ? _descriptionController
+                                                                  : _openKeyboardLocation
+                                                                      ? _locationController
+                                                                      : _openKeyboardRegisteredCustomerID
+                                                                          ? _registeredCustomerIdController
+                                                                          : TextEditingController(),
+                                                      //customLayoutKeys: _customLayoutKeys,
+                                                      defaultLayouts: const [
+                                                        VirtualKeyboardDefaultLayouts
+                                                            .English
+                                                      ],
+
+                                                      //reverseLayout :true,
+                                                      type: VirtualKeyboardType
+                                                          .Alphanumeric,
+                                                    ),
+                                                  ],
+                                                )
+
+                                              //TAP TO OPEN KEYBOARD
+                                              : GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _isKeyboardEnabled = true;
+                                                    });
+                                                  },
+                                                  child: const Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal:
+                                                                standardPadding,
+                                                            vertical: 30),
+                                                    child: Text(
+                                                      'TAP HERE TO OPEN KEYBOARD',
+                                                      style: TextStyle(
+                                                        fontSize: thirdFontSize,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              VirtualKeyboard(
-                                                height: 300,
-                                                //width: 500,
-                                                textColor: Colors.black,
-
-                                                textController: _openKeyboardType
-                                                    ? _typeController
-                                                    : _openKeyboardStatus
-                                                        ? _statusController
-                                                        : _openKeyboardDescription
-                                                            ? _descriptionController
-                                                            : _openKeyboardLocation
-                                                                ? _locationController
-                                                                : _openKeyboardRegisteredCustomerID
-                                                                    ? _registeredCustomerIdController
-                                                                    : TextEditingController(),
-                                                //customLayoutKeys: _customLayoutKeys,
-                                                defaultLayouts: const [
-                                                  VirtualKeyboardDefaultLayouts
-                                                      .English
-                                                ],
-
-                                                //reverseLayout :true,
-                                                type: VirtualKeyboardType
-                                                    .Alphanumeric,
-                                              ),
-                                            ],
-                                          )
-
-                                        //TAP TO OPEN KEYBOARD
-                                        : GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                _isKeyboardEnabled = true;
-                                              });
-                                            },
-                                            child: const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: standardPadding,
-                                                  vertical: 30),
-                                              child: Text(
-                                                'TAP HERE TO OPEN KEYBOARD',
-                                                style: TextStyle(
-                                                  fontSize: thirdFontSize,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                  )
+                                        )
+                                      : const SizedBox(height: firstBoxHeight),
                                 ],
                               ),
                             ],
