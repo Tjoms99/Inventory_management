@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-
 ///A class of [Item].
 class Item {
   int id;
@@ -50,9 +48,11 @@ Item createDefaultItem() {
 List<String> getItemTypes(List<Item> items) {
   List<String> types = [];
   for (int index = 0; index < items.length; index++) {
-    if (!types.contains(items[index].name)) types.add(items[index].name);
+    if (!types.any((type) => type == items[index].name)) {
+      types.add(items[index].name);
+    }
   }
-  debugPrint("${types.length}");
+
   return types;
 }
 
@@ -61,7 +61,9 @@ List<Item> getItemsInType(List<Item> items, String type) {
   List<Item> itemsInType = [];
 
   for (int index = 0; index < items.length; index++) {
-    if (items[index].name.contains(type)) itemsInType.add(items[index]);
+    if (type == items[index].name) {
+      itemsInType.add(items[index]);
+    }
   }
 
   return itemsInType;

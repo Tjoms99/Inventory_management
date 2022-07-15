@@ -120,7 +120,10 @@ class _RegisterPage extends State<RegisterPage> {
 
     _changeStateRFID();
     await Future.delayed(const Duration(milliseconds: 50));
-    _rfidTag = await getRFIDorNFC();
+    String rfidTagTemp = await getRFIDorNFC();
+    rfidTagTemp.isEmpty
+        ? debugPrint("No rfid detected")
+        : _rfidTag = rfidTagTemp;
     _changeStateRFID();
   }
 
@@ -171,6 +174,7 @@ class _RegisterPage extends State<RegisterPage> {
     _customerIDController.text = account.customerId;
     _registeredCustomerIDController.text = account.registeredCustomerId;
     _rfidTag = account.rfid;
+    setState(() {});
   }
 
   @override
@@ -252,7 +256,9 @@ class _RegisterPage extends State<RegisterPage> {
     //Will be unable to add accounts in web.
     if (rfid.isEmpty) {
       debugPrint("No rfid tag detected");
-      account.rfid = "NO RFID ASSIGNED";
+      widget._doRegister
+          ? account.rfid = "NO RFID ASSIGNED"
+          : debugPrint("Ignore empty rfid");
       //return;
     }
 
@@ -352,6 +358,7 @@ class _RegisterPage extends State<RegisterPage> {
   ///Builds the register page.
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(

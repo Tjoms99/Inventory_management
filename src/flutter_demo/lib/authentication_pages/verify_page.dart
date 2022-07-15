@@ -91,7 +91,7 @@ class _VerifyPageState extends State<VerifyPage> {
                   //INFO TEXT.
                   const Center(
                     child: Text(
-                      'ENTER VERIFICATION CODE',
+                      'VERIFICATION',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: firstFontSize,
@@ -155,7 +155,7 @@ class _VerifyPageState extends State<VerifyPage> {
                                           borderRadius: BorderRadius.circular(
                                               texfieldBorderRadius),
                                         ),
-                                        hintText: 'Verification code',
+                                        hintText: 'Email Verification Code',
                                         fillColor: textfieldBackgroundColor,
                                         filled: true,
                                       ),

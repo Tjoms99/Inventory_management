@@ -341,10 +341,11 @@ class _ExpandableListViewState extends State<ExpandableListView> {
 
     //Update state.
     setState(() {
-      setSelected(item);
       if (_hasPressedModify[getIndex(item)]) {
         clearPressedModify();
+        _selectedIndex = -1;
       } else {
+        setSelected(item);
         _hasPressedModify[getIndex(item)] = true;
         clearPressedDelete();
       }
@@ -354,16 +355,19 @@ class _ExpandableListViewState extends State<ExpandableListView> {
   ///Goes to update [Item] page.
   void _deleteItem(Item item) {
     setState(() {
-      setSelected(item);
       if (_hasPressedDelete[getIndex(item)]) {
         deleteItem(item.id);
+
         widget.listToBuild.removeAt(getIndex(item));
         if (widget.listToBuild.isEmpty) {
           widget.title = "";
         }
 
         clearPressedDelete();
+        _selectedIndex = -1;
       } else {
+        setSelected(item);
+
         _hasPressedDelete[getIndex(item)] = true;
         clearPressedModify();
       }
@@ -421,127 +425,136 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                             constraints: BoxConstraints.expand(
                                 width: MediaQuery.of(context).size.width),
                             child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: DataTable(
-                                dataRowColor:
-                                    MaterialStateProperty.resolveWith<Color?>(
-                                        (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.selected)) {
-                                    return Colors.orange[300];
-                                  }
-                                  return null; // Use the default value.
-                                }),
-                                columns: const <DataColumn>[
-                                  DataColumn(
-                                    label: Text(
-                                      'Status',
-                                      style: TextStyle(
-                                        fontStyle: FontStyle.italic,
-                                        fontWeight: FontWeight.bold,
+                              scrollDirection: Axis.vertical,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: DataTable(
+                                  dataRowColor:
+                                      MaterialStateProperty.resolveWith<Color?>(
+                                          (Set<MaterialState> states) {
+                                    if (states
+                                        .contains(MaterialState.selected)) {
+                                      return Colors.orange[300];
+                                    }
+                                    return null; // Use the default value.
+                                  }),
+                                  columns: const <DataColumn>[
+                                    DataColumn(
+                                      label: Text(
+                                        'Status',
+                                        style: TextStyle(
+                                          fontStyle: FontStyle.italic,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Description',
-                                      style: TextStyle(
-                                        fontStyle: FontStyle.italic,
-                                        fontWeight: FontWeight.bold,
+                                    DataColumn(
+                                      label: Text(
+                                        'Description',
+                                        style: TextStyle(
+                                          fontStyle: FontStyle.italic,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Location',
-                                      style: TextStyle(
-                                        fontStyle: FontStyle.italic,
-                                        fontWeight: FontWeight.bold,
+                                    DataColumn(
+                                      label: Text(
+                                        'Location',
+                                        style: TextStyle(
+                                          fontStyle: FontStyle.italic,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'RFID',
-                                      style: TextStyle(
-                                        fontStyle: FontStyle.italic,
-                                        fontWeight: FontWeight.bold,
+                                    DataColumn(
+                                      label: Text(
+                                        'RFID',
+                                        style: TextStyle(
+                                          fontStyle: FontStyle.italic,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  DataColumn(
-                                    label: Text(
-                                      'Action',
-                                      style: TextStyle(
-                                        fontStyle: FontStyle.italic,
-                                        fontWeight: FontWeight.bold,
+                                    DataColumn(
+                                      label: Text(
+                                        'Action',
+                                        style: TextStyle(
+                                          fontStyle: FontStyle.italic,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
 
-                                //ITEMS IN EXPANDABLE LIST.
-                                rows: widget.listToBuild
-                                    .map(
-                                      ((item) => DataRow(
-                                            cells: <DataCell>[
-                                              DataCell(GestureDetector(
-                                                  onTap: () =>
-                                                      setSelected(item),
-                                                  child: Text(item.status))),
-                                              DataCell(GestureDetector(
-                                                  onTap: () =>
-                                                      setSelected(item),
-                                                  child:
-                                                      Text(item.description))),
-                                              DataCell(GestureDetector(
-                                                  onTap: () =>
-                                                      setSelected(item),
-                                                  child: Text(item.location))),
-                                              DataCell(GestureDetector(
-                                                  onTap: () =>
-                                                      setSelected(item),
-                                                  child: Text(item.rfid))),
-                                              DataCell(Row(
-                                                children: [
-                                                  //UPDATE ICON.
-                                                  GestureDetector(
-                                                    behavior:
-                                                        HitTestBehavior.opaque,
+                                  //ITEMS IN EXPANDABLE LIST.
+                                  rows: widget.listToBuild
+                                      .map(
+                                        ((item) => DataRow(
+                                              cells: <DataCell>[
+                                                DataCell(GestureDetector(
                                                     onTap: () =>
-                                                        _updateItem(item),
-                                                    child: _hasPressedModify[
-                                                            getIndex(item)]
-                                                        ? const Icon(Icons.done,
-                                                            color: Colors.black)
-                                                        : const Icon(
-                                                            Icons.create,
-                                                            color:
-                                                                Colors.black),
-                                                  ),
+                                                        setSelected(item),
+                                                    child: Text(item.status))),
+                                                DataCell(GestureDetector(
+                                                    onTap: () =>
+                                                        setSelected(item),
+                                                    child: Text(
+                                                        item.description))),
+                                                DataCell(GestureDetector(
+                                                    onTap: () =>
+                                                        setSelected(item),
+                                                    child:
+                                                        Text(item.location))),
+                                                DataCell(GestureDetector(
+                                                    onTap: () =>
+                                                        setSelected(item),
+                                                    child: Text(item.rfid))),
+                                                DataCell(Row(
+                                                  children: [
+                                                    //UPDATE ICON.
+                                                    GestureDetector(
+                                                      behavior: HitTestBehavior
+                                                          .opaque,
+                                                      onTap: () =>
+                                                          _updateItem(item),
+                                                      child: _hasPressedModify[
+                                                              getIndex(item)]
+                                                          ? const Icon(
+                                                              Icons.done,
+                                                              color:
+                                                                  Colors.black)
+                                                          : const Icon(
+                                                              Icons.create,
+                                                              color:
+                                                                  Colors.black),
+                                                    ),
 
-                                                  //DELETE ICON.
-                                                  GestureDetector(
-                                                    behavior:
-                                                        HitTestBehavior.opaque,
-                                                    onTap: () =>
-                                                        _deleteItem(item),
-                                                    child: _hasPressedDelete[
-                                                            getIndex(item)]
-                                                        ? const Icon(Icons.done,
-                                                            color: Colors.black)
-                                                        : const Icon(
-                                                            Icons.delete,
-                                                            color:
-                                                                Colors.black),
-                                                  ),
-                                                ],
-                                              ))
-                                            ],
-                                            selected: getIndex(item) ==
-                                                _selectedIndex,
-                                          )),
-                                    )
-                                    .toList(),
+                                                    //DELETE ICON.
+                                                    GestureDetector(
+                                                      behavior: HitTestBehavior
+                                                          .opaque,
+                                                      onTap: () =>
+                                                          _deleteItem(item),
+                                                      child: _hasPressedDelete[
+                                                              getIndex(item)]
+                                                          ? const Icon(
+                                                              Icons.done,
+                                                              color:
+                                                                  Colors.black)
+                                                          : const Icon(
+                                                              Icons.delete,
+                                                              color:
+                                                                  Colors.black),
+                                                    ),
+                                                  ],
+                                                ))
+                                              ],
+                                              selected: getIndex(item) ==
+                                                  _selectedIndex,
+                                            )),
+                                      )
+                                      .toList(),
+                                ),
                               ),
                             ),
                           )
