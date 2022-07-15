@@ -187,7 +187,7 @@ class _AddItemPageState extends State<AddItemPage> {
   }
 
   ///Checks if the [Item] contains empty parameters.
-  void errorCheck(Item item, String _errorPHP) {
+  void errorCheck(Item item) {
     _isError = false;
     _errorText = "";
 
@@ -216,9 +216,6 @@ class _AddItemPageState extends State<AddItemPage> {
       _isError = true;
     }
 
-    if (_errorPHP != "0") _isError = true;
-    if (_errorPHP == "-1") _errorText = _errorText + "Failed http request\n";
-    if (_errorPHP == "1") _errorText = _errorText + "RFID already exists\n";
     debugPrint(_errorText);
     setState(() {});
   }
@@ -236,10 +233,15 @@ class _AddItemPageState extends State<AddItemPage> {
         location: getLocation(),
         registeredCustomerId: getCustomerId());
 
+    errorCheck(item);
+    if (_isError) return;
+
     String _errorPHP = await updateItem(item);
     _errorPHP = jsonDecode(_errorPHP);
-    errorCheck(item, _errorPHP);
 
+    if (_errorPHP != "0") _isError = true;
+    if (_errorPHP == "-1") _errorText = _errorText + "Failed http request\n";
+    if (_errorPHP == "1") _errorText = _errorText + "RFID already exists\n";
     if (_isError) return;
     gotoPage();
   }
@@ -261,11 +263,15 @@ class _AddItemPageState extends State<AddItemPage> {
     if (item.rfid.isEmpty) {
       item.rfid = "NO RFID ASSIGNED";
     }
+    errorCheck(item);
+    if (_isError) return;
 
     String _errorPHP = await addItem(item);
     _errorPHP = jsonDecode(_errorPHP);
-    errorCheck(item, _errorPHP);
 
+    if (_errorPHP != "0") _isError = true;
+    if (_errorPHP == "-1") _errorText = _errorText + "Failed http request\n";
+    if (_errorPHP == "1") _errorText = _errorText + "RFID already exists\n";
     if (_isError) return;
     gotoPage();
   }
