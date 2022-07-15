@@ -24,7 +24,7 @@ Future<String> getTotemRFID() async {
   return rfid.toUpperCase();
 }
 
-///Returns a [String] with the rfid that is scanned using [FlutterNfcKit].
+///Returns a [String] with the rfid tag that is scanned using [FlutterNfcKit].
 Future<String> getNFC() async {
   String rfid = "";
 

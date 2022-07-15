@@ -751,6 +751,7 @@ class _RegisterPage extends State<RegisterPage> {
                                     ? Column(
                                         children: [
                                           GestureDetector(
+                                            behavior: HitTestBehavior.opaque,
                                             onTap: () {
                                               setState(() {
                                                 _isKeyboardEnabled = false;
@@ -801,6 +802,7 @@ class _RegisterPage extends State<RegisterPage> {
 
                                     //TAP TO OPEN KEYBOARD
                                     : GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
                                         onTap: () {
                                           setState(() {
                                             _isKeyboardEnabled = true;

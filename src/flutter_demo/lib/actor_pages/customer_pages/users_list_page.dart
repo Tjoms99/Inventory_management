@@ -98,6 +98,7 @@ class _UsersListPageState extends State<UsersListPage> {
                           ? Column(
                               children: [
                                 GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
                                   onTap: () {
                                     setState(() {
                                       _isKeyboardEnabled = false;
@@ -106,7 +107,7 @@ class _UsersListPageState extends State<UsersListPage> {
                                   child: const Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: standardPadding,
-                                        vertical: 10),
+                                        vertical: 15),
                                     child: Text(
                                       'TAP HERE TO CLOSE KEYBOARD',
                                       style: TextStyle(
@@ -133,6 +134,7 @@ class _UsersListPageState extends State<UsersListPage> {
 
                           //TAP TO OPEN KEYBOARD
                           : GestureDetector(
+                              behavior: HitTestBehavior.opaque,
                               onTap: () {
                                 setState(() {
                                   _isKeyboardEnabled = true;
@@ -140,7 +142,7 @@ class _UsersListPageState extends State<UsersListPage> {
                               },
                               child: const Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: standardPadding, vertical: 10),
+                                    horizontal: standardPadding, vertical: 15),
                                 child: Text(
                                   'TAP HERE TO OPEN KEYBOARD',
                                   style: TextStyle(

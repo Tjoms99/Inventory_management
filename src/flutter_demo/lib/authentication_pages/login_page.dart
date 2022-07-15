@@ -413,6 +413,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ? Column(
                                         children: [
                                           GestureDetector(
+                                            behavior: HitTestBehavior.opaque,
                                             onTap: () {
                                               setState(() {
                                                 _isKeyboardEnabled = false;
@@ -455,6 +456,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                     //TAP TO OPEN KEYBOARD
                                     : GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
                                         onTap: () {
                                           setState(() {
                                             _isKeyboardEnabled = true;

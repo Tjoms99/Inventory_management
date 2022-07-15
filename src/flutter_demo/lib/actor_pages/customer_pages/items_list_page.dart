@@ -144,6 +144,7 @@ class _ListBuilderState extends State<ListBuilder> {
                           ? Column(
                               children: [
                                 GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
                                   onTap: () {
                                     setState(() {
                                       _isKeyboardEnabled = false;
@@ -152,7 +153,7 @@ class _ListBuilderState extends State<ListBuilder> {
                                   child: const Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: standardPadding,
-                                        vertical: 10),
+                                        vertical: 15),
                                     child: Text(
                                       'TAP HERE TO CLOSE KEYBOARD',
                                       style: TextStyle(
@@ -179,6 +180,7 @@ class _ListBuilderState extends State<ListBuilder> {
 
                           //TAP TO OPEN KEYBOARD
                           : GestureDetector(
+                              behavior: HitTestBehavior.opaque,
                               onTap: () {
                                 setState(() {
                                   _isKeyboardEnabled = true;
@@ -186,7 +188,7 @@ class _ListBuilderState extends State<ListBuilder> {
                               },
                               child: const Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: standardPadding, vertical: 10),
+                                    horizontal: standardPadding, vertical: 15),
                                 child: Text(
                                   'TAP HERE TO OPEN KEYBOARD',
                                   style: TextStyle(
@@ -503,6 +505,8 @@ class _ExpandableListViewState extends State<ExpandableListView> {
                                                 children: [
                                                   //UPDATE ICON.
                                                   GestureDetector(
+                                                    behavior:
+                                                        HitTestBehavior.opaque,
                                                     onTap: () =>
                                                         _updateItem(item),
                                                     child: _hasPressedModify[
@@ -517,6 +521,8 @@ class _ExpandableListViewState extends State<ExpandableListView> {
 
                                                   //DELETE ICON.
                                                   GestureDetector(
+                                                    behavior:
+                                                        HitTestBehavior.opaque,
                                                     onTap: () =>
                                                         _deleteItem(item),
                                                     child: _hasPressedDelete[

@@ -162,8 +162,6 @@ class _ConfigPageState extends State<ConfigPage> {
                     ),
                   ),
 
-                  const SizedBox(height: firstBoxHeight),
-
                   //TEXTFIELDS & BUTTONS.
                   Expanded(
                     child: Container(
@@ -311,6 +309,8 @@ class _ConfigPageState extends State<ConfigPage> {
                                           ? Column(
                                               children: [
                                                 GestureDetector(
+                                                  behavior:
+                                                      HitTestBehavior.opaque,
                                                   onTap: () {
                                                     setState(() {
                                                       _isKeyboardEnabled =
@@ -355,6 +355,7 @@ class _ConfigPageState extends State<ConfigPage> {
 
                                           //TAP TO OPEN KEYBOARD
                                           : GestureDetector(
+                                              behavior: HitTestBehavior.opaque,
                                               onTap: () {
                                                 setState(() {
                                                   _isKeyboardEnabled = true;
