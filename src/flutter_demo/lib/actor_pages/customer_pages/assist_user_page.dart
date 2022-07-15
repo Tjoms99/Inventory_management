@@ -208,63 +208,69 @@ class _AssistUserPageState extends State<AssistUserPage> {
                 const SizedBox(height: thirdBoxHeight),
 
                 //KEYBOARD
-                SingleChildScrollView(
-                  child: _isKeyboardEnabled
-                      ? Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _isKeyboardEnabled = false;
-                                });
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: standardPadding, vertical: 30),
-                                child: Text(
-                                  'TAP HERE TO CLOSE KEYBOARD',
-                                  style: TextStyle(
-                                    fontSize: thirdFontSize,
+                isKeyboardActivated
+                    ? SingleChildScrollView(
+                        child: Container(
+                          color: Colors.white,
+                          child: _isKeyboardEnabled
+                              ? Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _isKeyboardEnabled = false;
+                                        });
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: standardPadding,
+                                            vertical: 10),
+                                        child: Text(
+                                          'TAP HERE TO CLOSE KEYBOARD',
+                                          style: TextStyle(
+                                            fontSize: thirdFontSize,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    VirtualKeyboard(
+                                      height: 300,
+                                      //width: 500,
+                                      textColor: Colors.black,
+                                      textController: _emailController,
+                                      //customLayoutKeys: _customLayoutKeys,
+                                      defaultLayouts: const [
+                                        VirtualKeyboardDefaultLayouts.English
+                                      ],
+
+                                      //reverseLayout :true,
+                                      type: VirtualKeyboardType.Alphanumeric,
+                                    ),
+                                  ],
+                                )
+
+                              //TAP TO OPEN KEYBOARD
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _isKeyboardEnabled = true;
+                                    });
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: standardPadding,
+                                        vertical: 10),
+                                    child: Text(
+                                      'TAP HERE TO OPEN KEYBOARD',
+                                      style: TextStyle(
+                                        fontSize: thirdFontSize,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            VirtualKeyboard(
-                              height: 300,
-                              //width: 500,
-                              textColor: Colors.black,
-
-                              textController: _emailController,
-                              //customLayoutKeys: _customLayoutKeys,
-                              defaultLayouts: const [
-                                VirtualKeyboardDefaultLayouts.English
-                              ],
-
-                              //reverseLayout :true,
-                              type: VirtualKeyboardType.Alphanumeric,
-                            ),
-                          ],
-                        )
-
-                      //TAP TO OPEN KEYBOARD
-                      : GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isKeyboardEnabled = true;
-                            });
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: standardPadding, vertical: 30),
-                            child: Text(
-                              'TAP HERE TO OPEN KEYBOARD',
-                              style: TextStyle(
-                                fontSize: thirdFontSize,
-                              ),
-                            ),
-                          ),
                         ),
-                )
+                      )
+                    : const SizedBox(),
               ],
             ),
           ),

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 ///A class of [Item].
 class Item {
   int id;
@@ -50,7 +52,7 @@ List<String> getItemTypes(List<Item> items) {
   for (int index = 0; index < items.length; index++) {
     if (!types.contains(items[index].name)) types.add(items[index].name);
   }
-
+  debugPrint("${types.length}");
   return types;
 }
 

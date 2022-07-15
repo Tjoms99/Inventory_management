@@ -28,6 +28,7 @@ class _ConfigPageState extends State<ConfigPage> {
   //Keyboard checkers.
   bool _openKeyboardTotemId = false;
   bool _isKeyboardEnabled = false;
+  bool isKeyboardActivatedTemp = isKeyboardActivated;
 
   //Error.
   String _errorText = "";
@@ -40,6 +41,7 @@ class _ConfigPageState extends State<ConfigPage> {
     _isError = false;
     _errorText = "";
 
+    isKeyboardActivated = isKeyboardActivatedTemp;
     totemID = id;
     _gotoPage();
   }
@@ -172,8 +174,8 @@ class _ConfigPageState extends State<ConfigPage> {
                                         horizontal: standardPadding),
                                     child: GestureDetector(
                                       onTap: () => setState(() {
-                                        isKeyboardActivated =
-                                            !isKeyboardActivated;
+                                        isKeyboardActivatedTemp =
+                                            !isKeyboardActivatedTemp;
                                       }),
                                       child: Container(
                                         padding:
@@ -181,12 +183,12 @@ class _ConfigPageState extends State<ConfigPage> {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            gradient: isKeyboardActivated
+                                            gradient: isKeyboardActivatedTemp
                                                 ? activatedGradient
                                                 : disabledGradient),
                                         child: Center(
                                           child: Text(
-                                            isKeyboardActivated
+                                            isKeyboardActivatedTemp
                                                 ? 'Keyboard Enabled'
                                                 : 'Keyboard Disabled',
                                             style: const TextStyle(
@@ -245,7 +247,7 @@ class _ConfigPageState extends State<ConfigPage> {
                               ),
 
                               //KEYBOARD
-                              isKeyboardActivated
+                              isKeyboardActivatedTemp
                                   ? SingleChildScrollView(
                                       child: _isKeyboardEnabled
                                           ? Column(

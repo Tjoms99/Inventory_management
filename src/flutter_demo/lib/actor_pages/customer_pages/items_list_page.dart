@@ -6,6 +6,7 @@ import 'package:flutter_demo/classes/account.dart';
 import 'package:flutter_demo/classes/item.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/page_route.dart';
+import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
 ///This is a page where customers or admins can add/modify/delete [Item]s.
 class ItemsListPage extends StatefulWidget {
@@ -51,16 +52,55 @@ class ListBuilder extends StatefulWidget {
 
 class _ListBuilderState extends State<ListBuilder> {
   List<Item> _items = [];
+  List<Item> _allItems = [];
+
   List<String> _types = [];
+
+  //Controller
+  final TextEditingController _searchController = TextEditingController();
+  //Focus node.
+  final FocusNode _focusSearch = FocusNode();
+  //Keyboard checker.
+  bool _isKeyboardEnabled = false;
+  bool _isFirstLoad = true;
+
+  ///Updates [accounts] with content that is contained in [_searchController].
+  Future _searchItems() async {
+    var suggestons = _allItems.where((item) {
+      final itemName = item.name.toLowerCase();
+      final itemDescription = item.description.toLowerCase();
+      final itemLocation = item.location.toLowerCase();
+
+      final input = _searchController.text.toLowerCase().trim();
+
+      if (itemName.contains(input) ||
+          itemDescription.contains(input) ||
+          itemLocation.contains(input)) {
+        return true;
+      }
+      return false;
+    }).toList();
+
+    suggestons.sort((a, b) {
+      return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+    });
+
+    setState(() {
+      _items = suggestons;
+      _types = getItemTypes(_items);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_searchItems);
   }
 
   @override
   void dispose() {
     _items.clear();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -68,45 +108,145 @@ class _ListBuilderState extends State<ListBuilder> {
   @override
   Widget build(BuildContext context) {
     setState(() {});
-    return FutureBuilder<List<Item>>(
-        future: getItems(widget.currentAccount),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            //error
-          }
-          if (snapshot.hasData) {
-            _items = snapshot.data as List<Item>;
-            _types = getItemTypes(_items);
-            debugPrint("Types of items:  $_types ");
+    return SingleChildScrollView(
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            TextField(
+              cursorColor: textfieldFocusedBorderColor,
+              controller: _searchController,
+              focusNode: _focusSearch,
+              decoration: const InputDecoration(
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Colors.orange,
+                ),
+                hintStyle: TextStyle(color: Colors.orange),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: textfieldEnabledBorderColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: textfieldEnabledBorderColor),
+                ),
+                hintText: 'Search',
+                fillColor: Colors.white,
+                filled: true,
+              ),
+            ),
 
-            return ListView.builder(
-              itemCount: _types.length,
-              itemBuilder: (_, int index) {
-                return Column(
-                  children: [
-                    index == 0
-                        ? const SizedBox(height: thirdBoxHeight)
-                        : const SizedBox(),
-                    ExpandableListView(
-                      title: _types[index],
-                      listToBuild: getItemsInType(_items, _types[index]),
-                      currentAccount: widget.currentAccount,
+            //KEYBOARD
+            isKeyboardActivated
+                ? SingleChildScrollView(
+                    child: Container(
+                      color: Colors.white,
+                      child: _isKeyboardEnabled
+                          ? Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _isKeyboardEnabled = false;
+                                    });
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: standardPadding,
+                                        vertical: 10),
+                                    child: Text(
+                                      'TAP HERE TO CLOSE KEYBOARD',
+                                      style: TextStyle(
+                                        fontSize: thirdFontSize,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                VirtualKeyboard(
+                                  height: 300,
+                                  //width: 500,
+                                  textColor: Colors.black,
+                                  textController: _searchController,
+                                  //customLayoutKeys: _customLayoutKeys,
+                                  defaultLayouts: const [
+                                    VirtualKeyboardDefaultLayouts.English
+                                  ],
+
+                                  //reverseLayout :true,
+                                  type: VirtualKeyboardType.Alphanumeric,
+                                ),
+                              ],
+                            )
+
+                          //TAP TO OPEN KEYBOARD
+                          : GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isKeyboardEnabled = true;
+                                });
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: standardPadding, vertical: 10),
+                                child: Text(
+                                  'TAP HERE TO OPEN KEYBOARD',
+                                  style: TextStyle(
+                                    fontSize: thirdFontSize,
+                                  ),
+                                ),
+                              ),
+                            ),
                     ),
-                    index == _types.length - 1
-                        ? Container(
-                            color: Colors.white,
-                            height: 600,
-                            width: double.infinity,
-                          )
-                        : const SizedBox(),
-                  ],
-                );
+                  )
+                : const SizedBox(),
+
+            FutureBuilder<List<Item>>(
+              future: getItems(widget.currentAccount),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  //error
+                }
+                if (snapshot.hasData) {
+                  _allItems = snapshot.data as List<Item>;
+                  _isFirstLoad ? _searchItems() : debugPrint("Not first load");
+                  _isFirstLoad = false;
+
+                  debugPrint("Types of items:  $_types ");
+
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _types.length,
+                    itemBuilder: (_, int index) {
+                      return Column(
+                        children: [
+                          index == 0
+                              ? const SizedBox(height: thirdBoxHeight)
+                              : const SizedBox(),
+                          ExpandableListView(
+                            title: _types[index],
+                            listToBuild: getItemsInType(_items, _types[index]),
+                            currentAccount: widget.currentAccount,
+                          ),
+                          index == _types.length - 1
+                              ? Container(
+                                  color: Colors.white,
+                                  height: 600,
+                                  width: double.infinity,
+                                )
+                              : const SizedBox(),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
               },
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -116,10 +256,11 @@ class ExpandableListView extends StatefulWidget {
   final List<Item> listToBuild;
   final Account currentAccount;
 
-  ExpandableListView(
-      {required this.title,
-      required this.listToBuild,
-      required this.currentAccount});
+  ExpandableListView({
+    required this.title,
+    required this.listToBuild,
+    required this.currentAccount,
+  });
 
   @override
   _ExpandableListViewState createState() => _ExpandableListViewState();
