@@ -108,39 +108,37 @@ class _LoginPageState extends State<LoginPage> {
         child: const VerifyPage(),
         direction: AxisDirection.down,
       ));
+    } else {
+      switch (currentAccount.accountRole) {
+        case "customer":
+          Navigator.of(context).push(PageRouter(
+            child: AdminPage(
+              currentAccount: currentAccount,
+              currentIndex: 0,
+            ),
+            direction: AxisDirection.down,
+          ));
+          break;
 
-      return;
-    }
+        case "admin":
+          Navigator.of(context).push(PageRouter(
+            child: AdminPage(
+              currentAccount: currentAccount,
+              currentIndex: 0,
+            ),
+            direction: AxisDirection.down,
+          ));
+          break;
 
-    switch (currentAccount.accountRole) {
-      case "customer":
-        Navigator.of(context).push(PageRouter(
-          child: AdminPage(
-            currentAccount: currentAccount,
-            currentIndex: 0,
-          ),
-          direction: AxisDirection.down,
-        ));
-        break;
-
-      case "admin":
-        Navigator.of(context).push(PageRouter(
-          child: AdminPage(
-            currentAccount: currentAccount,
-            currentIndex: 0,
-          ),
-          direction: AxisDirection.down,
-        ));
-        break;
-
-      default:
-        Navigator.of(context).push(PageRouter(
-          child: UserPage(
-            currentAccount: currentAccount,
-            isCustomer: false,
-          ),
-          direction: AxisDirection.down,
-        ));
+        default:
+          Navigator.of(context).push(PageRouter(
+            child: UserPage(
+              currentAccount: currentAccount,
+              isCustomer: false,
+            ),
+            direction: AxisDirection.down,
+          ));
+      }
     }
     currentAccount = createDefaultAccount();
   }
@@ -153,6 +151,8 @@ class _LoginPageState extends State<LoginPage> {
       child: RegisterPage(true, _email, 0, false, currentAccount),
       direction: AxisDirection.left,
     ));
+
+    currentAccount = createDefaultAccount();
   }
 
   ///Connects the [_emailController] to the keyboard.
