@@ -10,8 +10,12 @@ import 'package:flutter_demo/page_route.dart';
 ///This is a page where a user can be borrow and return items.
 class UserPage extends StatefulWidget {
   final Account currentAccount;
+  final Account helpAccount;
   final bool isCustomer;
-  const UserPage({required this.currentAccount, required this.isCustomer});
+  const UserPage(
+      {required this.currentAccount,
+      required this.isCustomer,
+      required this.helpAccount});
 
   @override
   State<UserPage> createState() => _UserPage();
@@ -23,11 +27,11 @@ class _UserPage extends State<UserPage> {
     debugPrint("Signed out " + widget.currentAccount.accountName);
 
     ///Changes the page depending on [widget.currentAccount.accountRole].
-    if (isAdmin(widget.currentAccount) || isCustomer(widget.currentAccount)) {
+    if (isAdmin(widget.helpAccount) || isCustomer(widget.helpAccount)) {
       Navigator.of(context).push(PageRouter(
         child: AdminPage(
-          currentAccount: widget.currentAccount,
-          currentIndex: 0,
+          currentAccount: widget.helpAccount,
+          currentIndex: 2,
         ),
         direction: AxisDirection.up,
       ));

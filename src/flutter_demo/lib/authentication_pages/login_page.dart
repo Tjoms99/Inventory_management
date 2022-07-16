@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.of(context).push(PageRouter(
             child: AdminPage(
               currentAccount: currentAccount,
-              currentIndex: 0,
+              currentIndex: 3,
             ),
             direction: AxisDirection.down,
           ));
@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.of(context).push(PageRouter(
             child: AdminPage(
               currentAccount: currentAccount,
-              currentIndex: 0,
+              currentIndex: 3,
             ),
             direction: AxisDirection.down,
           ));
@@ -134,6 +134,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.of(context).push(PageRouter(
             child: UserPage(
               currentAccount: currentAccount,
+              helpAccount: createDefaultAccount(),
               isCustomer: false,
             ),
             direction: AxisDirection.down,
