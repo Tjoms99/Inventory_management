@@ -15,7 +15,11 @@ $sql = $conn->query($sql);
 while ($row = $sql->fetch_assoc()) {
     if ($account_role == "admin") {
         $res[] = $row;
+    } elseif ($row['account_role'] == "admin" || $row['account_role'] == "customer") {
+        //Do nothing
     } elseif (substr($row['registered_customer_id'], $pos, 1) == "1" && $pos !== false) {
+
+
         $res[] = $row;
     }
 }

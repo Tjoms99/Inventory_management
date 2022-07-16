@@ -64,8 +64,13 @@ if ($error != "0") {
 }
 
 
-$sql = "UPDATE `accounts` SET `account_name` = '$account_name', `account_role` = '$account_role' , `password` = '$hashed_password', `rfid` = '$rfid', `customer_id` = '$customer_id', `registered_customer_id` = '$registered_customer_id' WHERE `accounts`.`id` = $id";
-$conn->query($sql);
+if ($password == "") {
+    $sql = "UPDATE `accounts` SET `account_name` = '$account_name', `account_role` = '$account_role' , `rfid` = '$rfid', `customer_id` = '$customer_id', `registered_customer_id` = '$registered_customer_id' WHERE `accounts`.`id` = $id";
+    $conn->query($sql);
+} else {
+    $sql = "UPDATE `accounts` SET `account_name` = '$account_name', `account_role` = '$account_role' , `password` = '$hashed_password', `rfid` = '$rfid', `customer_id` = '$customer_id', `registered_customer_id` = '$registered_customer_id' WHERE `accounts`.`id` = $id";
+    $conn->query($sql);
+}
 
 
 //Update items with new location if name has changed 

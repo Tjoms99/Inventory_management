@@ -4,8 +4,6 @@ include '../conn.php';
 $rfid = $_POST['rfid'];
 $totem_id = $_POST['totem_id'];
 
-$rfid = substr($rfid, 2, -2);
-
 $sql = "SELECT * FROM `totems` WHERE `totem_id` LIKE '$totem_id'";
 $res = $conn->query($sql);
 

@@ -5,6 +5,7 @@ $account_name = $_POST['account_name'];
 $password = $_POST['password'];
 $rfid = $_POST['rfid'];
 
+
 //Try to get account using rfid
 $sql = "SELECT * FROM `accounts` WHERE `rfid` LIKE '$rfid'";
 $res = $conn->query($sql);
@@ -15,7 +16,8 @@ if (mysqli_num_rows($res) != 0) {
     return;
 }
 
-
+if ($account_name == "") return;
+if ($password == "") return;
 //Try to get account using name and password
 $sql = "SELECT * FROM `accounts` WHERE `account_name` LIKE '$account_name'";
 $res = $conn->query($sql);
