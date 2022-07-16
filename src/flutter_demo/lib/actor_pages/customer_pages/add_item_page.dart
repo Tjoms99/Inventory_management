@@ -104,38 +104,13 @@ class _AddItemPageState extends State<AddItemPage> {
     String id = "";
 
     if (!widget.doAddItem) {
-      _registeredCustomerIdController.text = widget.item.registeredCustomerId;
+      _registeredCustomerIdController.text =
+          getCustomerIDIndexAsString(widget.item.registeredCustomerId);
       return;
     }
 
-    //Should be length of 200.
-    while (id.length < 200) {
-      id = id + "0";
-    }
-
-    //Find customerID.
-    for (int index = 0;
-        index < widget.currentAccount.customerId.length;
-        index++) {
-      if (widget.currentAccount.customerId.startsWith("1", index)) {
-        customerIndex = index;
-        break;
-      }
-    }
-    debugPrint("Registered CustomerID index: $customerIndex");
-
-    //Set new registered customer ID.
-    if (customerIndex != -1) {
-      id = id.substring(
-            0,
-            customerIndex,
-          ) +
-          "1" +
-          id.substring(customerIndex, id.length - 1);
-      _registeredCustomerIdController.text = id;
-
-      debugPrint("New ID: $id");
-    }
+    _registeredCustomerIdController.text =
+        getCustomerIDIndexAsString(widget.currentAccount.customerId);
 
     setState(() {});
   }
@@ -185,17 +160,25 @@ class _AddItemPageState extends State<AddItemPage> {
   }
 
   ///Returns the [String] located in the customerID textfield.
-  String getCustomerId() {
-    int customerIdIndex =
-        int.parse(_registeredCustomerIdController.text.trim());
+  String getCustomerID() {
     String customerId = "";
+    try {
+      int customerIdIndex =
+          int.parse(_registeredCustomerIdController.text.trim());
 
-    //Should be length of 200
-    for (int index = 0; index < 200; index++) {
-      customerIdIndex - 1 == index
-          ? customerId = customerId + "1"
-          : customerId = customerId + "0";
+      //Should be length of 200
+      for (int index = 0; index < 200; index++) {
+        customerIdIndex - 1 == index
+            ? customerId = customerId + "1"
+            : customerId = customerId + "0";
+      }
+    } catch (e) {
+      //Should be length of 200
+      for (int index = 0; index < 200; index++) {
+        customerId = customerId + "0";
+      }
     }
+
     return customerId;
   }
 
@@ -244,7 +227,7 @@ class _AddItemPageState extends State<AddItemPage> {
         rfid: getRFID(),
         description: getDescription(),
         location: getLocation(),
-        registeredCustomerId: getCustomerId());
+        registeredCustomerId: getCustomerID());
 
     errorCheck(item);
     if (_isError) return;
@@ -270,7 +253,7 @@ class _AddItemPageState extends State<AddItemPage> {
         rfid: getRFID(),
         description: getDescription(),
         location: getLocation(),
-        registeredCustomerId: getCustomerId());
+        registeredCustomerId: getCustomerID());
 
     //Can add items without RFID
     if (item.rfid.isEmpty) {
