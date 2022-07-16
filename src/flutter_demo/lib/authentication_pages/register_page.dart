@@ -129,10 +129,14 @@ class _RegisterPage extends State<RegisterPage> {
 
   ///Returns the [String] located in the customerID textfield.
   String getCustomerID() {
-    String customerId = _customerIDController.text.trim();
+    int customerIdIndex = int.parse(_customerIDController.text.trim());
+    String customerId = "";
+
     //Should be length of 200
-    while (customerId.length < 200) {
-      customerId = customerId + "0";
+    for (int index = 0; index < 200; index++) {
+      customerIdIndex - 1 == index
+          ? customerId = customerId + "1"
+          : customerId = customerId + "0";
     }
     return customerId;
   }
@@ -140,10 +144,9 @@ class _RegisterPage extends State<RegisterPage> {
   ///Returns the [String] located in the registeredCustomerID textfield.
   String getReigstedCustomerId() {
     String registeredCustomerId = _registeredCustomerIDController.text.trim();
-    //Should be length of 200
-    while (registeredCustomerId.length < 200) {
-      registeredCustomerId = registeredCustomerId + "0";
-    }
+
+    registeredCustomerId =
+        getRegisteredCustomerIDFromIndexes(registeredCustomerId);
 
     return registeredCustomerId;
   }
@@ -168,11 +171,11 @@ class _RegisterPage extends State<RegisterPage> {
     Account account = await getAccountFromName(widget._email);
 
     if (isDefualt(account)) return;
-
     _emailController.text = account.accountName;
     _accountRoleController.text = account.accountRole;
-    _customerIDController.text = account.customerId;
-    _registeredCustomerIDController.text = account.registeredCustomerId;
+    _customerIDController.text = getCustomerIDIndexAsString(account.customerId);
+    _registeredCustomerIDController.text =
+        getRegisteredCustomerIDIndexesAsString(account.registeredCustomerId);
     _rfidTag = account.rfid;
     setState(() {});
   }

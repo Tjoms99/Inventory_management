@@ -164,3 +164,48 @@ void updateAndRemoveFromCustomerList(Account account, Account customer) {
   debugPrint("Removed 1 at $indexCustomerId");
   debugPrint("Actual new ID:  $newID");
 }
+
+///Returns a customerID number as [String].
+String getCustomerIDIndexAsString(String customerID) {
+  return (customerID.indexOf('1') + 1).toString();
+}
+
+///Returns a customerID number as [String].
+String getRegisteredCustomerIDIndexesAsString(String registeredCustomerID) {
+  String indexes = "";
+  for (int index = 0; index < 200; index++) {
+    registeredCustomerID[index] == "1"
+        ? indexes = indexes + (index + 1).toString() + ";"
+        : indexes = indexes;
+  }
+
+  return indexes;
+}
+
+///Returns a customerID number as [String].
+String getRegisteredCustomerIDFromIndexes(String registeredCustomerID) {
+  List<int> numbers = [];
+  String numberString = "";
+  for (int index = 0; index < registeredCustomerID.length; index++) {
+    if (registeredCustomerID[index] != ";") {
+      numberString = numberString + registeredCustomerID[index];
+    } else {
+      numbers.add(int.parse(numberString));
+      numberString = "";
+    }
+  }
+
+  registeredCustomerID = "";
+  for (int index = 0; index < 200; index++) {
+    bool containsIndex = false;
+    for (int number = 0; number < numbers.length; number++) {
+      if (numbers[number] - 1 == index) containsIndex = true;
+    }
+
+    containsIndex
+        ? registeredCustomerID = registeredCustomerID + "1"
+        : registeredCustomerID = registeredCustomerID + "0";
+  }
+
+  return registeredCustomerID;
+}
