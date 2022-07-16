@@ -129,9 +129,9 @@ class _RegisterPage extends State<RegisterPage> {
 
   ///Returns the [String] located in the customerID textfield.
   String getCustomerID() {
+    String customerId = "";
     try {
       int customerIdIndex = int.parse(_customerIDController.text.trim());
-      String customerId = "";
 
       //Should be length of 200
       for (int index = 0; index < 200; index++) {
@@ -139,10 +139,14 @@ class _RegisterPage extends State<RegisterPage> {
             ? customerId = customerId + "1"
             : customerId = customerId + "0";
       }
-      return customerId;
     } catch (e) {
-      return "";
+      //Should be length of 200
+      for (int index = 0; index < 200; index++) {
+        customerId = customerId + "0";
+      }
     }
+
+    return customerId;
   }
 
   ///Returns the [String] located in the registeredCustomerID textfield.
