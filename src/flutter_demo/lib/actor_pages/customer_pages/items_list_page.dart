@@ -53,8 +53,8 @@ class ListBuilder extends StatefulWidget {
 class _ListBuilderState extends State<ListBuilder> {
   List<Item> _items = [];
   List<Item> _allItems = [];
-
-  List<String> _types = [];
+  final List<String> _types = [];
+  final List<List<Item>> _typeWithItems = [];
 
   //Controller
   final TextEditingController _searchController = TextEditingController();
@@ -70,12 +70,16 @@ class _ListBuilderState extends State<ListBuilder> {
       final itemName = item.name.toLowerCase();
       final itemDescription = item.description.toLowerCase();
       final itemLocation = item.location.toLowerCase();
+      final itemStatus = item.status.toLowerCase();
+      final itemRFID = item.rfid.toLowerCase();
 
       final input = _searchController.text.toLowerCase().trim();
 
       if (itemName.contains(input) ||
           itemDescription.contains(input) ||
-          itemLocation.contains(input)) {
+          itemLocation.contains(input) ||
+          itemStatus.contains(input) ||
+          itemRFID.contains(input)) {
         return true;
       }
       return false;
@@ -85,10 +89,8 @@ class _ListBuilderState extends State<ListBuilder> {
       return a.name.toLowerCase().compareTo(b.name.toLowerCase());
     });
 
-    setState(() {
-      _items = suggestons;
-      _types = getItemTypes(_items);
-    });
+    _items = suggestons;
+    setState(() {});
   }
 
   @override
@@ -206,39 +208,23 @@ class _ListBuilderState extends State<ListBuilder> {
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   //error
+                  debugPrint("future builder error");
                 }
+
                 if (snapshot.hasData) {
                   _allItems = snapshot.data as List<Item>;
                   _isFirstLoad ? _searchItems() : debugPrint("Not first load");
                   _isFirstLoad = false;
 
                   debugPrint("Types of items:  $_types ");
-
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _types.length,
-                    itemBuilder: (_, int index) {
-                      return Column(
-                        children: [
-                          index == 0
-                              ? const SizedBox(height: thirdBoxHeight)
-                              : const SizedBox(),
-                          ExpandableListView(
-                            title: _types[index],
-                            listToBuild: getItemsInType(_items, _types[index]),
-                            currentAccount: widget.currentAccount,
-                          ),
-                          index == _types.length - 1
-                              ? Container(
-                                  color: Colors.white,
-                                  height: 600,
-                                  width: double.infinity,
-                                )
-                              : const SizedBox(),
-                        ],
-                      );
-                    },
+                  return Container(
+                    color: Colors.white,
+                    width: double.infinity,
+                    child: ItemListView(
+                      title: "Items",
+                      listToBuild: _items,
+                      currentAccount: widget.currentAccount,
+                    ),
                   );
                 } else {
                   return const Center(child: CircularProgressIndicator());
@@ -253,23 +239,23 @@ class _ListBuilderState extends State<ListBuilder> {
 }
 
 ///This is a page that expands a [List] of [Item]s on request.
-class ExpandableListView extends StatefulWidget {
+class ItemListView extends StatefulWidget {
   String title;
-  final List<Item> listToBuild;
+  List<Item> listToBuild;
   final Account currentAccount;
 
-  ExpandableListView({
+  ItemListView({
     required this.title,
     required this.listToBuild,
     required this.currentAccount,
   });
 
   @override
-  _ExpandableListViewState createState() => _ExpandableListViewState();
+  _ItemListViewState createState() => _ItemListViewState();
 }
 
-class _ExpandableListViewState extends State<ExpandableListView> {
-  bool _expandFlag = false;
+class _ItemListViewState extends State<ItemListView> {
+  final bool _expandFlag = false;
   final List<bool> _hasPressedDelete = [];
   final List<bool> _hasPressedModify = [];
   int _selectedIndex = -1;
@@ -380,219 +366,123 @@ class _ExpandableListViewState extends State<ExpandableListView> {
     setState(() {});
     return Container(
       color: Colors.white,
-      child: widget.title != ""
-          ? Column(
-              children: <Widget>[
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2),
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () => {
-                      setState(() {
-                        _expandFlag = !_expandFlag;
-                      })
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        //EXPANDABLE ICON.
-                        Icon(
-                          _expandFlag ? Icons.list_outlined : Icons.list,
-                          color: _expandFlag
-                              ? Colors.orange[300]
-                              : Colors.orange[700],
-                          size: 40.0,
-                        ),
-                        Text(
-                          widget.title,
-                          style: const TextStyle(
-                            fontSize: 23,
-                            color: Colors.black,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          dataRowColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.selected)) {
+              return Colors.orange[300];
+            }
+            return null; // Use the default value.
+          }),
+          columns: const <DataColumn>[
+            DataColumn(
+              label: Text(
+                'Type',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
                 ),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                'Status',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                'Description',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                'Location',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                'RFID',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                'Action',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
 
-                //EXPANDABLE LIST.
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: ExpandableContainer(
-                    expanded: _expandFlag,
-                    child: _expandFlag
-                        ? ConstrainedBox(
-                            constraints: BoxConstraints.expand(
-                                width: MediaQuery.of(context).size.width),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: DataTable(
-                                  dataRowColor:
-                                      MaterialStateProperty.resolveWith<Color?>(
-                                          (Set<MaterialState> states) {
-                                    if (states
-                                        .contains(MaterialState.selected)) {
-                                      return Colors.orange[300];
-                                    }
-                                    return null; // Use the default value.
-                                  }),
-                                  columns: const <DataColumn>[
-                                    DataColumn(
-                                      label: Text(
-                                        'Status',
-                                        style: TextStyle(
-                                          fontStyle: FontStyle.italic,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Description',
-                                        style: TextStyle(
-                                          fontStyle: FontStyle.italic,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Location',
-                                        style: TextStyle(
-                                          fontStyle: FontStyle.italic,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'RFID',
-                                        style: TextStyle(
-                                          fontStyle: FontStyle.italic,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Action',
-                                        style: TextStyle(
-                                          fontStyle: FontStyle.italic,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-
-                                  //ITEMS IN EXPANDABLE LIST.
-                                  rows: widget.listToBuild
-                                      .map(
-                                        ((item) => DataRow(
-                                              cells: <DataCell>[
-                                                DataCell(GestureDetector(
-                                                    onTap: () =>
-                                                        setSelected(item),
-                                                    child: Text(item.status))),
-                                                DataCell(GestureDetector(
-                                                    onTap: () =>
-                                                        setSelected(item),
-                                                    child: Text(
-                                                        item.description))),
-                                                DataCell(GestureDetector(
-                                                    onTap: () =>
-                                                        setSelected(item),
-                                                    child:
-                                                        Text(item.location))),
-                                                DataCell(GestureDetector(
-                                                    onTap: () =>
-                                                        setSelected(item),
-                                                    child: Text(item.rfid))),
-                                                DataCell(Row(
-                                                  children: [
-                                                    //UPDATE ICON.
-                                                    GestureDetector(
-                                                      behavior: HitTestBehavior
-                                                          .opaque,
-                                                      onTap: () =>
-                                                          _updateItem(item),
-                                                      child: _hasPressedModify[
-                                                              getIndex(item)]
-                                                          ? const Icon(
-                                                              Icons.done,
-                                                              color:
-                                                                  Colors.black)
-                                                          : const Icon(
-                                                              Icons.create,
-                                                              color:
-                                                                  Colors.black),
-                                                    ),
-
-                                                    //DELETE ICON.
-                                                    GestureDetector(
-                                                      behavior: HitTestBehavior
-                                                          .opaque,
-                                                      onTap: () =>
-                                                          _deleteItem(item),
-                                                      child: _hasPressedDelete[
-                                                              getIndex(item)]
-                                                          ? const Icon(
-                                                              Icons.done,
-                                                              color:
-                                                                  Colors.black)
-                                                          : const Icon(
-                                                              Icons.delete,
-                                                              color:
-                                                                  Colors.black),
-                                                    ),
-                                                  ],
-                                                ))
-                                              ],
-                                              selected: getIndex(item) ==
-                                                  _selectedIndex,
-                                            )),
-                                      )
-                                      .toList(),
-                                ),
-                              ),
+          //ITEMS IN EXPANDABLE LIST.
+          rows: widget.listToBuild
+              .map(
+                ((item) => DataRow(
+                      cells: <DataCell>[
+                        DataCell(GestureDetector(
+                            onTap: () => setSelected(item),
+                            child: Text(item.name))),
+                        DataCell(GestureDetector(
+                            onTap: () => setSelected(item),
+                            child: Text(item.status))),
+                        DataCell(GestureDetector(
+                            onTap: () => setSelected(item),
+                            child: Text(item.description))),
+                        DataCell(GestureDetector(
+                            onTap: () => setSelected(item),
+                            child: Text(item.location))),
+                        DataCell(GestureDetector(
+                            onTap: () => setSelected(item),
+                            child: Text(item.rfid))),
+                        DataCell(Row(
+                          children: [
+                            //UPDATE ICON.
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () => _updateItem(item),
+                              child: _hasPressedModify[getIndex(item)]
+                                  ? const Icon(Icons.done, color: Colors.black)
+                                  : const Icon(Icons.create,
+                                      color: Colors.black),
                             ),
-                          )
-                        : const SizedBox(),
-                  ),
-                )
-              ],
-            )
-          : const SizedBox(),
-    );
-  }
-}
 
-///This class creates an expandable container.
-class ExpandableContainer extends StatelessWidget {
-  final bool expanded;
-  final double collapsedHeight;
-  final double expandedHeight;
-  final Widget child;
-
-  const ExpandableContainer({
-    required this.child,
-    this.collapsedHeight = 0.0,
-    this.expandedHeight = 300.0,
-    this.expanded = true,
-  });
-
-  ///Builds an expandable container.
-  @override
-  Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-      width: screenWidth,
-      height: expanded ? expandedHeight : collapsedHeight,
-      child: Container(
-        child: child,
+                            //DELETE ICON.
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () => _deleteItem(item),
+                              child: _hasPressedDelete[getIndex(item)]
+                                  ? const Icon(Icons.done, color: Colors.black)
+                                  : const Icon(Icons.delete,
+                                      color: Colors.black),
+                            ),
+                          ],
+                        ))
+                      ],
+                      selected: getIndex(item) == _selectedIndex,
+                    )),
+              )
+              .toList(),
+        ),
       ),
     );
   }

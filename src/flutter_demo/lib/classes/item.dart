@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 ///A class of [Item].
 class Item {
   int id;
@@ -56,16 +58,17 @@ List<String> getItemTypes(List<Item> items) {
   return types;
 }
 
-///Returns a list of items with a certian [type].
+///Returns a [List] of [Item]s with a certian [type].
 List<Item> getItemsInType(List<Item> items, String type) {
   List<Item> itemsInType = [];
 
   for (int index = 0; index < items.length; index++) {
     if (type == items[index].name) {
       itemsInType.add(items[index]);
+      debugPrint(items[index].description);
     }
   }
-
+  debugPrint("Items in type length: ${itemsInType.length}");
   return itemsInType;
 }
 
