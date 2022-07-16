@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //Addresses
-const ipAddress = "192.168.1.201"; //192.168.43.90"
+const ipAddress = "192.168.43.90"; //192.168.43.90"
 const fromEmail = "inventorymanagement.verify@gmail.com";
 String totemID = "default totem ID";
 

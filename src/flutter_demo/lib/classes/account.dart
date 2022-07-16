@@ -138,7 +138,7 @@ String getNewRegisteredCustomerID(String currentID, String itemCustomerID) {
   } else {
     newID = newID.substring(0, indexCustomerId) +
         "1" +
-        newID.substring(indexCustomerId + 1, newID.length - 1);
+        newID.substring(indexCustomerId, newID.length - 1);
   }
   debugPrint("ID length: ${newID.length}");
 
@@ -186,26 +186,29 @@ String getRegisteredCustomerIDIndexesAsString(String registeredCustomerID) {
 String getRegisteredCustomerIDFromIndexes(String registeredCustomerID) {
   List<int> numbers = [];
   String numberString = "";
-  for (int index = 0; index < registeredCustomerID.length; index++) {
-    if (registeredCustomerID[index] != ";") {
-      numberString = numberString + registeredCustomerID[index];
-    } else {
-      numbers.add(int.parse(numberString));
-      numberString = "";
-    }
-  }
-
-  registeredCustomerID = "";
-  for (int index = 0; index < 200; index++) {
-    bool containsIndex = false;
-    for (int number = 0; number < numbers.length; number++) {
-      if (numbers[number] - 1 == index) containsIndex = true;
+  try {
+    for (int index = 0; index < registeredCustomerID.length; index++) {
+      if (registeredCustomerID[index] != ";") {
+        numberString = numberString + registeredCustomerID[index];
+      } else {
+        numbers.add(int.parse(numberString));
+        numberString = "";
+      }
     }
 
-    containsIndex
-        ? registeredCustomerID = registeredCustomerID + "1"
-        : registeredCustomerID = registeredCustomerID + "0";
-  }
+    registeredCustomerID = "";
+    for (int index = 0; index < 200; index++) {
+      bool containsIndex = false;
+      for (int number = 0; number < numbers.length; number++) {
+        if (numbers[number] - 1 == index) containsIndex = true;
+      }
 
+      containsIndex
+          ? registeredCustomerID = registeredCustomerID + "1"
+          : registeredCustomerID = registeredCustomerID + "0";
+    }
+  } catch (e) {
+    debugPrint("Could not get registered customer id from indexes");
+  }
   return registeredCustomerID;
 }

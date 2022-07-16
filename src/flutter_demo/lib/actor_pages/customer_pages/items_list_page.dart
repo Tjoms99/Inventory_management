@@ -55,6 +55,8 @@ class _ItemsListPageState extends State<ItemsListPage> {
     });
 
     _items = suggestons;
+    _allItems = await getItems(widget.currentAccount);
+
     setState(() {});
   }
 
@@ -74,7 +76,6 @@ class _ItemsListPageState extends State<ItemsListPage> {
   ///Builds the [Item]s list page.
   @override
   Widget build(BuildContext context) {
-    setState(() {});
     return SingleChildScrollView(
       child: Container(
         color: Colors.white,

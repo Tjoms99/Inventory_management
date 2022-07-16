@@ -129,16 +129,20 @@ class _RegisterPage extends State<RegisterPage> {
 
   ///Returns the [String] located in the customerID textfield.
   String getCustomerID() {
-    int customerIdIndex = int.parse(_customerIDController.text.trim());
-    String customerId = "";
+    try {
+      int customerIdIndex = int.parse(_customerIDController.text.trim());
+      String customerId = "";
 
-    //Should be length of 200
-    for (int index = 0; index < 200; index++) {
-      customerIdIndex - 1 == index
-          ? customerId = customerId + "1"
-          : customerId = customerId + "0";
+      //Should be length of 200
+      for (int index = 0; index < 200; index++) {
+        customerIdIndex - 1 == index
+            ? customerId = customerId + "1"
+            : customerId = customerId + "0";
+      }
+      return customerId;
+    } catch (e) {
+      return "";
     }
-    return customerId;
   }
 
   ///Returns the [String] located in the registeredCustomerID textfield.
@@ -170,14 +174,24 @@ class _RegisterPage extends State<RegisterPage> {
 
     Account account = await getAccountFromName(widget._email);
 
+    debugPrint(account.accountName);
+    debugPrint(account.accountRole);
+    debugPrint(account.rfid);
+    debugPrint(account.customerId);
+    debugPrint(account.registeredCustomerId);
+
     if (isDefualt(account)) return;
-    _emailController.text = account.accountName;
-    _accountRoleController.text = account.accountRole;
-    _customerIDController.text = getCustomerIDIndexAsString(account.customerId);
-    _registeredCustomerIDController.text =
-        getRegisteredCustomerIDIndexesAsString(account.registeredCustomerId);
-    _rfidTag = account.rfid;
-    setState(() {});
+    setState(() {
+      _emailController.text = account.accountName;
+      _accountRoleController.text = account.accountRole;
+      _rfidTag = account.rfid;
+
+      _customerIDController.text =
+          getCustomerIDIndexAsString(account.customerId);
+
+      _registeredCustomerIDController.text =
+          getRegisteredCustomerIDIndexesAsString(account.registeredCustomerId);
+    });
   }
 
   @override
@@ -361,7 +375,6 @@ class _RegisterPage extends State<RegisterPage> {
   ///Builds the register page.
   @override
   Widget build(BuildContext context) {
-    setState(() {});
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
