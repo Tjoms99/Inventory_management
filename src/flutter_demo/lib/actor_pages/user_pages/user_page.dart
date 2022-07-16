@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/actor_pages/admin_pages/admin_page.dart';
+import 'package:flutter_demo/authentication_pages/login_page.dart';
 import 'package:flutter_demo/classes/account.dart';
 
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/actor_pages/user_pages/user_body_page.dart';
+import 'package:flutter_demo/page_route.dart';
 
 ///This is a page where a user can be borrow and return items.
 class UserPage extends StatefulWidget {
@@ -18,7 +21,24 @@ class _UserPage extends State<UserPage> {
   ///Signs out [widget.currentAccount].
   Future _signOut() async {
     debugPrint("Signed out " + widget.currentAccount.accountName);
-    Navigator.pop(context);
+
+    ///Changes the page depending on [widget.currentAccount.accountRole].
+    if (isAdmin(widget.currentAccount) || isCustomer(widget.currentAccount)) {
+      Navigator.of(context).push(PageRouter(
+        child: AdminPage(
+          currentAccount: widget.currentAccount,
+          currentIndex: 0,
+        ),
+        direction: AxisDirection.up,
+      ));
+    } else {
+      debugPrint("Go to login page");
+
+      Navigator.of(context).push(PageRouter(
+        child: const LoginPage(),
+        direction: AxisDirection.right,
+      ));
+    }
   }
 
   ///Updates current widget.
