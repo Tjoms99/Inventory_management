@@ -268,7 +268,7 @@ class _RegisterPage extends State<RegisterPage> {
       _isError = true;
     }
 
-    if (password.isEmpty) {
+    if (password.isEmpty && widget._doRegister) {
       debugPrint("incorrect password");
       _errorText = _errorText + "No password entered\n";
       _isError = true;
