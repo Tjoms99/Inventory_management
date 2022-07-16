@@ -8,7 +8,7 @@ import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/page_route.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
-///This is a page where customers or admins can add/modify/delete [Item]s.
+///This is a page that builds a [List] of [Item]s for customers and admins.
 class ItemsListPage extends StatefulWidget {
   final Account currentAccount;
   const ItemsListPage({required this.currentAccount});
@@ -18,45 +18,10 @@ class ItemsListPage extends StatefulWidget {
 }
 
 class _ItemsListPageState extends State<ItemsListPage> {
-  late List<String> _itemTypes;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _itemTypes.clear();
-    super.dispose();
-  }
-
-  ///Builds the item list view.
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: ListBuilder(
-      currentAccount: widget.currentAccount,
-    ));
-  }
-}
-
-///This is a page that builds a [List] of [Item]s for customers and admins.
-class ListBuilder extends StatefulWidget {
-  final Account currentAccount;
-  const ListBuilder({required this.currentAccount});
-
-  @override
-  State<ListBuilder> createState() => _ListBuilderState();
-}
-
-class _ListBuilderState extends State<ListBuilder> {
+  //Item lists.
   List<Item> _items = [];
   List<Item> _allItems = [];
-  final List<String> _types = [];
-  final List<List<Item>> _typeWithItems = [];
-
-  //Controller
+  //Controller.
   final TextEditingController _searchController = TextEditingController();
   //Focus node.
   final FocusNode _focusSearch = FocusNode();
@@ -216,7 +181,6 @@ class _ListBuilderState extends State<ListBuilder> {
                   _isFirstLoad ? _searchItems() : debugPrint("Not first load");
                   _isFirstLoad = false;
 
-                  debugPrint("Types of items:  $_types ");
                   return Container(
                     color: Colors.white,
                     width: double.infinity,
