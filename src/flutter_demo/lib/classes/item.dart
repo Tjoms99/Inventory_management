@@ -84,3 +84,8 @@ bool canUnassignItem(Item item, String customerId) {
   }
   return canUnnasign;
 }
+
+///Returns a customerID number as [String].
+String getRegisteredCustomerIDIndexAsString(String registeredCustomerID) {
+  return (registeredCustomerID.indexOf('1') + 1).toString();
+}

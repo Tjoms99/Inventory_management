@@ -92,7 +92,8 @@ class _AddItemPageState extends State<AddItemPage> {
     _rfidTag = widget.item.rfid;
     _descriptionController.text = widget.item.description;
     _locationController.text = widget.item.location;
-    _registeredCustomerIdController.text = widget.item.registeredCustomerId;
+    _registeredCustomerIdController.text =
+        getRegisteredCustomerIDIndexAsString(widget.item.registeredCustomerId);
   }
 
   ///Sets the [_registeredCustomerIdController] to a wanted value.
@@ -185,7 +186,17 @@ class _AddItemPageState extends State<AddItemPage> {
 
   ///Returns the [String] located in the customerID textfield.
   String getCustomerId() {
-    return _registeredCustomerIdController.text.trim();
+    int customerIdIndex =
+        int.parse(_registeredCustomerIdController.text.trim());
+    String customerId = "";
+
+    //Should be length of 200
+    for (int index = 0; index < 200; index++) {
+      customerIdIndex - 1 == index
+          ? customerId = customerId + "1"
+          : customerId = customerId + "0";
+    }
+    return customerId;
   }
 
   ///Checks if the [Item] contains empty parameters.
