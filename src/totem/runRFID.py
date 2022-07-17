@@ -3,7 +3,7 @@ import requests
 from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
 
-api_endpoint = "http://192.168.1.201/dashboard/flutter_db/totem/addTotem.php"
+api_endpoint = "http://192.168.43.90/dashboard/flutter_db/totem/addTotem.php"
 reader = SimpleMFRC522()
 
 
@@ -13,8 +13,9 @@ def config():
         totem_id = f.readline()
         f.close()
     except:
+        print("Waiting for RFID")
         totem_id, text = reader.read()
-        totem_id = hex(totem_id)
+        totem_id = hex(totem_id).upper()
         totem_id = totem_id[2:-2]
         f = open('config.txt', 'w')
         f.write(totem_id)
@@ -24,11 +25,12 @@ def config():
         r = requests.post(url=api_endpoint, data=data)
         print(data)
     finally:
+        print("This is your totem ID:\n");
+        print(totem_id)
         return totem_id
 
 def main():
     totem_id = config()
-    print(totem_id)
     while True:
         rfid, text = reader.read()
         rfid = hex(rfid)
