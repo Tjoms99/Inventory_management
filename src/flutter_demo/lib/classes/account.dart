@@ -134,11 +134,11 @@ String getNewRegisteredCustomerID(String currentID, String itemCustomerID) {
   int indexCustomerId = itemCustomerID.indexOf("1");
 
   if (indexCustomerId == 0) {
-    newID = "1" + newID.substring(1, newID.length - 1);
+    newID = "1" + newID.substring(1, newID.length);
   } else {
     newID = newID.substring(0, indexCustomerId) +
         "1" +
-        newID.substring(indexCustomerId, newID.length - 1);
+        newID.substring(indexCustomerId + 1, newID.length);
   }
   debugPrint("ID length: ${newID.length}");
 
@@ -151,11 +151,11 @@ void updateAndRemoveFromCustomerList(Account account, Account customer) {
   String newID = account.registeredCustomerId;
 
   if (indexCustomerId == 0) {
-    newID = "0" + newID.substring(1, newID.length - 1);
+    newID = "0" + newID.substring(1, newID.length);
   } else {
     newID = newID.substring(0, indexCustomerId) +
         "0" +
-        newID.substring(indexCustomerId + 1, newID.length - 1);
+        newID.substring(indexCustomerId + 1, newID.length);
     debugPrint("ID length: ${newID.length}");
   }
   account.registeredCustomerId = newID;
