@@ -69539,8 +69539,8 @@ if(r.c==="admin"&&!0)A.aEH(this.b)
 else{s=s.c[o.f]
 q=J.mJ(r.f,"1")
 p=s.r
-if(q===0)p="0"+B.c.O(p,1,p.length-1)
-else{p=J.el(p,0,q)+"0"+B.c.O(p,q+1,p.length-1)
+if(q===0)p="0"+B.c.O(p,1,p.length)
+else{p=J.el(p,0,q)+"0"+B.c.O(p,q+1,p.length)
 A.aA().$1("ID length: "+p.length)}s.r=p
 A.arD(s)
 A.aA().$1("Removed 1 at "+q)
@@ -69617,7 +69617,7 @@ n=p.a.c
 l.f=n.b
 j=n.r
 i=J.mJ(l.r,"1")
-j=i===0?"1"+B.c.O(j,1,j.length-1):J.el(j,0,i)+"1"+B.c.O(j,i,j.length-1)
+j=i===0?"1"+B.c.O(j,1,j.length):J.el(j,0,i)+"1"+B.c.O(j,i+1,j.length)
 A.aA().$1("ID length: "+j.length)
 n.r=j
 A.arD(p.a.c)}A.Sm(l)
