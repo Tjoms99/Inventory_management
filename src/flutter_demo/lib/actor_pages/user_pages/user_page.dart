@@ -47,7 +47,14 @@ class _UserPage extends State<UserPage> {
 
   ///Updates current widget.
   Future _update() async {
-    setState(() {});
+    Navigator.of(context).push(PageRouter(
+      child: UserPage(
+        currentAccount: widget.currentAccount,
+        helpAccount: widget.helpAccount,
+        isCustomer: widget.isCustomer,
+      ),
+      direction: null,
+    ));
   }
 
   ///Builds the user page.

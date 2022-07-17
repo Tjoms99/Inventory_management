@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 ///Creates a transition when transfering between two pages using [PageRouteBuilder].
 class PageRouter extends PageRouteBuilder {
   final Widget child;
-  final AxisDirection direction;
+  final AxisDirection? direction;
 
   PageRouter({required this.child, required this.direction})
       : super(
@@ -38,6 +38,8 @@ class PageRouter extends PageRouteBuilder {
         return const Offset(1, 0);
       case AxisDirection.right:
         return const Offset(-1, 0);
+      default:
+        return const Offset(0, 0);
     }
   }
 }

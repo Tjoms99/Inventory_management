@@ -40,7 +40,13 @@ class _AdminPageState extends State<AdminPage> {
 
   ///Updates current widget.
   void _update() {
-    setState(() {});
+    Navigator.of(context).push(PageRouter(
+      child: AdminPage(
+        currentAccount: widget.currentAccount,
+        currentIndex: widget.currentIndex,
+      ),
+      direction: null,
+    ));
   }
 
   ///Goes to add [Item] page.
